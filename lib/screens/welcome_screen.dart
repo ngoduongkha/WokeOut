@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/login/login_screen.dart';
-import 'package:woke_out/screens/signup/signup_screen.dart';
-import 'package:woke_out/screens/welcome/components/background.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/constants.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:woke_out/screens/signup_screen.dart';
+import 'package:woke_out/screens/login_screen.dart';
+
+class WelcomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Body(),
+    );
+  }
+}
 
 class Body extends StatelessWidget {
   @override
@@ -60,3 +68,43 @@ class Body extends StatelessWidget {
     );
   }
 }
+
+class Background extends StatelessWidget {
+  final Widget child;
+  const Background({
+    Key key,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height,
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Image.asset(
+              "assets/images/main_top.png",
+              width: size.width * 0.3,
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Image.asset(
+              "assets/images/main_bottom.png",
+              width: size.width * 0.2,
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+}
+

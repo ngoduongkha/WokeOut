@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/welcome/welcome_screen.dart';
 import 'package:woke_out/constants.dart';
+import 'package:woke_out/screens/welcome_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,10 +10,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Auth',
+      title: 'WokeOut',
       theme: ThemeData(
+        fontFamily: "Cairo",
+        scaffoldBackgroundColor: kBackgroundColor,
+        textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
         primaryColor: kPrimaryColor,
-        scaffoldBackgroundColor: Colors.white,
+        //scaffoldBackgroundColor: Colors.white,
       ),
       home: WelcomeScreen(),
     );

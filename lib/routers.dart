@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/landing_page.dart';
-import 'package:woke_out/screens/home/home_screen.dart';
+import 'package:woke_out/screens/home_screen.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {

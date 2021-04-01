@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:woke_out/screens/detail/details_screen.dart';
 import 'package:woke_out/widgets/bottom_nav_bar.dart';
 import 'package:woke_out/widgets/category_card.dart';
 import 'package:woke_out/widgets/search_bar.dart';
+import 'package:woke_out/screens/details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

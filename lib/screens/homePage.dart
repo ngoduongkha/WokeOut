@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:woke_out/model/homeModel.dart';
+import 'package:woke_out/model/authModel.dart';
 import 'package:woke_out/screens/baseView.dart';
 import 'package:woke_out/screens/detailsPage.dart';
 import 'package:woke_out/widgets/bottom_nav_bar.dart';
@@ -12,8 +11,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
-    return BaseView<HomeModel>(
-      builder: (context, homeModel, __) => Scaffold(
+    return BaseView<AuthModel>(
+      builder: (context, authModel, child) => Scaffold(
         bottomNavigationBar: BottomNavBar(),
         body: Stack(
           children: <Widget>[
@@ -46,7 +45,7 @@ class HomePage extends StatelessWidget {
                         ),
                         child: new RaisedButton(
                           onPressed: () {
-                            homeModel.logOut();
+                            authModel.logOut();
                           },
                           child: Text('Logout'),
                         ),

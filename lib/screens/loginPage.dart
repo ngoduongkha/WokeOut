@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woke_out/components/already_have_an_account_acheck.dart';
@@ -46,8 +47,6 @@ class Body extends StatelessWidget {
                       hintText: "Your Email",
                       controller: emailController,
                       onChanged: (value) {},
-                      validator: (value) =>
-                          value.isEmpty ? 'Email can\'t be empty.' : null,
                     ),
                     RoundedPasswordField(
                       controller: passwordController,
@@ -103,8 +102,8 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: double.infinity,
       height: size.height,
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[

@@ -46,6 +46,7 @@ class HomePage extends StatelessWidget {
                         child: new RaisedButton(
                           onPressed: () {
                             authModel.logOut();
+                            Navigator.popAndPushNamed(context, 'welcome');
                           },
                           child: Text('Logout'),
                         ),

@@ -6,7 +6,7 @@ class AuthModel extends BaseModel {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   String errorMessage;
 
-  Future<bool> signIn(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(String email, String password) async {
     setViewState(ViewState.Busy);
 
     try {
@@ -22,7 +22,7 @@ class AuthModel extends BaseModel {
     return true;
   }
 
-  Future<bool> createNewUser(String email, String password) async {
+  Future<bool> createUserWithEmailAndPassword(String email, String password) async {
     setViewState(ViewState.Busy);
 
     try {

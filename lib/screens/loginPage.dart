@@ -54,22 +54,20 @@ class Body extends StatelessWidget {
                     ),
                     RoundedButton(
                       text: "LOGIN",
-                      press: () {
-                        authModel.signIn(
-                            emailController.text, passwordController.text);
+                      press: () async {
+                        var success =
+                            await authModel.signInWithEmailAndPassword(
+                                emailController.text, passwordController.text);
+                        if (success) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, 'home', ModalRoute.withName('landing'));
+                        }
                       },
                     ),
                     SizedBox(height: size.height * 0.03),
                     AlreadyHaveAnAccountCheck(
                       press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SignupPage();
-                            },
-                          ),
-                        );
+                        Navigator.popAndPushNamed(context, 'signup');
                       },
                     ),
                   ],

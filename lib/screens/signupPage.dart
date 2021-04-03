@@ -5,78 +5,100 @@ import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/constants.dart';
-import 'package:woke_out/screens/loginPage.dart';
+import 'package:woke_out/enum/app_state.dart';
+import 'package:woke_out/model/authModel.dart';
+import 'package:woke_out/screens/baseView.dart';
 
 class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Body(),
-    );
+    return Body();
   }
 }
 
 class Body extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return BaseView<AuthModel>(
+      builder: (context, authModel, child) => Scaffold(
+        body: Stack(
           children: <Widget>[
-            Text(
-              "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.35,
-            ),
-            RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
-            ),
-            RoundedPasswordField(
-              onChanged: (value) {},
-            ),
-            RoundedButton(
-              text: "SIGNUP",
-              press: () {},
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              login: false,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginPage();
-                    },
-                  ),
-                );
-              },
-            ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
+            Background(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "SIGNUP",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: size.height * 0.03),
+                    SvgPicture.asset(
+                      "assets/icons/signup.svg",
+                      height: size.height * 0.35,
+                    ),
+                    RoundedInputField(
+                      controller: emailController,
+                      hintText: "Your Email",
+                      onChanged: (value) {},
+                    ),
+                    RoundedPasswordField(
+                      controller: passwordController,
+                      onChanged: (value) {},
+                    ),
+                    RoundedButton(
+                      text: "SIGNUP",
+                      press: () async {
+                        var success =
+                            await authModel.createUserWithEmailAndPassword(
+                                emailController.text, passwordController.text);
+                        if (success) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, 'home', ModalRoute.withName('landing'));
+                        }
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.03),
+                    AlreadyHaveAnAccountCheck(
+                      login: false,
+                      press: () {
+                        Navigator.popAndPushNamed(context, 'login');
+                      },
+                    ),
+                    OrDivider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SocialIcon(
+                          iconSrc: "assets/icons/facebook.svg",
+                          press: () {},
+                        ),
+                        SocialIcon(
+                          iconSrc: "assets/icons/twitter.svg",
+                          press: () {},
+                        ),
+                        SocialIcon(
+                          iconSrc: "assets/icons/google-plus.svg",
+                          press: () {},
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
+              ),
+            ),
+            authModel.viewState == ViewState.Busy
+                ? Container(
+                    color: Colors.black.withOpacity(0.5),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),
@@ -84,10 +106,10 @@ class Body extends StatelessWidget {
   }
 }
 
-class SocalIcon extends StatelessWidget {
+class SocialIcon extends StatelessWidget {
   final String iconSrc;
   final Function press;
-  const SocalIcon({
+  const SocialIcon({
     Key key,
     this.iconSrc,
     this.press,
@@ -166,7 +188,6 @@ class Background extends StatelessWidget {
     return Container(
       height: size.height,
       width: double.infinity,
-      // Here i can use size.width but use double.infinity because both work as a same
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[

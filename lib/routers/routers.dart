@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/screens/landingPage.dart';
 import 'package:woke_out/screens/homePage.dart';
+import 'package:woke_out/screens/loginPage.dart';
+import 'package:woke_out/screens/signupPage.dart';
+import 'package:woke_out/screens/welcomePage.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -9,6 +12,12 @@ class Routers {
         return MaterialPageRoute(builder: (_) => HomePage());
       case 'landing':
         return MaterialPageRoute(builder: (_) => LandingPage());
+      case 'login':
+        return MaterialPageRoute(builder: (_) => LoginPage());
+      case 'welcome':
+        return MaterialPageRoute(builder: (_) => WelcomePage());
+      case 'signup':
+        return MaterialPageRoute(builder: (_) => SignupPage());
       default:
         return MaterialPageRoute(
           builder: (_) {

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/constants.dart';
-import 'package:woke_out/screens/signup_screen.dart';
-import 'package:woke_out/screens/login_screen.dart';
+import 'package:woke_out/screens/loginPage.dart';
+import 'package:woke_out/screens/signupPage.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +41,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return LoginScreen();
+                      return LoginPage();
                     },
                   ),
                 );
@@ -56,7 +56,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return SignUpScreen();
+                      return SignupPage();
                     },
                   ),
                 );

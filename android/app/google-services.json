@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "218718472908",
+    "project_id": "wokeout-7cd74",
+    "storage_bucket": "wokeout-7cd74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218718472908:android:0653bd0730d1c20ab09069",
+        "android_client_info": {
+          "package_name": "com.example.woke_out"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "218718472908-6j6d9c2peb15u0l13ff7hr8pl0q8fraj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtN53GMP3jYh2F7Qsx0kHUxeHvTrO69JE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218718472908-6j6d9c2peb15u0l13ff7hr8pl0q8fraj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,7 @@ import 'package:woke_out/constants.dart';
 import 'package:woke_out/widgets/bottom_nav_bar.dart';
 import 'package:woke_out/widgets/search_bar.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

@@ -5,9 +5,9 @@ import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/constants.dart';
-import 'package:woke_out/screens/login_screen.dart';
+import 'package:woke_out/screens/loginPage.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +53,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return LoginScreen();
+                      return LoginPage();
                     },
                   ),
                 );

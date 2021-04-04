@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "218718472908-oqvbs7apuimuutpc6hdroer3st42fmrk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.woke_out",
+            "certificate_hash": "090d0cfe5b5dcd88c87b6dc3c8aba1994812fda4"
+          }
+        },
+        {
           "client_id": "218718472908-6j6d9c2peb15u0l13ff7hr8pl0q8fraj.apps.googleusercontent.com",
           "client_type": 3
         }

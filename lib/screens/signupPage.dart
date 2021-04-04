@@ -75,7 +75,13 @@ class Body extends StatelessWidget {
                       children: <Widget>[
                         SocialIcon(
                           iconSrc: "assets/icons/facebook.svg",
-                          press: () {},
+                          press: () async {
+                            var success = await authModel.signInWithFacebook();
+                            if (success) {
+                              Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                  ModalRoute.withName('landing'));
+                            }
+                          },
                         ),
                         SocialIcon(
                           iconSrc: "assets/icons/twitter.svg",
@@ -83,7 +89,13 @@ class Body extends StatelessWidget {
                         ),
                         SocialIcon(
                           iconSrc: "assets/icons/google-plus.svg",
-                          press: () {},
+                          press: () async {
+                            var success = await authModel.signInWithGoogle();
+                            if (success) {
+                              Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                  ModalRoute.withName('landing'));
+                            }
+                          },
                         ),
                       ],
                     )

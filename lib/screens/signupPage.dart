@@ -8,6 +8,7 @@ import 'package:woke_out/constants.dart';
 import 'package:woke_out/enum/app_state.dart';
 import 'package:woke_out/model/authModel.dart';
 import 'package:woke_out/screens/baseView.dart';
+import 'package:woke_out/widgets/custom_dialog_box.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -59,6 +60,18 @@ class Body extends StatelessWidget {
                         if (success) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, 'home', ModalRoute.withName('landing'));
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialogBox(
+                                dialogType: DialogType.error,
+                                title: "Đăng ký thất bại",
+                                descriptions: authModel.errorMessage,
+                                text: "OK",
+                              );
+                            },
+                          );
                         }
                       },
                     ),

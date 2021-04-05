@@ -18,7 +18,27 @@ class AuthModel extends BaseModel {
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
-      errorMessage = e.message;
+      print('Failed with error message: ${e.message}');
+
+      switch (e.code) {
+        case "wrong-password":
+        case "user-not-found":
+          errorMessage = "Tài khoản hoặc mật khẩu không đúng";
+          break;
+        case "invalid-email":
+          errorMessage = "Tài khoản email không hợp lệ";
+          break;
+        case "unknown":
+          errorMessage = "Lỗi không xác định";
+          break;
+        case "too-many-requests":
+          errorMessage = "Thao tác thất bại nhiều lần.\nVui lòng thử lại sau.";
+          break;
+        default:
+          errorMessage = "";
+          break;
+      }
+
       setViewState(ViewState.Ideal);
       return false;
     }
@@ -35,7 +55,29 @@ class AuthModel extends BaseModel {
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
-      errorMessage = e.message;
+      print('Failed with error message: ${e.message}');
+
+      switch (e.code) {
+        case "invalid-email":
+          errorMessage = "Tài khoản email không hợp lệ";
+          break;
+        case "unknown":
+          errorMessage = "Lỗi không xác định";
+          break;
+        case "too-many-requests":
+          errorMessage = "Thao tác thất bại nhiều lần.\nVui lòng thử lại sau.";
+          break;
+        case "weak-password":
+          errorMessage = "Mật khẩu phải có ít nhất 6 ký tự.";
+          break;
+        case "email-already-in-use":
+          errorMessage = "Tài khoản đã tồn tại";
+          break;
+        default:
+          errorMessage = "";
+          break;
+      }
+
       setViewState(ViewState.Ideal);
       return false;
     }

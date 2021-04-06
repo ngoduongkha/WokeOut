@@ -17,13 +17,14 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           BottomNavItem(
-            title: "Today",
+            title: "Schedule",
             svgScr: "assets/icons/calendar.svg",
           ),
           BottomNavItem(
             title: "All Exercises",
             svgScr: "assets/icons/gym.svg",
             isActive: true,
+            press: () {},
           ),
           BottomNavItem(
             title: "Settings",
@@ -38,7 +39,7 @@ class BottomNavBar extends StatelessWidget {
 class BottomNavItem extends StatelessWidget {
   final String svgScr;
   final String title;
-  final Function press;
+  final VoidCallback press;
   final bool isActive;
   const BottomNavItem({
     Key key,

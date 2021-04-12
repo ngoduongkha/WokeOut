@@ -1,96 +1,70 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:woke_out/widgets/category_card.dart';
-import 'package:woke_out/widgets/search_bar.dart';
-
-import 'detailsPage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AllExercisePage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        Container(
-          // Here the height of the container is 45% of our total height
-          height: size.height * .45,
-          decoration: BoxDecoration(
-            color: Color(0xFFF5CEB8),
-            image: DecorationImage(
-              alignment: Alignment.centerLeft,
-              image: AssetImage("assets/images/undraw_pilates_gpdb.png"),
+  Widget build(BuildContext context) => Scaffold(
+        body: CustomScrollView(
+          physics: BouncingScrollPhysics(), // Bounce effect when scrolling
+          slivers: [
+            buildAppBar(context),
+          ],
+        ),
+      );
+  SliverAppBar buildAppBar(BuildContext context) => SliverAppBar(
+        flexibleSpace: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/chest_workout.jpg"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                child: Container(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.0),
+                    ),
+                  ),
+                ),
+              ),
             ),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(2, 2),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  child: Icon(Icons.play_arrow, color: Colors.black, size: 40),
+                  backgroundColor: Colors.white,
+                  radius: 36,
+                ),
+              ),
+            ),
+          ],
+        ),
+        expandedHeight: MediaQuery.of(context).size.height * 0.4,
+        stretch: true,
+        title: Text(
+          'Today Workout',
+          style: GoogleFonts.bebasNeue(
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 52,
-                    width: 52,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF2BEA1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: SvgPicture.asset("assets/icons/menu.svg"),
-                  ),
-                ),
-                Text(
-                  "Good Mornign \nShishir",
-                  style: Theme.of(context)
-                      .textTheme
-                      .display1
-                      .copyWith(fontWeight: FontWeight.w900),
-                ),
-                SearchBar(),
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: .85,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    children: <Widget>[
-                      CategoryCard(
-                        title: "Diet Recommendation",
-                        svgSrc: "assets/icons/Hamburger.svg",
-                        press: () {},
-                      ),
-                      CategoryCard(
-                        title: "Kegel Exercises",
-                        svgSrc: "assets/icons/Excrecises.svg",
-                        press: () {},
-                      ),
-                      CategoryCard(
-                        title: "Meditation",
-                        svgSrc: "assets/icons/Meditation.svg",
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return DetailsPage();
-                            }),
-                          );
-                        },
-                      ),
-                      CategoryCard(
-                        title: "Yoga",
-                        svgSrc: "assets/icons/yoga.svg",
-                        press: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
+        centerTitle: true,
+        pinned: true,
+      );
 }

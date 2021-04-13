@@ -1,14 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:woke_out/widgets/today_exercises_widget.dart';
 
-class AllExercisePage extends StatelessWidget {
+class TodayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: CustomScrollView(
           physics: BouncingScrollPhysics(), // Bounce effect when scrolling
           slivers: [
             buildAppBar(context),
+            TodayExercisesWidget(),
           ],
         ),
       );
@@ -20,16 +22,6 @@ class AllExercisePage extends StatelessWidget {
                 image: DecorationImage(
                   image: AssetImage("assets/images/chest_workout.jpg"),
                   fit: BoxFit.fill,
-                ),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                child: Container(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.0),
-                    ),
-                  ),
                 ),
               ),
             ),
@@ -46,7 +38,7 @@ class AllExercisePage extends StatelessWidget {
                   ],
                 ),
                 child: CircleAvatar(
-                  child: Icon(Icons.play_arrow, color: Colors.black, size: 40),
+                  child: Icon(Icons.play_arrow, color: Colors.black, size: 45),
                   backgroundColor: Colors.white,
                   radius: 36,
                 ),
@@ -56,12 +48,21 @@ class AllExercisePage extends StatelessWidget {
         ),
         expandedHeight: MediaQuery.of(context).size.height * 0.4,
         stretch: true,
-        title: Text(
-          'Today Workout',
-          style: GoogleFonts.bebasNeue(
-            fontSize: 50,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        title: Container(
+          width: 310,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Text(
+              'Today Exercises',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         centerTitle: true,

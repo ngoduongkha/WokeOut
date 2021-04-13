@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/screens/landingPage.dart';
-import 'package:woke_out/screens/homePage.dart';
+import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/loginPage.dart';
 import 'package:woke_out/screens/signupPage.dart';
 import 'package:woke_out/screens/welcomePage.dart';

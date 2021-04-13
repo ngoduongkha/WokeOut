@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:woke_out/widgets/today_exercises_widget.dart';
 
 class TodayPage extends StatelessWidget {
   @override
@@ -9,6 +10,7 @@ class TodayPage extends StatelessWidget {
           physics: BouncingScrollPhysics(), // Bounce effect when scrolling
           slivers: [
             buildAppBar(context),
+            TodayExercisesWidget(),
           ],
         ),
       );
@@ -47,14 +49,14 @@ class TodayPage extends StatelessWidget {
         expandedHeight: MediaQuery.of(context).size.height * 0.4,
         stretch: true,
         title: Container(
-          width: 300,
+          width: 310,
           decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
             child: Text(
-              'Today Workout',
+              'Today Exercises',
               style: GoogleFonts.bebasNeue(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,

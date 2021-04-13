@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:woke_out/model/baseModel.dart';
 import 'package:woke_out/screens/baseView.dart';
-import 'package:woke_out/screens/homePage.dart';
+import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/welcomePage.dart';
 
 // ignore: must_be_immutable

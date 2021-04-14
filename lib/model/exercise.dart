@@ -4,10 +4,12 @@ class Exercise {
   final String name;
   final Duration duration;
   final int noOfReps;
+  final String gifUrl;
 
   Exercise({
     @required this.name,
     @required this.duration,
     @required this.noOfReps,
+    this.gifUrl,
   });
 }

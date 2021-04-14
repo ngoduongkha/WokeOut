@@ -22,6 +22,9 @@ String getExerciseName(ExerciseType type) {
     case ExerciseType.shoulder:
       return 'Shoulder';
       break;
+    case ExerciseType.cardio:
+      return 'Cardio';
+      break;
     default:
       return 'All';
       break;
@@ -31,14 +34,18 @@ String getExerciseName(ExerciseType type) {
 class ExerciseSet {
   final String name;
   final List<Exercise> exercises;
+  final String imageUrl;
   final ExerciseType exerciseType;
   final Color color;
 
-  ExerciseSet(
-      {@required this.name,
-      @required this.exercises,
-      @required this.exerciseType,
-      @required this.color});
+  ExerciseSet({
+    @required this.name,
+    @required this.exercises,
+    this.imageUrl,
+    @required this.exerciseType,
+    @required this.color,
+  });
+
   String get totalDuration {
     final duration = exercises.fold(Duration.zero,
         (previousValue, element) => previousValue + element.duration);

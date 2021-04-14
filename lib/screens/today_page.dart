@@ -9,12 +9,12 @@ class TodayPage extends StatelessWidget {
         body: CustomScrollView(
           physics: BouncingScrollPhysics(), // Bounce effect when scrolling
           slivers: [
-            buildAppBar(context),
+            buildMyAppBar(context),
             TodayExercisesWidget(),
           ],
         ),
       );
-  SliverAppBar buildAppBar(BuildContext context) => SliverAppBar(
+  SliverAppBar buildMyAppBar(BuildContext context) => SliverAppBar(
         flexibleSpace: Stack(
           children: [
             Container(
@@ -47,11 +47,11 @@ class TodayPage extends StatelessWidget {
           ],
         ),
         expandedHeight: MediaQuery.of(context).size.height * 0.4,
-        stretch: true,
+        stretch: false,
         title: Container(
           width: 310,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: Colors.black.withOpacity(.5),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
@@ -60,12 +60,12 @@ class TodayPage extends StatelessWidget {
               style: GoogleFonts.bebasNeue(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.white.withOpacity(.7),
               ),
             ),
           ),
         ),
         centerTitle: true,
-        pinned: true,
+        pinned: false,
       );
 }

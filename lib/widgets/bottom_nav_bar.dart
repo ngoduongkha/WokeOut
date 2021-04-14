@@ -2,46 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woke_out/constants.dart';
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-      height: 80,
-      color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          BottomNavItem(
-            title: "Schedule",
-            svgScr: "assets/icons/calendar.svg",
-          ),
-          BottomNavItem(
-            title: "All Exercises",
-            svgScr: "assets/icons/gym.svg",
-            isActive: true,
-            press: () {},
-          ),
-          BottomNavItem(
-            title: "Settings",
-            svgScr: "assets/icons/Settings.svg",
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BottomNavItem extends StatelessWidget {
+class BottomNavItemWidget extends StatelessWidget {
   final String svgScr;
   final String title;
   final VoidCallback press;
   final bool isActive;
-  const BottomNavItem({
+  const BottomNavItemWidget({
     Key key,
     this.svgScr,
     this.title,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/locator.dart';
 import 'package:woke_out/routers/routers.dart';
+import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/splashScreen.dart';
 
 void main() async {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
         primaryColor: kPrimaryColor,
       ),
-      home: new SplashScreen(),
+      home: new HomePage(),
       onGenerateRoute: Routers.generateRoute,
     );
   }

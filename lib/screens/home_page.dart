@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/model/authModel.dart';
+import 'package:woke_out/screens/choose_exercise_page.dart';
 import 'package:woke_out/screens/today_page.dart';
 import 'package:woke_out/screens/baseView.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
@@ -21,7 +22,7 @@ class homePageState extends State<HomePage> {
     return BaseView<AuthModel>(
       builder: (context, authModel, child) => Scaffold(
         bottomNavigationBar: myBottomNavigationBar(),
-        body: TodayPage(),
+        body: ChooseExercisePage(),
       ),
     );
   }

@@ -8,7 +8,7 @@ class ChooseExercisePage extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/choose_exercise_page.jpg'),
+              image: AssetImage('assets/images/choose_exercise_page.png'),
               fit: BoxFit.cover,
             ),
           ),

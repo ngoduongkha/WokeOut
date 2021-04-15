@@ -12,7 +12,9 @@ class ChooseExercisePage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          child: CustomScrollView(),
+          child: CustomScrollView(
+            slivers: [],
+          ),
         ),
       );
 }

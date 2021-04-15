@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:woke_out/components/already_have_an_account_acheck.dart';
 import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
-import 'package:woke_out/constants.dart';
+import 'package:woke_out/constants/constants.dart';
 import 'package:woke_out/enum/app_state.dart';
-import 'package:woke_out/model/authModel.dart';
-import 'package:woke_out/screens/baseView.dart';
+import 'package:woke_out/services/firebase_auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
 
 class SignupPage extends StatelessWidget {
@@ -23,109 +23,100 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthService>(context);
     Size size = MediaQuery.of(context).size;
-    return BaseView<AuthModel>(
-      builder: (context, authModel, child) => Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Background(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "SIGNUP",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    SvgPicture.asset(
-                      "assets/icons/signup.svg",
-                      height: size.height * 0.35,
-                    ),
-                    RoundedInputField(
-                      controller: emailController,
-                      hintText: "Your Email",
-                      onChanged: (value) {},
-                    ),
-                    RoundedPasswordField(
-                      controller: passwordController,
-                      onChanged: (value) {},
-                    ),
-                    RoundedButton(
-                      text: "SIGNUP",
-                      press: () async {
-                        var success =
-                            await authModel.createUserWithEmailAndPassword(
-                                emailController.text, passwordController.text);
-                        if (success) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, 'home', ModalRoute.withName('landing'));
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialogBox(
-                                dialogType: DialogType.error,
-                                title: "Đăng ký thất bại",
-                                descriptions: authModel.errorMessage,
-                                text: "OK",
-                              );
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    AlreadyHaveAnAccountCheck(
-                      login: false,
-                      press: () {
-                        Navigator.popAndPushNamed(context, 'login');
-                      },
-                    ),
-                    OrDivider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SocialIcon(
-                          iconSrc: "assets/icons/facebook.svg",
-                          press: () async {
-                            var success = await authModel.signInWithFacebook();
-                            if (success) {
-                              Navigator.pushNamedAndRemoveUntil(context, 'home',
-                                  ModalRoute.withName('landing'));
-                            }
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Background(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "SIGNUP",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  SvgPicture.asset(
+                    "assets/icons/signup.svg",
+                    height: size.height * 0.35,
+                  ),
+                  RoundedInputField(
+                    controller: emailController,
+                    hintText: "Your Email",
+                    onChanged: (value) {},
+                  ),
+                  RoundedPasswordField(
+                    controller: passwordController,
+                    onChanged: (value) {},
+                  ),
+                  RoundedButton(
+                    text: "SIGNUP",
+                    press: () async {
+                      var user =
+                          await auth.createUserWithEmailAndPassword(
+                              emailController.text, passwordController.text);
+                      if (user != null) {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'home', ModalRoute.withName('landing'));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CustomDialogBox(
+                              dialogType: DialogType.error,
+                              title: "Đăng ký thất bại",
+                              descriptions: auth.errorMessage,
+                              text: "OK",
+                            );
                           },
-                        ),
-                        SocialIcon(
-                          iconSrc: "assets/icons/twitter.svg",
-                          press: () {},
-                        ),
-                        SocialIcon(
-                          iconSrc: "assets/icons/google-plus.svg",
-                          press: () async {
-                            var success = await authModel.signInWithGoogle();
-                            if (success) {
-                              Navigator.pushNamedAndRemoveUntil(context, 'home',
-                                  ModalRoute.withName('landing'));
-                            }
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  AlreadyHaveAnAccountCheck(
+                    login: false,
+                    press: () {
+                      Navigator.popAndPushNamed(context, 'login');
+                    },
+                  ),
+                  OrDivider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SocialIcon(
+                        iconSrc: "assets/icons/facebook.svg",
+                        press: () async {
+                          var user = await auth.signInWithFacebook();
+                          if (user != null) {
+                            Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                ModalRoute.withName('landing'));
+                          }
+                        },
+                      ),
+                      SocialIcon(
+                        iconSrc: "assets/icons/twitter.svg",
+                        press: () {},
+                      ),
+                      SocialIcon(
+                        iconSrc: "assets/icons/google-plus.svg",
+                        press: () async {
+                          var user = await auth.signInWithGoogle();
+                          if (user != null) {
+                            Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                ModalRoute.withName('landing'));
+                          }
+                        },
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-            authModel.viewState == ViewState.Busy
-                ? Container(
-                    color: Colors.black.withOpacity(0.5),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Container()
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

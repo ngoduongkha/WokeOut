@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woke_out/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woke_out/constants/constants.dart';
 import 'package:woke_out/enum/app_state.dart';
 
 class CustomDialogBox extends StatefulWidget {

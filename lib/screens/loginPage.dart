@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:woke_out/components/already_have_an_account_acheck.dart';
 import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
+import 'package:woke_out/constants/strings.dart';
 import 'package:woke_out/enum/app_state.dart';
-import 'package:woke_out/model/authModel.dart';
-import 'package:woke_out/screens/baseView.dart';
-import 'package:woke_out/screens/signupPage.dart';
-import 'package:woke_out/widgets/custom_dialog_box.dart';
+import 'package:woke_out/screens/home_page.dart';
+import 'package:woke_out/services/firebase_auth_service.dart';
+import 'package:woke_out/widgets/platform_exception_alert_dialog.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -24,79 +26,60 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthService>(context);
     Size size = MediaQuery.of(context).size;
-    return BaseView<AuthModel>(
-      builder: (context, authModel, child) => Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Background(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "LOGIN",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    SvgPicture.asset(
-                      "assets/icons/login.svg",
-                      height: size.height * 0.35,
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    RoundedInputField(
-                      hintText: "Your Email",
-                      controller: emailController,
-                      onChanged: (value) {},
-                    ),
-                    RoundedPasswordField(
-                      controller: passwordController,
-                      onChanged: (value) {},
-                    ),
-                    RoundedButton(
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Background(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "LOGIN",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  SvgPicture.asset(
+                    "assets/icons/login.svg",
+                    height: size.height * 0.35,
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  RoundedInputField(
+                    hintText: "Your Email",
+                    controller: emailController,
+                    onChanged: (value) {},
+                  ),
+                  RoundedPasswordField(
+                    controller: passwordController,
+                    onChanged: (value) {},
+                  ),
+                  RoundedButton(
                       text: "LOGIN",
                       press: () async {
-                        var success =
-                            await authModel.signInWithEmailAndPassword(
-                                emailController.text, passwordController.text);
-                        if (success) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, 'home', ModalRoute.withName('landing'));
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialogBox(
-                                dialogType: DialogType.error,
-                                title: "Đăng nhập thất bại",
-                                descriptions: authModel.errorMessage,
-                                text: "OK",
-                              );
-                            },
-                          );
+                        var user = await auth.signInWithEmailAndPassword(
+                            emailController.text, passwordController.text);
+                        if (user != null) {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         }
-                      },
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    AlreadyHaveAnAccountCheck(
-                      press: () {
-                        Navigator.popAndPushNamed(context, 'signup');
-                      },
-                    ),
-                  ],
-                ),
+                      }),
+                  SizedBox(height: size.height * 0.03),
+                  AlreadyHaveAnAccountCheck(
+                    press: () {
+                      Navigator.popAndPushNamed(context, 'signup');
+                    },
+                  ),
+                ],
               ),
             ),
-            authModel.viewState == ViewState.Busy
-                ? Container(
-                    color: Colors.black.withOpacity(0.5),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Container()
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

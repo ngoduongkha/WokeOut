@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:woke_out/components/rounded_button.dart';
-import 'package:woke_out/constants.dart';
+import 'package:woke_out/constants/constants.dart';
+import 'package:woke_out/screens/loginPage.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
@@ -35,7 +36,10 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "LOGIN",
               press: () {
-                Navigator.pushNamed(context, 'login');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
               },
             ),
             RoundedButton(

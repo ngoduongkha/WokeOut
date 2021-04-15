@@ -21,7 +21,7 @@ class ChooseExercisePage extends StatelessWidget {
         ),
       );
   Widget buildAppBar(BuildContext context) => SliverAppBar(
-        expandedHeight: MediaQuery.of(context).size.height * 0.5,
+        expandedHeight: MediaQuery.of(context).size.height * 0.4,
         backgroundColor: Colors.transparent,
         title: Row(
           children: [
@@ -43,16 +43,47 @@ class ChooseExercisePage extends StatelessWidget {
             ),
           ],
         ),
-        flexibleSpace: Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(width: 3, color: Color(0xFF40D876)),
-            image: DecorationImage(
-              image: AssetImage('assets/images/avartar_demo.jpg'),
-              fit: BoxFit.cover,
-            ),
+        flexibleSpace: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 100),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(width: 3, color: Color(0xFF40D876)),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/avartar_demo.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'What\'s on',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 40,
+                      color: Colors.white,
+                      letterSpacing: 1.8,
+                    ),
+                  ),
+                  Text(
+                    ' for today ?',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 40,
+                      color: Color(0xFF40D876),
+                      letterSpacing: 1.8,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       );

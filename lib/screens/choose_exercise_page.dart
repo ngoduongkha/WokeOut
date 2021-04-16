@@ -16,10 +16,13 @@ class ChooseExercisePage extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               buildAppBar(context),
+              buildTodayExerciseCategory(),
             ],
           ),
         ),
       );
+
+  // This is app bar of the choose_exercise_page
   Widget buildAppBar(BuildContext context) => SliverAppBar(
         expandedHeight: MediaQuery.of(context).size.height * 0.4,
         backgroundColor: Colors.transparent,
@@ -85,6 +88,41 @@ class ChooseExercisePage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      );
+
+  // This is the today exercise category
+  Widget buildTodayExerciseCategory() => SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 500,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 10,
+        ),
+        delegate: SliverChildListDelegate(
+          [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'Upper ',
+                    style: GoogleFonts.lato(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 32),
+                  ),
+                  Text(
+                    'body',
+                    style: GoogleFonts.lato(
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF40D876),
+                        fontSize: 32),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       );
 }

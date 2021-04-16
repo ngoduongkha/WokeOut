@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:woke_out/model/baseModel.dart';
-import 'package:woke_out/screens/baseView.dart';
+import 'package:woke_out/model/base_model.dart';
+import 'package:woke_out/screens/base_view.dart';
 import 'package:woke_out/screens/home_page.dart';
-import 'package:woke_out/screens/welcomePage.dart';
+import 'package:woke_out/screens/welcome_page.dart';
 
 // ignore: must_be_immutable
 class LandingPage extends StatelessWidget {

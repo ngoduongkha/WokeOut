@@ -96,7 +96,7 @@ class ChooseExercisePage extends StatelessWidget {
         padding: EdgeInsets.only(left: 20),
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 500,
+            maxCrossAxisExtent: 1000,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
             childAspectRatio: 10,
@@ -106,7 +106,28 @@ class ChooseExercisePage extends StatelessWidget {
               Text(
                 'Upper body',
                 style: GoogleFonts.bebasNeue(
-                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 32,
+                  letterSpacing: 1.8,
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 300,
+                color: Colors.transparent,
+                child: ListView(),
+              ),
+              Text(
+                'Lower body',
+                style: GoogleFonts.bebasNeue(
+                  color: Colors.white,
+                  fontSize: 32,
+                  letterSpacing: 1.8,
+                ),
+              ),
+              Text(
+                'Full body',
+                style: GoogleFonts.bebasNeue(
                   color: Colors.white,
                   fontSize: 32,
                   letterSpacing: 1.8,

@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -108,13 +106,7 @@ class ChooseExercisePage extends StatelessWidget {
     ];
     return SliverPadding(
       padding: EdgeInsets.only(left: 20),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 1000,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 10,
-        ),
+      sliver: SliverList(
         delegate: SliverChildListDelegate(
           [
             Text(

@@ -136,6 +136,7 @@ class ChooseExercisePage extends StatelessWidget {
                             image: AssetImage(upperCategory[index].imageUrl),
                             fit: BoxFit.cover,
                           ),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       SizedBox(height: 10),

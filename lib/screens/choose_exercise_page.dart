@@ -92,37 +92,28 @@ class ChooseExercisePage extends StatelessWidget {
       );
 
   // This is the today exercise category
-  Widget buildTodayExerciseCategory() => SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 500,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 10,
-        ),
-        delegate: SliverChildListDelegate(
-          [
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: [
-                  Text(
-                    'Upper ',
-                    style: GoogleFonts.lato(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        fontSize: 32),
-                  ),
-                  Text(
-                    'body',
-                    style: GoogleFonts.lato(
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF40D876),
-                        fontSize: 32),
-                  )
-                ],
+  Widget buildTodayExerciseCategory() => SliverPadding(
+        padding: EdgeInsets.only(left: 20),
+        sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 500,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 10,
+          ),
+          delegate: SliverChildListDelegate(
+            [
+              Text(
+                'Upper body',
+                style: GoogleFonts.bebasNeue(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 32,
+                  letterSpacing: 1.8,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 }

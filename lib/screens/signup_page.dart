@@ -6,8 +6,8 @@ import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/enum/app_state.dart';
-import 'package:woke_out/model/authModel.dart';
-import 'package:woke_out/screens/baseView.dart';
+import 'package:woke_out/screens/base_view.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
 
 class SignupPage extends StatelessWidget {
@@ -24,7 +24,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BaseView<AuthModel>(
+    return BaseView<AuthService>(
       builder: (context, authModel, child) => Scaffold(
         body: Stack(
           children: <Widget>[
@@ -54,10 +54,10 @@ class Body extends StatelessWidget {
                     RoundedButton(
                       text: "SIGNUP",
                       press: () async {
-                        var success =
+                        var user =
                             await authModel.createUserWithEmailAndPassword(
                                 emailController.text, passwordController.text);
-                        if (success) {
+                        if (user != null) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, 'home', ModalRoute.withName('landing'));
                         } else {
@@ -89,8 +89,8 @@ class Body extends StatelessWidget {
                         SocialIcon(
                           iconSrc: "assets/icons/facebook.svg",
                           press: () async {
-                            var success = await authModel.signInWithFacebook();
-                            if (success) {
+                            var user = await authModel.signInWithFacebook();
+                            if (user != null) {
                               Navigator.pushNamedAndRemoveUntil(context, 'home',
                                   ModalRoute.withName('landing'));
                             }
@@ -103,8 +103,8 @@ class Body extends StatelessWidget {
                         SocialIcon(
                           iconSrc: "assets/icons/google-plus.svg",
                           press: () async {
-                            var success = await authModel.signInWithGoogle();
-                            if (success) {
+                            var user = await authModel.signInWithGoogle();
+                            if (user != null) {
                               Navigator.pushNamedAndRemoveUntil(context, 'home',
                                   ModalRoute.withName('landing'));
                             }
@@ -116,12 +116,10 @@ class Body extends StatelessWidget {
                 ),
               ),
             ),
-            authModel.viewState == ViewState.Busy
+            authModel.viewState == ViewState.busy
                 ? Container(
                     color: Colors.black.withOpacity(0.5),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: Center(child: CircularProgressIndicator()),
                   )
                 : Container()
           ],

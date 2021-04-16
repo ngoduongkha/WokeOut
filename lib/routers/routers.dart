@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/landingPage.dart';
+import 'package:woke_out/screens/landing_page.dart';
 import 'package:woke_out/screens/home_page.dart';
-import 'package:woke_out/screens/loginPage.dart';
-import 'package:woke_out/screens/signupPage.dart';
-import 'package:woke_out/screens/welcomePage.dart';
+import 'package:woke_out/screens/login_page.dart';
+import 'package:woke_out/screens/signup_page.dart';
+import 'package:woke_out/screens/welcome_page.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {

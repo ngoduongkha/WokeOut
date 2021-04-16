@@ -1,21 +1,35 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:woke_out/enum/app_state.dart';
-import 'package:woke_out/model/baseModel.dart';
+import 'package:woke_out/model/app_user_model.dart';
+import 'package:woke_out/model/base_model.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
-class AuthModel extends BaseModel {
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  FacebookLogin facebookLogin = new FacebookLogin();
-  GoogleSignIn googleSignIn = new GoogleSignIn();
+class AuthService extends BaseModel {
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String errorMessage;
 
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
-    setViewState(ViewState.Busy);
+  MyAppUser _userFromFirebase(User user) {
+    if (user == null) {
+      return null;
+    }
+    return MyAppUser(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoUrl: user.photoURL,
+    );
+  }
+
+  Future<MyAppUser> signInWithEmailAndPassword(
+      String email, String password) async {
+    setViewState(ViewState.busy);
 
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      setViewState(ViewState.ideal);
+      return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print('Failed with error message: ${e.message}');
@@ -35,24 +49,24 @@ class AuthModel extends BaseModel {
           errorMessage = "Thao tác thất bại nhiều lần.\nVui lòng thử lại sau.";
           break;
         default:
-          errorMessage = "";
+          errorMessage = "Lỗi không xác định";
           break;
       }
 
-      setViewState(ViewState.Ideal);
-      return false;
+      setViewState(ViewState.ideal);
+      return null;
     }
-    setViewState(ViewState.Ideal);
-    return true;
   }
 
-  Future<bool> createUserWithEmailAndPassword(
+  Future<MyAppUser> createUserWithEmailAndPassword(
       String email, String password) async {
-    setViewState(ViewState.Busy);
+    setViewState(ViewState.busy);
 
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      setViewState(ViewState.ideal);
+      return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print('Failed with error message: ${e.message}');
@@ -78,15 +92,14 @@ class AuthModel extends BaseModel {
           break;
       }
 
-      setViewState(ViewState.Ideal);
-      return false;
+      setViewState(ViewState.ideal);
+      return null;
     }
-    setViewState(ViewState.Ideal);
-    return true;
   }
 
-  Future<bool> signInWithFacebook() async {
-    setViewState(ViewState.Busy);
+  Future<MyAppUser> signInWithFacebook() async {
+    setViewState(ViewState.busy);
+    final facebookLogin = FacebookLogin();
 
     try {
       FacebookLoginResult facebookLoginResult =
@@ -94,74 +107,70 @@ class AuthModel extends BaseModel {
       switch (facebookLoginResult.status) {
         case FacebookLoginStatus.cancelledByUser:
           print('Facebook login cancelled by user');
-          setViewState(ViewState.Ideal);
-          return false;
+          setViewState(ViewState.ideal);
+          return null;
         case FacebookLoginStatus.loggedIn:
           FacebookAccessToken facebookAccessToken =
               facebookLoginResult.accessToken;
           AuthCredential authCredential =
               FacebookAuthProvider.credential(facebookAccessToken.token);
-          await firebaseAuth.signInWithCredential(authCredential);
-          break;
+          final userCredential =
+              await _firebaseAuth.signInWithCredential(authCredential);
+          setViewState(ViewState.ideal);
+          return _userFromFirebase(userCredential.user);
         case FacebookLoginStatus.error:
           errorMessage = 'Facebook login error';
-          setViewState(ViewState.Ideal);
-          return false;
+          setViewState(ViewState.ideal);
+          return null;
         default:
           print('Error unknown');
-          break;
+          setViewState(ViewState.ideal);
+          return null;
       }
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       errorMessage = e.message;
-      setViewState(ViewState.Ideal);
-      return false;
+      setViewState(ViewState.ideal);
+      return null;
     }
-    setViewState(ViewState.Ideal);
-    return true;
   }
 
-  Future<bool> signInWithGoogle() async {
-    setViewState(ViewState.Busy);
+  Future<MyAppUser> signInWithGoogle() async {
+    setViewState(ViewState.busy);
+    final googleSignIn = GoogleSignIn();
 
     try {
-      final googleAccount = await googleSignIn.signIn().catchError((e) {
-        errorMessage = e;
-        print(errorMessage);
-      });
+      final googleAccount = await googleSignIn.signIn();
 
-      final googleAuth = await googleAccount.authentication.catchError((e) {
-        errorMessage = e;
-        print(errorMessage);
-      });
+      final googleAuth = await googleAccount.authentication;
 
       final googleCredential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-      await firebaseAuth.signInWithCredential(googleCredential);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(googleCredential);
+      setViewState(ViewState.ideal);
+      return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       errorMessage = e.message;
-      setViewState(ViewState.Ideal);
-      return false;
+      setViewState(ViewState.ideal);
+      return null;
     } catch (e) {
       errorMessage = e;
       print(errorMessage);
-      setViewState(ViewState.Ideal);
-      return false;
+      setViewState(ViewState.ideal);
+      return null;
     }
-
-    setViewState(ViewState.Ideal);
-    return true;
   }
 
-  void logOut() async {
-    setViewState(ViewState.Busy);
-    // var isLoggedInFacebook = await facebookLogin.isLoggedIn;
-    // if (isLoggedInFacebook) facebookLogin.logOut();
-    // var isSignedInFacebook = await googleSignIn.isSignedIn();
-    // if (isSignedInFacebook) googleSignIn.disconnect();
-    await firebaseAuth.signOut();
-    setViewState(ViewState.Ideal);
+  void signOut() async {
+    setViewState(ViewState.busy);
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    final FacebookLogin facebookLogin = FacebookLogin();
+    await facebookLogin.logOut();
+    await _firebaseAuth.signOut();
+    setViewState(ViewState.ideal);
   }
 }

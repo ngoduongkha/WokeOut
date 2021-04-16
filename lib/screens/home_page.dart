@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/model/authModel.dart';
 import 'package:woke_out/screens/choose_exercise_page.dart';
-import 'package:woke_out/screens/today_page.dart';
-import 'package:woke_out/screens/baseView.dart';
+import 'package:woke_out/screens/base_view.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
-import 'package:woke_out/widgets/category_card.dart';
-import 'package:woke_out/widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => homePageState();
+  State<StatefulWidget> createState() => HomePageState();
 }
 
-class homePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   var selectedPage = 0;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    var size = MediaQuery.of(context)
-        .size; //this gonna give us total height and with of our device
-    return BaseView<AuthModel>(
+    return BaseView<AuthService>(
       builder: (context, authModel, child) => Scaffold(
         bottomNavigationBar: myBottomNavigationBar(),
         body: ChooseExercisePage(),

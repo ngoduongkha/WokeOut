@@ -4,7 +4,7 @@ import 'package:woke_out/constants.dart';
 import 'package:woke_out/locator.dart';
 import 'package:woke_out/routers/routers.dart';
 import 'package:woke_out/screens/home_page.dart';
-import 'package:woke_out/screens/splashScreen.dart';
+import 'package:woke_out/screens/landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
         primaryColor: kPrimaryColor,
       ),
-      home: new HomePage(),
+      home: new LandingPage(),
       onGenerateRoute: Routers.generateRoute,
     );
   }

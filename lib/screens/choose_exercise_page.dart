@@ -58,7 +58,7 @@ class ChooseExercisePage extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  border: Border.all(width: 3, color: Color(0xFF40D876)),
+                  border: Border.all(width: 5, color: Color(0xFF40D876)),
                   image: DecorationImage(
                     image: AssetImage('assets/images/avartar_demo.jpg'),
                     fit: BoxFit.cover,
@@ -102,6 +102,10 @@ class ChooseExercisePage extends StatelessWidget {
       TodayExerciseCategory(
         imageUrl: 'assets/images/back.jpg',
         name: 'back',
+      ),
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/shoulder.jpg',
+        name: 'shoulder',
       ),
       TodayExerciseCategory(
         imageUrl: 'assets/images/biceps.jpg',

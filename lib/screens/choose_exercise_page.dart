@@ -32,7 +32,7 @@ class ChooseExercisePage extends StatelessWidget {
             Text(
               'WELCOME,  ',
               style: GoogleFonts.bebasNeue(
-                fontSize: 43,
+                fontSize: 40,
                 color: Colors.white,
                 letterSpacing: 1.8,
               ),
@@ -40,7 +40,7 @@ class ChooseExercisePage extends StatelessWidget {
             Text(
               'LUAN',
               style: GoogleFonts.bebasNeue(
-                fontSize: 43,
+                fontSize: 40,
                 color: Color(0xFF40D876),
                 letterSpacing: 1.8,
               ),
@@ -100,6 +100,14 @@ class ChooseExercisePage extends StatelessWidget {
         name: 'chest',
       ),
       TodayExerciseCategory(
+        imageUrl: 'assets/images/back.jpg',
+        name: 'back',
+      ),
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/biceps.jpg',
+        name: 'biceps',
+      ),
+      TodayExerciseCategory(
         imageUrl: 'assets/images/triceps.jpg',
         name: 'triceps',
       ),
@@ -109,62 +117,30 @@ class ChooseExercisePage extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildListDelegate(
           [
+            SizedBox(height: 10),
             Text(
               'Upper body',
               style: GoogleFonts.bebasNeue(
-                color: Colors.white,
-                fontSize: 32,
+                color: Color(0xFF40D876),
+                fontSize: 35,
                 letterSpacing: 1.8,
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 300,
-              color: Colors.transparent,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: upperCategory.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: 141,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(upperCategory[index].imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        upperCategory[index].name,
-                        style: GoogleFonts.bebasNeue(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            SizedBox(height: 10),
+            buildListCardCategory(upperCategory),
             Text(
               'Lower body',
               style: GoogleFonts.bebasNeue(
-                color: Colors.white,
-                fontSize: 32,
+                color: Color(0xFF40D876),
+                fontSize: 35,
                 letterSpacing: 1.8,
               ),
             ),
             Text(
               'Full body',
               style: GoogleFonts.bebasNeue(
-                color: Colors.white,
-                fontSize: 32,
+                color: Color(0xFF40D876),
+                fontSize: 35,
                 letterSpacing: 1.8,
               ),
             ),
@@ -173,6 +149,44 @@ class ChooseExercisePage extends StatelessWidget {
       ),
     );
   }
+
+  // Build list of cards for each category
+  Widget buildListCardCategory(List list) => Container(
+        width: double.infinity,
+        height: 300,
+        color: Colors.transparent,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: list.length,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  width: 280,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(list[index].imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Text(
+                  list[index].name,
+                  style: GoogleFonts.bebasNeue(
+                    color: Colors.white,
+                    fontSize: 30,
+                    letterSpacing: 1.8,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
 }
 
 class TodayExerciseCategory {

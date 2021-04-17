@@ -24,44 +24,44 @@ class ChooseExercisePage extends StatelessWidget {
       );
 
   // This is app bar of the choose_exercise_page
-  Widget buildAppBar(BuildContext context) => SliverAppBar(
-        expandedHeight: MediaQuery.of(context).size.height * 0.4,
-        backgroundColor: Colors.transparent,
-        title: Row(
-          children: [
-            Text(
-              'WELCOME,  ',
-              style: GoogleFonts.bebasNeue(
-                fontSize: 40,
-                color: Colors.white,
-                letterSpacing: 1.8,
+  Widget buildAppBar(BuildContext context) => SliverPadding(
+        padding: EdgeInsets.only(left: 20),
+        sliver: SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              SizedBox(height: 40),
+              Row(
+                children: [
+                  Text(
+                    'WELCOME,  ',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 40,
+                      color: Colors.white,
+                      letterSpacing: 1.8,
+                    ),
+                  ),
+                  Text(
+                    'LUAN',
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 40,
+                      color: Color(0xFF40D876),
+                      letterSpacing: 1.8,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              'LUAN',
-              style: GoogleFonts.bebasNeue(
-                fontSize: 40,
-                color: Color(0xFF40D876),
-                letterSpacing: 1.8,
-              ),
-            ),
-          ],
-        ),
-        flexibleSpace: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 100),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(width: 5, color: Color(0xFF40D876)),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/avartar_demo.jpg'),
-                    fit: BoxFit.cover,
+              SizedBox(height: 40),
+              Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(width: 5, color: Color(0xFF40D876)),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/avartar_demo.jpg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -87,6 +87,7 @@ class ChooseExercisePage extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 40),
             ],
           ),
         ),
@@ -116,6 +117,26 @@ class ChooseExercisePage extends StatelessWidget {
         name: 'triceps',
       ),
     ];
+    final lowerCategory = [
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/abs.jpg',
+        name: 'abs',
+      ),
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/leg.jpg',
+        name: 'leg',
+      ),
+    ];
+    final fullBodyCategory = [
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/strength.jpg',
+        name: 'abs',
+      ),
+      TodayExerciseCategory(
+        imageUrl: 'assets/images/cardio.jpg',
+        name: 'leg',
+      ),
+    ];
     return SliverPadding(
       padding: EdgeInsets.only(left: 20),
       sliver: SliverList(
@@ -140,6 +161,8 @@ class ChooseExercisePage extends StatelessWidget {
                 letterSpacing: 1.8,
               ),
             ),
+            SizedBox(height: 10),
+            buildListCardCategory(lowerCategory),
             Text(
               'Full body',
               style: GoogleFonts.bebasNeue(
@@ -148,6 +171,8 @@ class ChooseExercisePage extends StatelessWidget {
                 letterSpacing: 1.8,
               ),
             ),
+            SizedBox(height: 10),
+            buildListCardCategory(fullBodyCategory),
           ],
         ),
       ),
@@ -166,15 +191,18 @@ class ChooseExercisePage extends StatelessWidget {
             padding: EdgeInsets.only(right: 20),
             child: Column(
               children: [
-                Container(
-                  height: 200,
-                  width: 280,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(list[index].imageUrl),
-                      fit: BoxFit.cover,
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 200,
+                    width: 280,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(list[index].imageUrl),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 SizedBox(height: 15),

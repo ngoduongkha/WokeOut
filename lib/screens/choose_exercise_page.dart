@@ -2,7 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ChooseExercisePage extends StatelessWidget {
+class ChooseExercisePage extends StatefulWidget {
+  @override
+  _ChooseExercisePageState createState() => _ChooseExercisePageState();
+}
+
+// State to let user choose what kind of exercise they wana do today
+class _ChooseExercisePageState extends State<ChooseExercisePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Container(
@@ -22,8 +28,6 @@ class ChooseExercisePage extends StatelessWidget {
           ),
         ),
       );
-
-  // This is app bar of the choose_exercise_page
   Widget buildAppBar(BuildContext context) => SliverPadding(
         padding: EdgeInsets.only(left: 20),
         sliver: SliverList(
@@ -130,11 +134,11 @@ class ChooseExercisePage extends StatelessWidget {
     final fullBodyCategory = [
       TodayExerciseCategory(
         imageUrl: 'assets/images/strength.jpg',
-        name: 'abs',
+        name: 'strength',
       ),
       TodayExerciseCategory(
         imageUrl: 'assets/images/cardio.jpg',
-        name: 'leg',
+        name: 'cardio',
       ),
     ];
     return SliverPadding(
@@ -220,7 +224,7 @@ class ChooseExercisePage extends StatelessWidget {
         ),
       );
 }
-
+// Class for save today exercise category
 class TodayExerciseCategory {
   final String imageUrl;
   final String name;

@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:woke_out/screens/choose_today_exercise_page.dart';
 import 'package:woke_out/screens/today_exercise_page.dart';
 

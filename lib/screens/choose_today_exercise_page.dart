@@ -6,7 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 class ChooseTodayExercisePage extends StatelessWidget {
   final StreamController streamController;
 
-  const ChooseTodayExercisePage({Key key, this.streamController}) : super(key: key);
+  const ChooseTodayExercisePage({Key key, this.streamController})
+      : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Container(
@@ -192,7 +193,10 @@ class ChooseTodayExercisePage extends StatelessWidget {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () => streamController.add(false),
+                  onTap: () => {
+                    streamController.add(false),
+                    streamController.add(list[index]),
+                  },
                   child: Container(
                     height: 200,
                     width: 280,

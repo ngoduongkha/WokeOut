@@ -17,28 +17,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       bottomNavigationBar: myBottomNavigationBar(),
-      body: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                auth.signOut();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'welcome', ModalRoute.withName('landing'));
-              },
-              child: Text(
-                'signout',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
-        body: _homeBodyDirector(selectedPage),
-      ),
+      body: _homeBodyDirector(selectedPage),
     );
   }
 

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "218718472908",
+    "firebase_url": "https://wokeout-7cd74-default-rtdb.firebaseio.com",
     "project_id": "wokeout-7cd74",
     "storage_bucket": "wokeout-7cd74.appspot.com"
   },
@@ -14,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "218718472908-oqvbs7apuimuutpc6hdroer3st42fmrk.apps.googleusercontent.com",
+          "client_id": "218718472908-uovglvjqe652pvsd8t0a1k1eq3o6asfo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.woke_out",
-            "certificate_hash": "090d0cfe5b5dcd88c87b6dc3c8aba1994812fda4"
+            "certificate_hash": "cc00f28fb9f6e02fc85642325028c57fc14dfe29"
           }
         },
         {

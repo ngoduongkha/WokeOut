@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/screens/today_page.dart';
-import 'package:woke_out/screens/base_view.dart';
+import 'package:provider/provider.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => HomePageState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   var selectedPage = 0;
   @override
   Widget build(BuildContext context) {
-    return BaseView<AuthService>(
-      builder: (context, authModel, child) => Scaffold(
-        bottomNavigationBar: myBottomNavigationBar(),
-        body: _HomeBodyDirector(selectedPage),
+    final auth = Provider.of<AuthService>(context, listen: false);
+
+    return Scaffold(
+      bottomNavigationBar: myBottomNavigationBar(),
+      body: Scaffold(
+        appBar: AppBar(
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                auth.signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, 'welcome', ModalRoute.withName('landing'));
+              },
+              child: Text(
+                'signout',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
+        body: _homeBodyDirector(selectedPage),
       ),
     );
   }
@@ -47,7 +68,8 @@ class HomePageState extends State<HomePage> {
           ],
         ),
       );
-  Widget _HomeBodyDirector(int selectedPage) {
+
+  Widget _homeBodyDirector(int selectedPage) {
     switch (selectedPage) {
       case 0:
         return TodayPage();

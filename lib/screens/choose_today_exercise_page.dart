@@ -21,78 +21,82 @@ class ChooseTodayExercisePage extends StatelessWidget {
           ),
           child: CustomScrollView(
             slivers: [
-              buildAppBar(context),
-              buildTodayExerciseCategory(),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    buildAppBar(context),
+                    buildTodayExerciseCategory(),
+                  ],
+                ),
+              )
             ],
           ),
         ),
       );
-  Widget buildAppBar(BuildContext context) => SliverPadding(
+  Widget buildAppBar(BuildContext context) => Padding(
         padding: EdgeInsets.only(left: 20),
-        sliver: SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Text(
-                    'WELCOME,  ',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 40,
-                      color: Colors.white,
-                      letterSpacing: 1.8,
-                    ),
+        child: Column(
+          children: [
+            SizedBox(height: 40),
+            Row(
+              children: [
+                Text(
+                  'WELCOME,  ',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                    color: Colors.white,
+                    letterSpacing: 1.8,
                   ),
-                  Text(
-                    'LUAN',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 40,
-                      color: Color(0xFF40D876),
-                      letterSpacing: 1.8,
-                    ),
+                ),
+                Text(
+                  'LUAN',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                    color: Color(0xFF40D876),
+                    letterSpacing: 1.8,
                   ),
-                ],
-              ),
-              SizedBox(height: 40),
-              Center(
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    border: Border.all(width: 5, color: Color(0xFF40D876)),
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/avartar_demo.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+                ),
+              ],
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(width: 5, color: Color(0xFF40D876)),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/avartar_demo.jpg'),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'What\'s on',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 40,
-                      color: Colors.white,
-                      letterSpacing: 1.8,
-                    ),
+            ),
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'What\'s on',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                    color: Colors.white,
+                    letterSpacing: 1.8,
                   ),
-                  Text(
-                    ' for today ?',
-                    style: GoogleFonts.bebasNeue(
-                      fontSize: 40,
-                      color: Color(0xFF40D876),
-                      letterSpacing: 1.8,
-                    ),
+                ),
+                Text(
+                  ' for today ?',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                    color: Color(0xFF40D876),
+                    letterSpacing: 1.8,
                   ),
-                ],
-              ),
-              SizedBox(height: 40),
-            ],
-          ),
+                ),
+              ],
+            ),
+            SizedBox(height: 40),
+          ],
         ),
       );
   Widget buildTodayExerciseCategory() {
@@ -138,44 +142,54 @@ class ChooseTodayExercisePage extends StatelessWidget {
         name: 'cardio',
       ),
     ];
-    return SliverPadding(
+    return Padding(
       padding: EdgeInsets.only(left: 20),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate(
-          [
-            SizedBox(height: 10),
-            Text(
-              'Upper body',
-              style: GoogleFonts.bebasNeue(
-                color: Color(0xFF40D876),
-                fontSize: 35,
-                letterSpacing: 1.8,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Text(
+                'Upper body',
+                style: GoogleFonts.bebasNeue(
+                  color: Color(0xFF40D876),
+                  fontSize: 35,
+                  letterSpacing: 1.8,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            buildListCardCategory(upperCategory),
-            Text(
-              'Lower body',
-              style: GoogleFonts.bebasNeue(
-                color: Color(0xFF40D876),
-                fontSize: 35,
-                letterSpacing: 1.8,
+            ],
+          ),
+          SizedBox(height: 10),
+          buildListCardCategory(upperCategory),
+          Row(
+            children: [
+              Text(
+                'Lower body',
+                style: GoogleFonts.bebasNeue(
+                  color: Color(0xFF40D876),
+                  fontSize: 35,
+                  letterSpacing: 1.8,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            buildListCardCategory(lowerCategory),
-            Text(
-              'Full body',
-              style: GoogleFonts.bebasNeue(
-                color: Color(0xFF40D876),
-                fontSize: 35,
-                letterSpacing: 1.8,
+            ],
+          ),
+          SizedBox(height: 10),
+          buildListCardCategory(lowerCategory),
+          Row(
+            children: [
+              Text(
+                'Full body',
+                style: GoogleFonts.bebasNeue(
+                  color: Color(0xFF40D876),
+                  fontSize: 35,
+                  letterSpacing: 1.8,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            buildListCardCategory(fullBodyCategory),
-          ],
-        ),
+            ],
+          ),
+          SizedBox(height: 10),
+          buildListCardCategory(fullBodyCategory),
+        ],
       ),
     );
   }
@@ -201,6 +215,10 @@ class ChooseTodayExercisePage extends StatelessWidget {
                     height: 200,
                     width: 280,
                     decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.white.withOpacity(.3),
+                      ),
                       image: DecorationImage(
                         image: AssetImage(list[index].imageUrl),
                         fit: BoxFit.cover,
@@ -225,7 +243,7 @@ class ChooseTodayExercisePage extends StatelessWidget {
       );
 }
 
-// // Class for save today exercise category
+// // // Class for save today exercise category
 class TodayExerciseCategory {
   final String imageUrl;
   final String name;

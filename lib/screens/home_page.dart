@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:woke_out/screens/today_page.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/services/auth_service.dart';
+import 'package:woke_out/services/exercise_service.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,14 +15,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
+    final exercise = ExerciseService();
 
     return Scaffold(
-      bottomNavigationBar: myBottomNavigationBar(),
+      bottomNavigationBar: myBottomNavigationBar(exercise),
       body: _homeBodyDirector(selectedPage),
     );
   }
 
-  Widget myBottomNavigationBar() => Container(
+  Widget myBottomNavigationBar(ExerciseService exe) => Container(
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
         height: 80,
         color: Colors.white,

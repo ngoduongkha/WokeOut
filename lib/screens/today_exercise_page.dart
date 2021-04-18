@@ -136,39 +136,42 @@ class TodayExercisePage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(width: 2, color: Colors.white.withOpacity(.3)),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                exerciseDetail.name,
-                style: GoogleFonts.lato(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                  color: Colors.white,
+          child: MaterialButton(
+            shape: ,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  exerciseDetail.name,
+                  style: GoogleFonts.lato(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    '${exerciseDetail.numOfReps} reps',
-                    style: GoogleFonts.lato(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      '${exerciseDetail.numOfReps} reps',
+                      style: GoogleFonts.lato(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${exerciseDetail.duration} s/rep',
-                    style: GoogleFonts.lato(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
+                    Text(
+                      '${exerciseDetail.duration} s/rep',
+                      style: GoogleFonts.lato(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );

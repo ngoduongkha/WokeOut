@@ -111,19 +111,23 @@ class TodayExercisePage extends StatelessWidget {
     );
   }
 
-  Widget buildExerciseSet(BuildContext context) => Column(
-        children: [
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-          buildexerciseButton(),
-        ],
-      );
-  Widget buildexerciseButton() => Padding(
+  Widget buildExerciseSet(BuildContext context) {
+    final listOfExercisesToday = [
+      TodayExerciseDetail(name: 'Wide push up', numOfReps: 10, duration: 3),
+      TodayExerciseDetail(name: 'Diamond push up', numOfReps: 10, duration: 3),
+      TodayExerciseDetail(name: 'Decline push up', numOfReps: 8, duration: 3),
+      TodayExerciseDetail(name: 'Regular push up', numOfReps: 10, duration: 3),
+      TodayExerciseDetail(name: 'Dip', numOfReps: 5, duration: 4),
+      TodayExerciseDetail(name: 'Incline push up', numOfReps: 15, duration: 3),
+      TodayExerciseDetail(name: 'Push up hold', numOfReps: 1, duration: 20),
+    ];
+    return Column(
+      children:
+          listOfExercisesToday.map((e) => buildExerciseButton(e)).toList(),
+    );
+  }
+
+  Widget buildExerciseButton(TodayExerciseDetail exerciseDetail) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
         child: Container(
           height: 100,
@@ -136,7 +140,7 @@ class TodayExercisePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Exercise 1',
+                exerciseDetail.name,
                 style: GoogleFonts.lato(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
@@ -147,7 +151,7 @@ class TodayExercisePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    '5 reps',
+                    '${exerciseDetail.numOfReps} reps',
                     style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -155,7 +159,7 @@ class TodayExercisePage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '10 s/rep',
+                    '${exerciseDetail.duration} s/rep',
                     style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -168,4 +172,16 @@ class TodayExercisePage extends StatelessWidget {
           ),
         ),
       );
+}
+
+class TodayExerciseDetail {
+  final String name;
+  final int numOfReps;
+  final int duration;
+
+  TodayExerciseDetail({
+    @required this.name,
+    @required this.numOfReps,
+    @required this.duration,
+  });
 }

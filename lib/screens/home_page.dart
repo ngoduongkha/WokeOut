@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  Widget _homeBodyDirector(int selectedPage) {
+  _homeBodyDirector(int selectedPage) {
     switch (selectedPage) {
       case 0:
         return TodayPage();

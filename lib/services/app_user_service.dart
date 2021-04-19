@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:woke_out/model/app_user_model.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:woke_out/model/app_user_model.dart";
 
 class AppUserService {
   final ref = FirebaseFirestore.instance.collection("users");

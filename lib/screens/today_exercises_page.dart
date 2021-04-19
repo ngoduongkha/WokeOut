@@ -1,14 +1,11 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:woke_out/model/exercise.dart';
-import 'package:woke_out/model/exercise_set.dart';
+import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/services/exercise_service.dart';
 
 class TodayExercisePage extends StatefulWidget {
-  final ExerciseSet exerciseSet;
+  final ExerciseService exerciseService = ExerciseService();
 
-  const TodayExercisePage({Key key, this.exerciseSet}) : super(key: key);
   @override
   _TodayExercisePageState createState() => _TodayExercisePageState();
 }
@@ -16,22 +13,26 @@ class TodayExercisePage extends StatefulWidget {
 class _TodayExercisePageState extends State<TodayExercisePage> {
   final controller = PageController();
   Exercise currentExercise;
+  
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    currentExercise = widget.exerciseSet.exercises.first;
+    var listExer = await widget.exerciseService.loadBeginnerExercises();
+    currentExercise = listExer.first;
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            currentExercise.name,
-            style: GoogleFonts.lato(color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          currentExercise.name,
+          style: GoogleFonts.lato(color: Colors.white),
         ),
-      );
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+    );
+  }
 }

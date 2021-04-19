@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:woke_out/model/exercise_model.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:woke_out/model/exercise_model.dart";
 
 class ExerciseService {
-  final ref = FirebaseFirestore.instance.collection('exercises');
+  final ref = FirebaseFirestore.instance.collection("exercises");
 
   Future<List<Exercise>> loadBeginnerExercises() async {
     QuerySnapshot snapshot =
-        await ref.where('level', isEqualTo: 'beginner').get();
+        await ref.where("level", isEqualTo: "beginner").get();
 
     List<Exercise> beginner = [];
 
@@ -18,9 +18,9 @@ class ExerciseService {
     return beginner;
   }
 
-  Future<List<Exercise>> loadIntermidiateExercises() async {
+  Future<List<Exercise>> loadIntermediateExercises() async {
     QuerySnapshot snapshot =
-        await ref.where('level', isEqualTo: 'intermidiate').get();
+        await ref.where("level", isEqualTo: "intermediate").get();
 
     List<Exercise> intermidiate = [];
 
@@ -34,7 +34,7 @@ class ExerciseService {
 
   Future<List<Exercise>> loadAdvancedExercises() async {
     QuerySnapshot snapshot =
-        await ref.where('level', isEqualTo: 'advanced').get();
+        await ref.where("level", isEqualTo: "advanced").get();
 
     List<Exercise> advanced = [];
 
@@ -46,19 +46,27 @@ class ExerciseService {
     return advanced;
   }
 
-  Future<bool> addExercise(Exercise exercise) async {
-    QuerySnapshot snapshot =
-        await ref.where('level', isEqualTo: 'beginner').get();
+  Future<void> addExercise(Exercise exercise) async {
+    // QuerySnapshot snapshot =
+    //     await ref.where("level", isEqualTo: "intermediate").get();
 
-    List<Exercise> beginner = [];
+    // List<Exercise> beginner = [];
 
-    snapshot.docs.forEach((element) {
-      Exercise exercise = Exercise.fromMap(element.data());
-      beginner.add(exercise);
-    });
+    // snapshot.docs.forEach((element) {
+    //   Exercise exercise = Exercise.fromMap(element.data());
+    //   beginner.add(exercise);
+    // });
 
-    beginner.forEach((element) {
-      var exeref = ref.doc().set(element.toMap());
+    // beginner.forEach((element) {
+    //   var exeref = ref.doc().set(element.toMap());
+    // });
+
+    ref.doc().set(exercise.toMap());
+  }
+
+  Future<void> addListExercise(List<Exercise> lExercises) async {
+    lExercises.forEach((element) {
+      ref.doc().set(element.toMap());
     });
   }
 }

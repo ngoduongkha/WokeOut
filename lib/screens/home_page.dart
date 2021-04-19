@@ -14,7 +14,6 @@ class _HomePageState extends State<HomePage> {
   var selectedPage = 0;
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
     final exercise = ExerciseService();
 
     return Scaffold(
@@ -55,6 +54,10 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return TodayPage();
         break;
+      default:
+        return Scaffold(
+          body: Text("Error"),
+        );
     }
   }
 }

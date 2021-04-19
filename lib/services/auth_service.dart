@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:woke_out/model/app_user_model.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import "package:firebase_auth/firebase_auth.dart";
+import "package:google_sign_in/google_sign_in.dart";
+import "package:woke_out/model/app_user_model.dart";
+import "package:flutter_facebook_login/flutter_facebook_login.dart";
 
 class AuthService {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -32,8 +32,8 @@ class AuthService {
           email: email, password: password);
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print('Failed with error message: ${e.message}');
+      print("Failed with error code: ${e.code}");
+      print("Failed with error message: ${e.message}");
 
       switch (e.code) {
         case "wrong-password":
@@ -65,8 +65,8 @@ class AuthService {
           email: email, password: password);
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
-      print('Failed with error message: ${e.message}');
+      print("Failed with error code: ${e.code}");
+      print("Failed with error message: ${e.message}");
 
       switch (e.code) {
         case "invalid-email":
@@ -97,10 +97,10 @@ class AuthService {
 
     try {
       FacebookLoginResult facebookLoginResult =
-          await facebookLogin.logIn(['email']);
+          await facebookLogin.logIn(["email"]);
       switch (facebookLoginResult.status) {
         case FacebookLoginStatus.cancelledByUser:
-          print('Facebook login cancelled by user');
+          print("Facebook login cancelled by user");
           return null;
         case FacebookLoginStatus.loggedIn:
           FacebookAccessToken facebookAccessToken =
@@ -111,14 +111,14 @@ class AuthService {
               await _firebaseAuth.signInWithCredential(authCredential);
           return _userFromFirebase(userCredential.user);
         case FacebookLoginStatus.error:
-          errorMessage = 'Facebook login error';
+          errorMessage = "Facebook login error";
           return null;
         default:
-          print('Error unknown');
+          print("Error unknown");
           return null;
       }
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
+      print("Failed with error code: ${e.code}");
       errorMessage = e.message;
       return null;
     }
@@ -139,7 +139,7 @@ class AuthService {
           await _firebaseAuth.signInWithCredential(googleCredential);
       return _userFromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
-      print('Failed with error code: ${e.code}');
+      print("Failed with error code: ${e.code}");
       errorMessage = e.message;
       return null;
     } catch (e) {

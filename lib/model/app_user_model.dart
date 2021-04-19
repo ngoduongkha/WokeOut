@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import "package:meta/meta.dart";
 
 class MyAppUser {
   MyAppUser({
@@ -27,31 +27,31 @@ class MyAppUser {
 
   factory MyAppUser.fromMap(Map<String, dynamic> data) {
     return MyAppUser(
-      uid: data['uid'],
-      displayName: data['displayName'],
-      email: data['email'],
-      photoUrl: data['photoUrl'],
-      bio: data['bio'],
-      gender: data['gender'],
-      height: data['height'],
-      weight: data['weight'],
-      level: data['level'],
-      goal: data['goal'],
+      uid: data["uid"],
+      displayName: data["displayName"],
+      email: data["email"],
+      photoUrl: data["photoUrl"],
+      bio: data["bio"],
+      gender: data["gender"],
+      height: data["height"],
+      weight: data["weight"],
+      level: data["level"],
+      goal: data["goal"],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
-      'displayName': displayName,
-      'email': email,
-      'photoUrl': photoUrl,
-      'bio': bio,
-      'gender': gender,
-      'height': height,
-      'weight': weight,
-      'level': level,
-      'goal': goal,
+      "uid": uid,
+      "displayName": displayName,
+      "email": email,
+      "photoUrl": photoUrl,
+      "bio": bio,
+      "gender": gender,
+      "height": height,
+      "weight": weight,
+      "level": level,
+      "goal": goal,
     };
   }
 }

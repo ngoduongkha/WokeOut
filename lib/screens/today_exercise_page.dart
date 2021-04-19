@@ -1,18 +1,34 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'choose_today_exercise_page.dart';
+import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/services/exercise_service.dart';
 
-class TodayExercisePage extends StatelessWidget {
-  final TodayExerciseCategory chosenExerciseToday;
+class TodayExercisePage extends StatefulWidget {
+  final muscleName;
+  List<Exercise> _listExercises = [];
 
-  const TodayExercisePage({
+  TodayExercisePage({
     Key key,
-    @required this.chosenExerciseToday,
+    @required this.muscleName,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
+  _TodayExercisePageState createState() => _TodayExercisePageState();
+}
+
+class _TodayExercisePageState extends State<TodayExercisePage> {
+  final ExerciseService exerciseService = ExerciseService();
+
+  @override
+  void setState(fn) {
+    super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
         color: Color(0xFF15152B),
         width: double.infinity,
         height: double.infinity,
@@ -22,13 +38,27 @@ class TodayExercisePage extends StatelessWidget {
               delegate: SliverChildListDelegate(
                 [
                   buildAppBar(context),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        TextButton(onPressed: () {}, child: Text('Beginner')),
+                        TextButton(onPressed: () {}, child: Text('Intermediate')),
+                        TextButton(onPressed: () {}, child: Text('Advanced')),
+                      ],
+                    ),
+                  ),
                   buildExerciseSet(context),
                 ],
               ),
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
+
   Widget buildAppBar(BuildContext context) {
     var _height = MediaQuery.of(context).size.height * 0.4;
     return Stack(
@@ -38,7 +68,7 @@ class TodayExercisePage extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(width: 1, color: Color(0xff15152b)),
             image: DecorationImage(
-              image: AssetImage(chosenExerciseToday.imageUrl),
+              image: AssetImage("assets/images/chest.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -62,7 +92,7 @@ class TodayExercisePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                chosenExerciseToday.name,
+                widget.muscleName,
                 style: GoogleFonts.bebasNeue(
                   fontSize: 40,
                   color: Colors.white,
@@ -111,80 +141,72 @@ class TodayExercisePage extends StatelessWidget {
   }
 
   Widget buildExerciseSet(BuildContext context) {
-    final listOfExercisesToday = [
-      TodayExerciseDetail(name: 'Wide push up', numOfReps: 10, duration: 3),
-      TodayExerciseDetail(name: 'Diamond push up', numOfReps: 10, duration: 3),
-      TodayExerciseDetail(name: 'Decline push up', numOfReps: 8, duration: 3),
-      TodayExerciseDetail(name: 'Regular push up', numOfReps: 10, duration: 3),
-      TodayExerciseDetail(name: 'Dip', numOfReps: 5, duration: 4),
-      TodayExerciseDetail(name: 'Incline push up', numOfReps: 15, duration: 3),
-      TodayExerciseDetail(name: 'Push up hold', numOfReps: 1, duration: 20),
-    ];
-    return Column(
-      children:
-          listOfExercisesToday.map((e) => buildExerciseButton(e)).toList(),
+    return StreamBuilder<List<Exercise>>(
+      stream: exerciseService.loadExercises(muscle: widget.muscleName),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          widget._listExercises = snapshot.data;
+
+          return Column(
+            children: widget._listExercises
+                .map((e) => buildExerciseButton(e))
+                .toList(),
+          );
+        } else
+          return Container(child: Center(child: CircularProgressIndicator()));
+      },
     );
   }
 
-  Widget buildExerciseButton(TodayExerciseDetail exerciseDetail) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        child: RawMaterialButton(
-          onPressed: () {},
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.white30, width: 2),
-          ),
-          splashColor: Colors.grey[800],
-          fillColor: Colors.black,
-          child: Container(
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  exerciseDetail.name,
-                  style: GoogleFonts.lato(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color: Colors.white,
+  Widget buildExerciseButton(Exercise exercise) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+      child: RawMaterialButton(
+        onPressed: () {},
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.white30, width: 2),
+        ),
+        splashColor: Colors.grey[800],
+        fillColor: Colors.black,
+        child: Container(
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                exercise.name,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  color: Colors.white,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    '${exercise.rep} reps',
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      '${exerciseDetail.numOfReps} reps',
-                      style: GoogleFonts.lato(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                  Text(
+                    '${exercise.duration} s/rep',
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
                     ),
-                    Text(
-                      '${exerciseDetail.duration} s/rep',
-                      style: GoogleFonts.lato(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      );
-}
-
-class TodayExerciseDetail {
-  final String name;
-  final int numOfReps;
-  final int duration;
-
-  TodayExerciseDetail({
-    @required this.name,
-    @required this.numOfReps,
-    @required this.duration,
-  });
+      ),
+    );
+  }
 }

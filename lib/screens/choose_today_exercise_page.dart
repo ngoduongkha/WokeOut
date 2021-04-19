@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:woke_out/screens/today_exercise_page.dart';
 
 class ChooseTodayExercisePage extends StatelessWidget {
   final StreamController streamController;
@@ -208,8 +209,11 @@ class ChooseTodayExercisePage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => {
-                    streamController.add(false),
-                    streamController.add(list[index]),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                TodayExercisePage(muscleName: "chest"))),
                   },
                   child: Container(
                     height: 200,

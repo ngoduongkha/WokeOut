@@ -1,7 +1,10 @@
+import 'dart:collection';
+
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:flutter/cupertino.dart';
 import "package:woke_out/model/exercise_model.dart";
 
-class ExerciseService {
+class ExerciseService with ChangeNotifier {
   final ref = FirebaseFirestore.instance.collection("exercises");
 
   Future<List<Exercise>> loadBeginnerExercises() async {
@@ -44,6 +47,21 @@ class ExerciseService {
     });
 
     return advanced;
+  }
+
+  Stream<List<Exercise>> loadExercises({String muscle}) {
+    List<Exercise> list = [];
+
+    return ref.where("muscle", arrayContains: muscle).snapshots().map(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            list.add(Exercise.fromMap(element.data()));
+          },
+        );
+        return list;
+      },
+    );
   }
 
   Future<void> addExercise(Exercise exercise) async {

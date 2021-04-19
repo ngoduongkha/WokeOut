@@ -9,6 +9,7 @@ import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/enum/app_state.dart';
 import 'package:woke_out/services/auth_service.dart';
+import 'package:woke_out/services/exercise_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
 
 class LoginPage extends StatelessWidget {

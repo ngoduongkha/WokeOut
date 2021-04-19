@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woke_out/screens/today_page.dart';
 import 'package:woke_out/screens/user_info_page.dart';
 import 'package:woke_out/services/exercise_service.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
@@ -9,7 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var selectedPage = 0;
+  var selectedPage = 1;
   @override
   Widget build(BuildContext context) {
     final exercise = ExerciseService();

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:woke_out/screens/today_exercise_page.dart';
 
-class ChooseTodayExercisePage extends StatelessWidget {
+class TodayPage extends StatelessWidget {
   final StreamController streamController;
 
-  const ChooseTodayExercisePage({Key key, this.streamController})
+  const TodayPage({Key key, this.streamController})
       : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/choose_today_exercise_page.dart';
+import 'package:woke_out/screens/user_info_page.dart';
 import 'package:woke_out/services/exercise_service.dart';
 import 'package:woke_out/widgets/bottom_nav_item.dart';
 
@@ -49,12 +49,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _homeBodyDirector(int selectedPage) {
+  _homeBodyDirector(int selectedPage) {
     switch (selectedPage) {
-      case 0:
-        return ChooseTodayExercisePage();
+      case 1:
+        return TodayPage();
         break;
-      default:
+      case 2:
+        return UserInfoPage();
+        break;
+        default:
         return Scaffold(
           body: Text("Error"),
         );

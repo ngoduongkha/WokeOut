@@ -49,7 +49,7 @@ class ExerciseService with ChangeNotifier {
     return advanced;
   }
 
-  Stream<List<Exercise>> loadExercises({String muscle}) {
+  Stream<List<Exercise>> loadExercises(String muscle) {
     List<Exercise> list = [];
 
     return ref.where("muscle", arrayContains: muscle).snapshots().map(

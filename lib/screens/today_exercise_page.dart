@@ -5,11 +5,12 @@ import 'package:woke_out/services/exercise_service.dart';
 
 class TodayExercisePage extends StatefulWidget {
   final muscleName;
-  List<Exercise> _listExercises = [];
+  final imagePath;
 
   TodayExercisePage({
     Key key,
     @required this.muscleName,
+    @required this.imagePath,
   }) : super(key: key);
 
   @override
@@ -18,11 +19,9 @@ class TodayExercisePage extends StatefulWidget {
 
 class _TodayExercisePageState extends State<TodayExercisePage> {
   final ExerciseService exerciseService = ExerciseService();
-
-  @override
-  void setState(fn) {
-    super.setState(fn);
-  }
+  List<Exercise> _listExercises = [];
+  List<Exercise> _listChosen = [];
+  int choice = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +42,27 @@ class _TodayExercisePageState extends State<TodayExercisePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        TextButton(onPressed: () {}, child: Text('Beginner')),
-                        TextButton(onPressed: () {}, child: Text('Intermediate')),
-                        TextButton(onPressed: () {}, child: Text('Advanced')),
+                        TextButton(
+                          child: Text('Beginner'),
+                          onPressed: () {
+                            choice = 1;
+                            setState(() {});
+                          },
+                        ),
+                        TextButton(
+                          child: Text('Intermediate'),
+                          onPressed: () {
+                            choice = 2;
+                            setState(() {});
+                          },
+                        ),
+                        TextButton(
+                          child: Text('Advanced'),
+                          onPressed: () {
+                            choice = 3;
+                            setState(() {});
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -142,15 +159,38 @@ class _TodayExercisePageState extends State<TodayExercisePage> {
 
   Widget buildExerciseSet(BuildContext context) {
     return StreamBuilder<List<Exercise>>(
-      stream: exerciseService.loadExercises(muscle: widget.muscleName),
+      stream: exerciseService.loadExercises(widget.muscleName),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          widget._listExercises = snapshot.data;
+          _listExercises = snapshot.data;
+          switch (choice) {
+            case 1:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "beginner")
+                  .toList();
+              break;
+            case 2:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "intermediate")
+                  .toList();
+              break;
+            case 3:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "advanced")
+                  .toList();
+              break;
+            default:
+              break;
+          }
 
-          return Column(
-            children: widget._listExercises
-                .map((e) => buildExerciseButton(e))
-                .toList(),
+          return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: _listChosen.length,
+            itemBuilder: (context, index) {
+              return buildExerciseButton(_listChosen[index]);
+            },
           );
         } else
           return Container(child: Center(child: CircularProgressIndicator()));

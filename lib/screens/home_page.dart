@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             svgScr: "assets/icons/gym.svg",
             isActive: true,
             press: () => setState(() {
-              selectedPage = 0;
+              selectedPage = 1;
             }),
           ),
           BottomNavItemWidget(
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return UserInfoPage();
         break;
-        default:
+      default:
         return Scaffold(
           body: Text("Error"),
         );

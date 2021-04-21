@@ -1,8 +1,6 @@
-import 'dart:collection';
-
-import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import "package:woke_out/model/exercise_model.dart";
+import 'package:woke_out/model/exercise_model.dart';
 
 class ExerciseService with ChangeNotifier {
   final ref = FirebaseFirestore.instance.collection("exercises");

@@ -7,8 +7,7 @@ import 'package:woke_out/screens/today_exercise_page.dart';
 class TodayPage extends StatelessWidget {
   final StreamController streamController;
 
-  const TodayPage({Key key, this.streamController})
-      : super(key: key);
+  const TodayPage({Key key, this.streamController}) : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Container(
@@ -196,7 +195,7 @@ class TodayPage extends StatelessWidget {
   }
 
   // Build list of cards for each category
-  Widget buildListCardCategory(List list) => Container(
+  Widget buildListCardCategory(List<TodayExerciseCategory> list) => Container(
         width: double.infinity,
         height: 300,
         color: Colors.transparent,
@@ -210,10 +209,14 @@ class TodayPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () => {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                TodayExercisePage(muscleName: "chest"))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TodayExercisePage(
+                          muscleName: list[index].name,
+                          imagePath: list[index].imageUrl,
+                        ),
+                      ),
+                    ),
                   },
                   child: Container(
                     height: 200,

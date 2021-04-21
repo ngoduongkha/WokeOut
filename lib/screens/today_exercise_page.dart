@@ -5,10 +5,12 @@ import 'package:woke_out/services/exercise_service.dart';
 
 class TodayExercisePage extends StatefulWidget {
   final muscleName;
+  final imagePath;
 
   TodayExercisePage({
     Key key,
     @required this.muscleName,
+    @required this.imagePath,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class _TodayExercisePageState extends State<TodayExercisePage> {
   final ExerciseService exerciseService = ExerciseService();
   List<Exercise> _listExercises = [];
   List<Exercise> _listChosen = [];
+  int choice = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -42,29 +45,21 @@ class _TodayExercisePageState extends State<TodayExercisePage> {
                         TextButton(
                           child: Text('Beginner'),
                           onPressed: () {
-                            _listChosen = _listExercises
-                                .where((element) => element.level == "beginner")
-                                .toList();
+                            choice = 1;
                             setState(() {});
                           },
                         ),
                         TextButton(
                           child: Text('Intermediate'),
                           onPressed: () {
-                            _listChosen = _listExercises
-                                .where((element) =>
-                                    element.level == "intermediate")
-                                .toList();
-
+                            choice = 2;
                             setState(() {});
                           },
                         ),
                         TextButton(
                           child: Text('Advanced'),
                           onPressed: () {
-                            _listChosen = _listExercises
-                                .where((element) => element.level == "advanced")
-                                .toList();
+                            choice = 3;
                             setState(() {});
                           },
                         ),
@@ -168,6 +163,25 @@ class _TodayExercisePageState extends State<TodayExercisePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _listExercises = snapshot.data;
+          switch (choice) {
+            case 1:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "beginner")
+                  .toList();
+              break;
+            case 2:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "intermediate")
+                  .toList();
+              break;
+            case 3:
+              _listChosen = _listExercises
+                  .where((element) => element.level == "advanced")
+                  .toList();
+              break;
+            default:
+              break;
+          }
 
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),

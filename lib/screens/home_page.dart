@@ -44,6 +44,9 @@ class _HomePageState extends State<HomePage> {
           BottomNavItemWidget(
             title: "Settings",
             svgScr: "assets/icons/Settings.svg",
+            press: () => setState(() {
+              selectedPage = 3;
+            }),
           ),
         ],
       ),
@@ -55,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return TodayPage();
         break;
-      case 2:
+      case 3:
         return UserInfoPage();
         break;
       default:

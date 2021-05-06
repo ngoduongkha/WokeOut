@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -8,6 +9,147 @@ class UserInfoPage extends StatefulWidget {
 class _UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Color(0xFFEBEDF0),
+      body: CustomScrollView(
+        slivers: [
+          settingAppBar(context),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                avatar(),
+                myProfile(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+
+  Widget settingAppBar(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      elevation: 0,
+      backgroundColor: Colors.white,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: Text(
+          'Settings',
+          style: GoogleFonts.lato(
+            fontSize: 25,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ),
+      actions: [
+        Container(
+          width: 100,
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: MaterialButton(
+            color: Color(0xFF40D876),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            onPressed: () {},
+            child: Text(
+              'Save',
+              style: GoogleFonts.lato(
+                color: Color(0xFFFFFFFE),
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget avatar() {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(width: 5, color: Colors.white),
+          image: DecorationImage(
+            image: AssetImage('assets/images/avartar_demo.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget myProfile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            'Account profile',
+            style: headerStyle(),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              settingCard('Username', 'ltl1313ltl'),
+              settingCard('Email', 'ltl1313ltl@gmail.com'),
+              settingCard('Name', 'Luan Le'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget settingCard(String title, String value) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: normalStyle()),
+              Text(value, style: normalBoldStyle()),
+            ],
+          ),
+        ),
+        Container(color: Color(0xFFEBEDF0), height: 1),
+      ],
+    );
+  }
+}
+
+TextStyle headerStyle() {
+  return GoogleFonts.lato(
+    fontSize: 20,
+    color: Colors.black,
+    fontWeight: FontWeight.w900,
+  );
+}
+
+TextStyle normalStyle() {
+  return GoogleFonts.lato(
+    fontSize: 17,
+    color: Colors.black,
+    fontWeight: FontWeight.normal,
+  );
+}
+
+TextStyle normalBoldStyle() {
+  return GoogleFonts.lato(
+    fontSize: 17,
+    color: Colors.black,
+    fontWeight: FontWeight.w900,
+  );
 }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -18,7 +21,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
             delegate: SliverChildListDelegate(
               [
                 avatar(),
-                myProfile(),
+                accountProfile(),
+                fitnessProfile(),
               ],
             ),
           ),
@@ -39,7 +43,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           style: GoogleFonts.lato(
             fontSize: 25,
             fontWeight: FontWeight.w900,
-            color: Colors.white,
+            color: Colors.black,
             letterSpacing: 1.2,
           ),
         ),
@@ -67,25 +71,44 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
+//Begin avatar
   Widget avatar() {
+    File _image;
+    final picker = ImagePicker();
+    Future pickImage() async {
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        _image = File('assets/images/avartar_demo.jpg');
+      }
+    }
+
     return Center(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        width: 120,
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          border: Border.all(width: 5, color: Colors.white),
-          image: DecorationImage(
-            image: AssetImage('assets/images/avartar_demo.jpg'),
-            fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: pickImage,
+        child: Container(
+          margin: EdgeInsets.all(20),
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(width: 5, color: Colors.white),
+            image: DecorationImage(
+              image: _image != null
+                  ? Image.file(_image)
+                  : AssetImage('assets/images/shoulder.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
     );
   }
+//End avatar
 
-  Widget myProfile() {
+//Begin Account Profile
+  Widget accountProfile() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,7 +143,23 @@ class _UserInfoPageState extends State<UserInfoPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: normalStyle()),
-              Text(value, style: normalBoldStyle()),
+              Container(
+                width: 250,
+                child: TextFormField(
+                  textAlign: TextAlign.right,
+                  initialValue: value,
+                  style: normalBoldStyle(),
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -128,6 +167,35 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ],
     );
   }
+//End account profile
+
+//Begin fitness profile
+  Widget fitnessProfile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            'Fitness profile',
+            style: headerStyle(),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              settingCard('Gender', 'Male'),
+              settingCard('Height', '160 cm'),
+              settingCard('Weight', '55 kg'),
+              settingCard('Fitness level', 'Advanced'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+//End fitness profile
 }
 
 TextStyle headerStyle() {

@@ -68,23 +68,28 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
+//Begin avatar
   Widget avatar() {
     return Center(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        width: 120,
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          border: Border.all(width: 5, color: Colors.white),
-          image: DecorationImage(
-            image: AssetImage('assets/images/avartar_demo.jpg'),
-            fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () {},
+        child: Container(
+          margin: EdgeInsets.all(20),
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(width: 5, color: Colors.white),
+            image: DecorationImage(
+              image: AssetImage('assets/images/avartar_demo.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
     );
   }
+//End avatar
 
 //Begin Account Profile
   Widget accountProfile() {

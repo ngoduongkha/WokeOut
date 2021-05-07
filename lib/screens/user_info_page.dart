@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -70,9 +73,20 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
 //Begin avatar
   Widget avatar() {
+    File _image;
+    final picker = ImagePicker();
+    Future pickImage() async {
+      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        _image = File('assets/images/avartar_demo.jpg');
+      }
+    }
+
     return Center(
       child: GestureDetector(
-        onTap: () {},
+        onTap: pickImage,
         child: Container(
           margin: EdgeInsets.all(20),
           width: 120,
@@ -81,7 +95,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
             borderRadius: BorderRadius.circular(100),
             border: Border.all(width: 5, color: Colors.white),
             image: DecorationImage(
-              image: AssetImage('assets/images/avartar_demo.jpg'),
+              image: _image != null
+                  ? Image.file(_image)
+                  : AssetImage('assets/images/shoulder.jpg'),
               fit: BoxFit.cover,
             ),
           ),

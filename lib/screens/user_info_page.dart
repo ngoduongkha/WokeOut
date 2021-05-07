@@ -18,7 +18,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
             delegate: SliverChildListDelegate(
               [
                 avatar(),
-                myProfile(),
+                accountProfile(),
+                fitnessProfile(),
               ],
             ),
           ),
@@ -39,7 +40,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           style: GoogleFonts.lato(
             fontSize: 25,
             fontWeight: FontWeight.w900,
-            color: Colors.white,
+            color: Colors.black,
             letterSpacing: 1.2,
           ),
         ),
@@ -85,7 +86,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-  Widget myProfile() {
+//Begin Account Profile
+  Widget accountProfile() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -144,6 +146,35 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ],
     );
   }
+//End account profile
+
+//Begin fitness profile
+  Widget fitnessProfile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Text(
+            'Fitness profile',
+            style: headerStyle(),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              settingCard('Gender', 'Male'),
+              settingCard('Height', '160 cm'),
+              settingCard('Weight', '55 kg'),
+              settingCard('Fitness level', 'Advanced'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+//End fitness profile
 }
 
 TextStyle headerStyle() {

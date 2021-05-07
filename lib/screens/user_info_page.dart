@@ -120,7 +120,23 @@ class _UserInfoPageState extends State<UserInfoPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: normalStyle()),
-              Text(value, style: normalBoldStyle()),
+              Container(
+                width: 250,
+                child: TextFormField(
+                  textAlign: TextAlign.right,
+                  initialValue: value,
+                  style: normalBoldStyle(),
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

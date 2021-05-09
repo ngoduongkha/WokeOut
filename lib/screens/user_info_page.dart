@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woke_out/widgets/avatar.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                avatar(),
+                AvatarWidget(),
                 accountProfile(),
                 fitnessProfile(),
               ],
@@ -76,7 +77,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     File _image;
     final picker = ImagePicker();
     Future pickImage() async {
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {

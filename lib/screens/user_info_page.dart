@@ -1,11 +1,13 @@
 import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:woke_out/widgets/avatar.dart';
 import 'package:woke_out/widgets/picker_card.dart';
+import 'package:woke_out/enum.dart';
+import 'package:woke_out/screens/bmi_page/input_page.dart';
+import 'package:woke_out/string_extension.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -13,6 +15,10 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
+  Gender gender;
+  int weight;
+  int height;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,6 +176,53 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ],
     );
   }
+
+  void _awaitReturnValueFromBMIScreen(BuildContext context) async {
+    // start the SecondScreen and wait for it to finish with a result
+    final Map<String, dynamic> result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                InputPage(gender: gender, height: height, weight: weight)));
+
+    // after the SecondScreen result comes back update the Text widget with it
+    setState(() {
+      if (result != null) {
+        gender = result['gender'];
+        height = result['height'];
+        weight = result['weight'];
+      }
+    });
+  }
+
+  Widget gestureCard(String title, String value) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: normalStyle()),
+              Container(
+                width: 250,
+                child: GestureDetector(
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.right,
+                    style: normalBoldStyle(),
+                  ),
+                  onTap: () => _awaitReturnValueFromBMIScreen(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(color: Color(0xFFEBEDF0), height: 1),
+      ],
+    );
+  }
 //End account profile
 
 //Begin fitness profile
@@ -192,6 +245,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
               PickerCard(title: 'Gender', value: 'Male'),
               PickerCard(title: 'Gender', value: 'Male'),
               PickerCard(title: 'Gender', value: 'Male'),
+              gestureCard(
+                  'Gender',
+                  gender
+                      .toString()
+                      .substring(gender.toString().indexOf('.') + 1)
+                      .capitalize()),
+              gestureCard('Height', height.toString() + ' cm'),
+              gestureCard('Weight', weight.toString() + ' kg'),
+              gestureCard('Fitness level', 'Advanced'),
             ],
           ),
         ),

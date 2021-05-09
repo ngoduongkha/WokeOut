@@ -185,17 +185,13 @@ class _UserInfoPageState extends State<UserInfoPage> {
         Container(
           color: Colors.white,
           child: Column(
-            children: [
-              settingCard('Gender', 'Male'),
-              settingCard('Height', '160 cm'),
-              settingCard('Weight', '55 kg'),
-              settingCard('Fitness level', 'Advanced'),
-            ],
+            children: [],
           ),
         ),
       ],
     );
   }
+  
 //End fitness profile
 }
 

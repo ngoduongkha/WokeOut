@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woke_out/widgets/avatar.dart';
+import 'package:woke_out/widgets/picker_card.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                avatar(),
+                AvatarWidget(),
                 accountProfile(),
                 fitnessProfile(),
               ],
@@ -76,7 +79,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     File _image;
     final picker = ImagePicker();
     Future pickImage() async {
-      final pickedFile = await picker.getImage(source: ImageSource.camera);
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
@@ -163,7 +166,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ],
           ),
         ),
-        Container(color: Color(0xFFEBEDF0), height: 1),
+        SizedBox(height: 1),
       ],
     );
   }
@@ -185,10 +188,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              settingCard('Gender', 'Male'),
-              settingCard('Height', '160 cm'),
-              settingCard('Weight', '55 kg'),
-              settingCard('Fitness level', 'Advanced'),
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
             ],
           ),
         ),

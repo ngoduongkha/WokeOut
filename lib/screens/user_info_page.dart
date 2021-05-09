@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:woke_out/widgets/avatar.dart';
+import 'package:woke_out/widgets/picker_card.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -164,7 +166,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ],
           ),
         ),
-        Container(color: Color(0xFFEBEDF0), height: 1),
+        SizedBox(height: 1),
       ],
     );
   }
@@ -185,13 +187,17 @@ class _UserInfoPageState extends State<UserInfoPage> {
         Container(
           color: Colors.white,
           child: Column(
-            children: [],
+            children: [
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
+              PickerCard(title: 'Gender', value: 'Male'),
+            ],
           ),
         ),
       ],
     );
   }
-  
 //End fitness profile
 }
 

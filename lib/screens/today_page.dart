@@ -208,15 +208,16 @@ class TodayPage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TodayExercisePage(
-                          muscleName: list[index].name,
-                          imagePath: list[index].imageUrl,
-                        ),
-                      ),
-                    ),
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => TodayExercisePage(
+                    //       muscleName: list[index].name,
+                    //       imagePath: list[index].imageUrl,
+                    //     ),
+                    //   ),
+                    // ),
+                    Navigator.pushNamed(context, "exerciseList")
                   },
                   child: Container(
                     height: 200,

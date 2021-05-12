@@ -2,45 +2,74 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:woke_out/widgets/avatar.dart';
-import 'package:woke_out/widgets/picker_card.dart';
-import 'package:woke_out/enum.dart';
+import 'package:provider/provider.dart';
+import 'package:woke_out/model/app_user_model.dart';
+import 'package:woke_out/services/app_user_service.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/screens/bmi_page/input_page.dart';
 import 'package:woke_out/string_extension.dart';
+import 'package:woke_out/widgets/avatar.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
+
+  static _UserInfoPageState of(BuildContext context) =>
+      context.findAncestorStateOfType<_UserInfoPageState>();
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  Gender gender;
-  int weight;
-  int height;
+  MyAppUser _user;
+  File _image;
+
+  set image(File value) {
+    assert(value != null);
+    _image = value;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFEBEDF0),
-      body: CustomScrollView(
-        slivers: [
-          settingAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                AvatarWidget(),
-                accountProfile(),
-                fitnessProfile(),
+    final auth = Provider.of<AuthService>(context, listen: false);
+
+    return StreamBuilder<MyAppUser>(
+      stream: Stream.fromFuture(AppUserService().loadProfile(auth.currentUser().uid)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          _user = snapshot.data;
+
+          return Scaffold(
+            backgroundColor: Color(0xFFEBEDF0),
+            body: CustomScrollView(
+              slivers: [
+                settingAppBar(context),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      AvatarWidget(photoUrl: _user.photoUrl),
+                      accountProfile(),
+                      fitnessProfile(),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 
   Widget settingAppBar(BuildContext context) {
+    void saveProfile() async {
+      await AppUserService().updateUser(_user).then((value) => print(value));
+    }
+
     return SliverAppBar(
       pinned: true,
       elevation: 0,
@@ -65,9 +94,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
             color: Color(0xFF40D876),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            onPressed: () {},
+            onPressed: () {
+              saveProfile();
+            },
             child: Text(
-              'Save',
+              'Lưu',
               style: GoogleFonts.lato(
                 color: Color(0xFFFFFFFE),
                 fontSize: 18,
@@ -79,42 +110,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ],
     );
   }
-
-//Begin avatar
-  Widget avatar() {
-    File _image;
-    final picker = ImagePicker();
-    Future pickImage() async {
-      final pickedFile = await picker.getImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        _image = File('assets/images/avartar_demo.jpg');
-      }
-    }
-
-    return Center(
-      child: GestureDetector(
-        onTap: pickImage,
-        child: Container(
-          margin: EdgeInsets.all(20),
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(width: 5, color: Colors.white),
-            image: DecorationImage(
-              image: _image != null
-                  ? Image.file(_image)
-                  : AssetImage('assets/images/shoulder.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-//End avatar
 
 //Begin Account Profile
   Widget accountProfile() {
@@ -132,9 +127,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              settingCard('Username', 'ltl1313ltl'),
-              settingCard('Email', 'ltl1313ltl@gmail.com'),
-              settingCard('Name', 'Luan Le'),
+              settingCard('Tên', _user.displayName),
+              settingCard('Email', _user.email),
+              settingCard('Quận/Huyện', _user.state),
+              settingCard('Tỉnh/Thành phố', _user.city),
+              settingCard('Tiểu sử', _user.bio),
             ],
           ),
         ),
@@ -160,6 +157,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   style: normalBoldStyle(),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
+                    hintText: "Nhập ${title.toLowerCase()}",
                     border: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -180,17 +178,23 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void _awaitReturnValueFromBMIScreen(BuildContext context) async {
     // start the SecondScreen and wait for it to finish with a result
     final Map<String, dynamic> result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                InputPage(gender: gender, height: height, weight: weight)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => InputPage(
+          gender: _user.gender,
+          height: _user.height,
+          weight: _user.weight,
+        ),
+      ),
+    );
 
     // after the SecondScreen result comes back update the Text widget with it
     setState(() {
       if (result != null) {
-        gender = result['gender'];
-        height = result['height'];
-        weight = result['weight'];
+        _user.gender = result['gender'];
+        _user.height = result['height'];
+        _user.weight = result['weight'];
+        print(_user.toMap());
       }
     });
   }
@@ -241,19 +245,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
               gestureCard(
                   'Gender',
-                  gender
+                  _user.gender
                       .toString()
-                      .substring(gender.toString().indexOf('.') + 1)
+                      .substring(_user.gender.toString().indexOf('.') + 1)
                       .capitalize()),
-              gestureCard('Height', height.toString() + ' cm'),
-              gestureCard('Weight', weight.toString() + ' kg'),
-              gestureCard('Fitness level', 'Advanced'),
+              gestureCard('Height', '${_user.height.toString()} cm'),
+              gestureCard('Weight', '${_user.weight.toString()} kg'),
+              gestureCard('Fitness level', '${_user.level.toString()}'),
             ],
           ),
         ),

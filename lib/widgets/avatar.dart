@@ -1,26 +1,31 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:woke_out/screens/user_info_page.dart';
 
 class AvatarWidget extends StatefulWidget {
+  final String photoUrl;
+
+  const AvatarWidget({Key key, this.photoUrl}) : super(key: key);
+
   @override
   _AvatarWidgetState createState() => _AvatarWidgetState();
 }
 
 class _AvatarWidgetState extends State<AvatarWidget> {
   File _image;
+
   @override
   Widget build(BuildContext context) {
     final picker = ImagePicker();
+
     Future pickImage() async {
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       setState(() {
         if (pickedFile != null) {
           print('Avatar is not null');
           _image = File(pickedFile.path);
-        } else {
-          print('Avatar is null');
-          _image = File('assets/images/avartar_demo.jpg');
+          UserInfoPage.of(context).image = _image;
         }
       });
     }
@@ -38,7 +43,9 @@ class _AvatarWidgetState extends State<AvatarWidget> {
             image: DecorationImage(
               image: _image != null
                   ? FileImage(_image)
-                  : AssetImage('assets/images/shoulder.jpg'),
+                  : widget.photoUrl != null
+                      ? NetworkImage(widget.photoUrl)
+                      : AssetImage('assets/images/shoulder.jpg'),
               fit: BoxFit.cover,
             ),
           ),

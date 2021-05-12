@@ -8,7 +8,7 @@ import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/login_page.dart';
 import 'package:woke_out/screens/resting_page.dart';
 import 'package:woke_out/screens/signup_page.dart';
-import 'package:woke_out/screens/welcome_page.dart';
+import 'package:woke_out/screens/welcome_page/welcome_page.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {

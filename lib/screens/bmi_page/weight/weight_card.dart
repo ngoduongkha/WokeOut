@@ -29,6 +29,7 @@ class _WeightCardState extends State<WeightCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color(0xFF15153F),
       child: Padding(
         padding: EdgeInsets.only(top: screenAwareSize(32.0, context)),
         child: Column(
@@ -85,7 +86,7 @@ class WeightBackground extends StatelessWidget {
         Container(
           height: screenAwareSize(100.0, context),
           decoration: BoxDecoration(
-            color: Color.fromRGBO(244, 244, 244, 1.0),
+            color: Color(0xFF15152B),
             borderRadius:
                 new BorderRadius.circular(screenAwareSize(50.0, context)),
           ),
@@ -93,6 +94,7 @@ class WeightBackground extends StatelessWidget {
         ),
         SvgPicture.asset(
           "assets/images/weight_arrow.svg",
+          color: Color(0xFF40D876),
           height: screenAwareSize(10.0, context),
           width: screenAwareSize(18.0, context),
         ),

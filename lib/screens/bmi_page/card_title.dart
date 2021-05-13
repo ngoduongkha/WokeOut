@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 const TextStyle _titleStyle = TextStyle(
   fontSize: 16.0,
   fontWeight: FontWeight.w500,
-  color: Color.fromRGBO(14, 24, 35, 1.0),
+  color: Color(0xFF40D876),
 );
 
 const TextStyle _subtitleStyle = TextStyle(
   fontSize: 8.0,
   fontWeight: FontWeight.w500,
-  color: Color.fromRGBO(78, 102, 114, 1.0),
+  color: Color(0xFF40D876),
 );
 
 class CardTitle extends StatelessWidget {

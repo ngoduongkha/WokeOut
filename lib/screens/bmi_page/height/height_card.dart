@@ -27,6 +27,7 @@ class HeightCardState extends State<HeightCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color(0xFF15153F),
       child: Padding(
         padding: EdgeInsets.only(top: screenAwareSize(16.0, context)),
         child: Column(

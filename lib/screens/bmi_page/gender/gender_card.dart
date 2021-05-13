@@ -56,6 +56,7 @@ class _GenderCardState extends State<GenderCard>
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color(0xFF15153F),
       child: Padding(
         padding: EdgeInsets.only(top: screenAwareSize(12.0, context)),
         child: Column(
@@ -110,7 +111,7 @@ class _GenderCardState extends State<GenderCard>
     setState(() => selectedGender = gender);
 
     InputPage.of(context).gender = selectedGender;
-    
+
     _arrowAnimationController.animateTo(
       _genderAngles[gender],
       duration: Duration(milliseconds: 150),
@@ -203,6 +204,7 @@ class GenderArrow extends AnimatedWidget {
           angle: -_defaultGenderAngle,
           child: SvgPicture.asset(
             "assets/images/gender_arrow.svg",
+            color: Color(0xFF40D876),
             height: _arrowLength(context),
             width: _arrowLength(context),
           ),
@@ -241,7 +243,7 @@ class GenderCircle extends StatelessWidget {
       height: _circleSize(context),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Color.fromRGBO(244, 244, 244, 1.0),
+        color: Color(0xFF15152B),
       ),
     );
   }
@@ -258,7 +260,7 @@ class GenderLine extends StatelessWidget {
       child: Container(
         height: screenAwareSize(8.0, context),
         width: 1.0,
-        color: Color.fromRGBO(216, 217, 223, 0.54),
+        color: Color(0xFF40D876),
       ),
     );
   }

@@ -28,183 +28,100 @@ class _Body extends StatelessWidget {
     final auth = Provider.of<AuthService>(context, listen: false);
     final userService = Provider.of<AppUserService>(context, listen: false);
 
-    // _background() {
-    //   return Background(
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: <Widget>[
-    //           Text(
-    //             "SIGNUP",
-    //             style: TextStyle(fontWeight: FontWeight.bold),
-    //           ),
-    //           SizedBox(height: size.height * 0.03),
-    //           RoundedInputField(
-    //             controller: emailController,
-    //             hintText: "Your Email",
-    //             onChanged: (value) {},
-    //           ),
-    //           RoundedPasswordField(
-    //             controller: passwordController,
-    //             onChanged: (value) {},
-    //           ),
-    //           RoundedButton(
-    //             text: "SIGNUP",
-    //             press: () async {
-    //               var user = await auth.createUserWithEmailAndPassword(
-    //                   emailController.text, passwordController.text);
-    //               if (user != null) {
-    //                 Navigator.pushNamedAndRemoveUntil(
-    //                     context, 'home', ModalRoute.withName('landing'));
-    //               } else {
-    //                 showDialog(
-    //                   context: context,
-    //                   builder: (BuildContext context) {
-    //                     return CustomDialogBox(
-    //                       dialogType: DialogType.error,
-    //                       title: "Đăng ký thất bại",
-    //                       descriptions: auth.errorMessage,
-    //                       text: "OK",
-    //                     );
-    //                   },
-    //                 );
-    //               }
-    //             },
-    //           ),
-    //           SizedBox(height: size.height * 0.03),
-    //           AlreadyHaveAnAccountCheck(
-    //             login: false,
-    //             press: () {
-    //               Navigator.popAndPushNamed(context, 'login');
-    //             },
-    //           ),
-    //           OrDivider(),
-    //           Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: <Widget>[
-    //               SocialIcon(
-    //                 iconSrc: "assets/icons/facebook.svg",
-    //                 press: () async {
-    //                   var user = await auth.signInWithFacebook();
-    //                   if (user != null) {
-    //                     userService.addUser(user);
-    //                     Navigator.pushNamedAndRemoveUntil(
-    //                         context, 'home', ModalRoute.withName('landing'));
-    //                   }
-    //                 },
-    //               ),
-    //               SocialIcon(
-    //                 iconSrc: "assets/icons/twitter.svg",
-    //                 press: () {},
-    //               ),
-    //               SocialIcon(
-    //                 iconSrc: "assets/icons/google-plus.svg",
-    //                 press: () async {
-    //                   var user = await auth.signInWithGoogle();
-    //                   if (user != null) {
-    //                     userService.addUser(user);
-    //                     Navigator.pushNamedAndRemoveUntil(
-    //                         context, 'home', ModalRoute.withName('landing'));
-    //                   }
-    //                 },
-    //               ),
-    //             ],
-    //           )
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
-
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/signup_background.png'),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/signup_background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            RoundedInputField(
-              controller: emailController,
-              hintText: "Your Email",
-              onChanged: (value) {},
-            ),
-            RoundedPasswordField(
-              controller: passwordController,
-              onChanged: (value) {},
-            ),
-            RoundedButton(
-              text: "SIGNUP",
-              press: () async {
-                var user = await auth.createUserWithEmailAndPassword(
-                    emailController.text, passwordController.text);
-                if (user != null) {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, 'home', ModalRoute.withName('landing'));
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialogBox(
-                        dialogType: DialogType.error,
-                        title: "Đăng ký thất bại",
-                        descriptions: auth.errorMessage,
-                        text: "OK",
-                      );
+          Container(
+            decoration:
+                BoxDecoration(color: Color(0xFF15152B).withOpacity(0.5)),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              SizedBox(height: size.height * 0.03),
+              RoundedInputField(
+                controller: emailController,
+                hintText: "Your Email",
+                onChanged: (value) {},
+              ),
+              RoundedPasswordField(
+                controller: passwordController,
+                onChanged: (value) {},
+              ),
+              RoundedButton(
+                text: "SIGNUP",
+                press: () async {
+                  var user = await auth.createUserWithEmailAndPassword(
+                      emailController.text, passwordController.text);
+                  if (user != null) {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, 'home', ModalRoute.withName('landing'));
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialogBox(
+                          dialogType: DialogType.error,
+                          title: "Đăng ký thất bại",
+                          descriptions: auth.errorMessage,
+                          text: "OK",
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: size.height * 0.03),
+              AlreadyHaveAnAccountCheck(
+                login: false,
+                press: () {
+                  Navigator.popAndPushNamed(context, 'login');
+                },
+              ),
+              OrDivider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SocialIcon(
+                    iconSrc: "assets/icons/facebook.svg",
+                    press: () async {
+                      var user = await auth.signInWithFacebook();
+                      if (user != null) {
+                        userService.addUser(user);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'home', ModalRoute.withName('landing'));
+                      }
                     },
-                  );
-                }
-              },
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              login: false,
-              press: () {
-                Navigator.popAndPushNamed(context, 'login');
-              },
-            ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocialIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () async {
-                    var user = await auth.signInWithFacebook();
-                    if (user != null) {
-                      userService.addUser(user);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, 'home', ModalRoute.withName('landing'));
-                    }
-                  },
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () async {
-                    var user = await auth.signInWithGoogle();
-                    if (user != null) {
-                      userService.addUser(user);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, 'home', ModalRoute.withName('landing'));
-                    }
-                  },
-                ),
-              ],
-            )
-          ],
-        ),
+                  ),
+                  SocialIcon(
+                    iconSrc: "assets/icons/twitter.svg",
+                    press: () {},
+                  ),
+                  SocialIcon(
+                    iconSrc: "assets/icons/google-plus.svg",
+                    press: () async {
+                      var user = await auth.signInWithGoogle();
+                      if (user != null) {
+                        userService.addUser(user);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'home', ModalRoute.withName('landing'));
+                      }
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height * 0.05),
+            ],
+          ),
+        ],
       ),
     );
   }

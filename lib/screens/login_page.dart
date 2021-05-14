@@ -28,62 +28,6 @@ class _Body extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final auth = Provider.of<AuthService>(context, listen: false);
 
-    // _background() {
-    //   return Background(
-    //     child: SingleChildScrollView(
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: <Widget>[
-    //           Text(
-    //             "LOGIN",
-    //             style: TextStyle(fontWeight: FontWeight.bold),
-    //           ),
-    //           SizedBox(height: size.height * 0.03),
-    //           SizedBox(height: size.height * 0.03),
-    //           RoundedInputField(
-    //             hintText: "Your Email",
-    //             controller: emailController,
-    //             onChanged: (value) {},
-    //           ),
-    //           RoundedPasswordField(
-    //             controller: passwordController,
-    //             onChanged: (value) {},
-    //           ),
-    //           RoundedButton(
-    //             text: "LOGIN",
-    //             press: () async {
-    //               var user = await auth.signInWithEmailAndPassword(
-    //                   emailController.text, passwordController.text);
-    //               if (user != null) {
-    //                 Navigator.pushNamedAndRemoveUntil(
-    //                     context, 'home', ModalRoute.withName('landing'));
-    //               } else {
-    //                 showDialog(
-    //                   context: context,
-    //                   builder: (BuildContext context) {
-    //                     return CustomDialogBox(
-    //                       dialogType: DialogType.error,
-    //                       title: "Đăng nhập thất bại",
-    //                       descriptions: auth.errorMessage,
-    //                       text: "OK",
-    //                     );
-    //                   },
-    //                 );
-    //               }
-    //             },
-    //           ),
-    //           SizedBox(height: size.height * 0.03),
-    //           AlreadyHaveAnAccountCheck(
-    //             press: () {
-    //               Navigator.popAndPushNamed(context, 'signup');
-    //             },
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   );
-    // }
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(

@@ -32,6 +32,17 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 AvatarWidget(),
                 accountProfile(),
                 fitnessProfile(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Log out',
+                    style: GoogleFonts.lato(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
               ],
             ),
           ),

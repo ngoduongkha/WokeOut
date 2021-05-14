@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/avatar.dart';
 import 'package:woke_out/widgets/picker_card.dart';
 import 'package:woke_out/enum.dart';
@@ -21,6 +23,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthService>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Color(0xFFEBEDF0),
       body: CustomScrollView(
@@ -33,7 +37,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 accountProfile(),
                 fitnessProfile(),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    auth.signOut();
+                  },
                   child: Text(
                     'Log out',
                     style: GoogleFonts.lato(

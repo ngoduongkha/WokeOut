@@ -241,10 +241,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
-              PickerCard(title: 'Gender', value: 'Male'),
               gestureCard(
                   'Gender',
                   gender

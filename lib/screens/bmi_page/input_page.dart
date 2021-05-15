@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:woke_out/enum.dart';
 import 'package:woke_out/screens/bmi_page/gender/gender_card.dart';
 import 'package:woke_out/screens/bmi_page/height/height_card.dart';
@@ -33,15 +34,31 @@ class InputPage extends StatelessWidget {
 
   Widget _buildTitle(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 24.0,
-        top: screenAwareSize(56.0, context),
-      ),
-      child: Text(
-        "Input your BMI",
-        style: new TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-      ),
-    );
+        padding: EdgeInsets.only(
+          left: 24.0,
+          top: screenAwareSize(56.0, context),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Fitness ',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 30,
+                color: Colors.white,
+                letterSpacing: 2,
+              ),
+            ),
+            Text(
+              'information',
+              style: GoogleFonts.bebasNeue(
+                fontSize: 30,
+                color: Color(0xFF40D876),
+                letterSpacing: 2,
+              ),
+            )
+          ],
+        ));
   }
 
   Widget _buildCards(BuildContext context) {
@@ -73,7 +90,14 @@ class InputPage extends StatelessWidget {
       height: screenAwareSize(108.0, context),
       width: double.infinity,
       child: TextButton(
-        child: Text("Submit"),
+        child: Text(
+          "Submit",
+          style: GoogleFonts.bebasNeue(
+            color: Colors.white,
+            fontSize: 26,
+            letterSpacing: 1.8,
+          ),
+        ),
         onPressed: () => _submitForm(context),
       ),
     );

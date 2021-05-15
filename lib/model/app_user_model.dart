@@ -1,8 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
 import "package:meta/meta.dart";
 import 'package:woke_out/enum.dart';
 
-@JsonSerializable()
 class MyAppUser {
   final String uid;
   String email;

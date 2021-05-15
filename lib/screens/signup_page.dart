@@ -10,6 +10,7 @@ import 'package:woke_out/enum.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
+import 'package:woke_out/widgets/password_text_form_field.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -52,9 +53,8 @@ class _Body extends StatelessWidget {
                 hintText: "Your Email",
                 onChanged: (value) {},
               ),
-              RoundedPasswordField(
-                controller: passwordController,
-                onChanged: (value) {},
+              PasswordField(
+                hintText: "Your password",
               ),
               RoundedButton(
                 text: "SIGNUP",

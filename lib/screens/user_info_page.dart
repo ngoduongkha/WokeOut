@@ -2,41 +2,71 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/enum.dart';
+import 'package:woke_out/model/app_user_model.dart';
+import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/avatar.dart';
-import 'package:woke_out/widgets/picker_card.dart';
-import 'package:woke_out/enum.dart';
 import 'package:woke_out/screens/bmi_page/input_page.dart';
 import 'package:woke_out/string_extension.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
+
+  static _UserInfoPageState of(BuildContext context) =>
+      context.findAncestorStateOfType<_UserInfoPageState>();
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  Gender gender;
-  int weight;
-  int height;
+  MyAppUser _userInternet;
+  MyAppUser _userLocal;
+
+  File _image;
+
+  TextEditingController _nameController;
+  TextEditingController _emailController;
+  TextEditingController _stateController;
+  TextEditingController _cityController;
+  TextEditingController _bioController;
+
+  set image(File value) {
+    assert(value != null);
+    _image = value;
+  }
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
 
-    return Scaffold(
-      backgroundColor: Color(0xFFEBEDF0),
-      body: CustomScrollView(
-        slivers: [
-          settingAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                AvatarWidget(),
-                accountProfile(),
-                fitnessProfile(),
-                TextButton(
+    return FutureBuilder<MyAppUser>(
+      future: AppUserService().loadProfile(auth.currentUser().uid),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _userInternet = snapshot.data;
+
+          if (_userLocal == null) _userLocal = _userInternet;
+
+          _nameController =
+              new TextEditingController(text: _userLocal.displayName);
+          _emailController = new TextEditingController(text: _userLocal.email);
+          _stateController = new TextEditingController(text: _userLocal.state);
+          _cityController = new TextEditingController(text: _userLocal.city);
+          _bioController = new TextEditingController(text: _userLocal.bio);
+
+          return Scaffold(
+            backgroundColor: Color(0xFFEBEDF0),
+            body: CustomScrollView(
+              slivers: [
+                settingAppBar(context),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      AvatarWidget(photoUrl: _userLocal.photoUrl),
+                      accountProfile(),
+                      fitnessProfile(),
+                      TextButton(
                   onPressed: () {
                     auth.signOut();
                   },
@@ -48,13 +78,30 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
+                ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
+  }
+
+  void saveProfile() async {
+    if (_userLocal != _userInternet) _userInternet = _userLocal;
+    if (_image != null) 
+    await AppUserService()
+        .updateUser(_userInternet, localFile: _image)
+        .then((value) => print(value));
   }
 
   Widget settingAppBar(BuildContext context) {
@@ -82,9 +129,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
             color: Color(0xFF40D876),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            onPressed: () {},
+            onPressed: () {
+              saveProfile();
+            },
             child: Text(
-              'Save',
+              'Lưu',
               style: GoogleFonts.lato(
                 color: Color(0xFFFFFFFE),
                 fontSize: 18,
@@ -96,42 +145,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       ],
     );
   }
-
-//Begin avatar
-  Widget avatar() {
-    File _image;
-    final picker = ImagePicker();
-    Future pickImage() async {
-      final pickedFile = await picker.getImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        _image = File('assets/images/avartar_demo.jpg');
-      }
-    }
-
-    return Center(
-      child: GestureDetector(
-        onTap: pickImage,
-        child: Container(
-          margin: EdgeInsets.all(20),
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(width: 5, color: Colors.white),
-            image: DecorationImage(
-              image: _image != null
-                  ? Image.file(_image)
-                  : AssetImage('assets/images/shoulder.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-//End avatar
 
 //Begin Account Profile
   Widget accountProfile() {
@@ -149,9 +162,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              settingCard('Username', 'ltl1313ltl'),
-              settingCard('Email', 'ltl1313ltl@gmail.com'),
-              settingCard('Name', 'Luan Le'),
+              settingCard('Tên', _userLocal.displayName, _nameController),
+              settingCard('Email', _userLocal.email, _emailController),
+              settingCard('Quận/Huyện', _userLocal.state, _stateController),
+              settingCard('Tỉnh/Thành phố', _userLocal.city, _cityController),
+              settingCard('Tiểu sử', _userLocal.bio, _bioController),
             ],
           ),
         ),
@@ -159,7 +174,30 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-  Widget settingCard(String title, String value) {
+  Widget settingCard1(String title, String value) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: normalStyle()),
+              Container(
+                width: 250,
+                child: null,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 1),
+      ],
+    );
+  }
+
+  Widget settingCard(
+      String title, String value, TextEditingController scontroller) {
     return Column(
       children: [
         Container(
@@ -172,11 +210,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
               Container(
                 width: 250,
                 child: TextFormField(
+                  controller: scontroller,
                   textAlign: TextAlign.right,
-                  initialValue: value,
                   style: normalBoldStyle(),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
+                    hintText: "Nhập ${title.toLowerCase()}",
                     border: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -197,17 +236,22 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void _awaitReturnValueFromBMIScreen(BuildContext context) async {
     // start the SecondScreen and wait for it to finish with a result
     final Map<String, dynamic> result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                InputPage(gender: gender, height: height, weight: weight)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => InputPage(
+          gender: _userLocal.gender,
+          height: _userLocal.height,
+          weight: _userLocal.weight,
+        ),
+      ),
+    );
 
     // after the SecondScreen result comes back update the Text widget with it
     setState(() {
       if (result != null) {
-        gender = result['gender'];
-        height = result['height'];
-        weight = result['weight'];
+        _userLocal.gender = result['gender'];
+        _userLocal.height = result['height'];
+        _userLocal.weight = result['weight'];
       }
     });
   }
@@ -260,13 +304,13 @@ class _UserInfoPageState extends State<UserInfoPage> {
             children: [
               gestureCard(
                   'Gender',
-                  gender
+                  _userLocal.gender
                       .toString()
-                      .substring(gender.toString().indexOf('.') + 1)
+                      .substring(_userLocal.gender.toString().indexOf('.') + 1)
                       .capitalize()),
-              gestureCard('Height', height.toString() + ' cm'),
-              gestureCard('Weight', weight.toString() + ' kg'),
-              gestureCard('Fitness level', 'Advanced'),
+              gestureCard('Height', '${_userLocal.height.toString()} cm'),
+              gestureCard('Weight', '${_userLocal.weight.toString()} kg'),
+              gestureCard('Fitness level', '${_userLocal.level.toString()}'),
             ],
           ),
         ),

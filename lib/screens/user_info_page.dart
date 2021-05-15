@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/enum.dart';
 import 'package:woke_out/model/app_user_model.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
@@ -19,8 +20,16 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  MyAppUser _user;
+  MyAppUser _userInternet;
+  MyAppUser _userLocal;
+
   File _image;
+
+  TextEditingController _nameController;
+  TextEditingController _emailController;
+  TextEditingController _stateController;
+  TextEditingController _cityController;
+  TextEditingController _bioController;
 
   set image(File value) {
     assert(value != null);
@@ -31,11 +40,20 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
 
-    return StreamBuilder<MyAppUser>(
-      stream: Stream.fromFuture(AppUserService().loadProfile(auth.currentUser().uid)),
+    return FutureBuilder<MyAppUser>(
+      future: AppUserService().loadProfile(auth.currentUser().uid),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          _user = snapshot.data;
+        if (snapshot.hasData) {
+          _userInternet = snapshot.data;
+
+          if (_userLocal == null) _userLocal = _userInternet;
+
+          _nameController =
+              new TextEditingController(text: _userLocal.displayName);
+          _emailController = new TextEditingController(text: _userLocal.email);
+          _stateController = new TextEditingController(text: _userLocal.state);
+          _cityController = new TextEditingController(text: _userLocal.city);
+          _bioController = new TextEditingController(text: _userLocal.bio);
 
           return Scaffold(
             backgroundColor: Color(0xFFEBEDF0),
@@ -45,7 +63,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      AvatarWidget(photoUrl: _user.photoUrl),
+                      AvatarWidget(photoUrl: _userLocal.photoUrl),
                       accountProfile(),
                       fitnessProfile(),
                       TextButton(
@@ -78,11 +96,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-  Widget settingAppBar(BuildContext context) {
-    void saveProfile() async {
-      await AppUserService().updateUser(_user).then((value) => print(value));
-    }
+  void saveProfile() async {
+    if (_userLocal != _userInternet) _userInternet = _userLocal;
+    if (_image != null) 
+    await AppUserService()
+        .updateUser(_userInternet, localFile: _image)
+        .then((value) => print(value));
+  }
 
+  Widget settingAppBar(BuildContext context) {
     return SliverAppBar(
       pinned: true,
       elevation: 0,
@@ -140,11 +162,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              settingCard('Tên', _user.displayName),
-              settingCard('Email', _user.email),
-              settingCard('Quận/Huyện', _user.state),
-              settingCard('Tỉnh/Thành phố', _user.city),
-              settingCard('Tiểu sử', _user.bio),
+              settingCard('Tên', _userLocal.displayName, _nameController),
+              settingCard('Email', _userLocal.email, _emailController),
+              settingCard('Quận/Huyện', _userLocal.state, _stateController),
+              settingCard('Tỉnh/Thành phố', _userLocal.city, _cityController),
+              settingCard('Tiểu sử', _userLocal.bio, _bioController),
             ],
           ),
         ),
@@ -152,7 +174,30 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-  Widget settingCard(String title, String value) {
+  Widget settingCard1(String title, String value) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: normalStyle()),
+              Container(
+                width: 250,
+                child: null,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 1),
+      ],
+    );
+  }
+
+  Widget settingCard(
+      String title, String value, TextEditingController scontroller) {
     return Column(
       children: [
         Container(
@@ -165,8 +210,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
               Container(
                 width: 250,
                 child: TextFormField(
+                  controller: scontroller,
                   textAlign: TextAlign.right,
-                  initialValue: value,
                   style: normalBoldStyle(),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
@@ -194,9 +239,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
       context,
       MaterialPageRoute(
         builder: (context) => InputPage(
-          gender: _user.gender,
-          height: _user.height,
-          weight: _user.weight,
+          gender: _userLocal.gender,
+          height: _userLocal.height,
+          weight: _userLocal.weight,
         ),
       ),
     );
@@ -204,10 +249,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
     // after the SecondScreen result comes back update the Text widget with it
     setState(() {
       if (result != null) {
-        _user.gender = result['gender'];
-        _user.height = result['height'];
-        _user.weight = result['weight'];
-        print(_user.toMap());
+        _userLocal.gender = result['gender'];
+        _userLocal.height = result['height'];
+        _userLocal.weight = result['weight'];
       }
     });
   }
@@ -260,13 +304,13 @@ class _UserInfoPageState extends State<UserInfoPage> {
             children: [
               gestureCard(
                   'Gender',
-                  _user.gender
+                  _userLocal.gender
                       .toString()
-                      .substring(_user.gender.toString().indexOf('.') + 1)
+                      .substring(_userLocal.gender.toString().indexOf('.') + 1)
                       .capitalize()),
-              gestureCard('Height', '${_user.height.toString()} cm'),
-              gestureCard('Weight', '${_user.weight.toString()} kg'),
-              gestureCard('Fitness level', '${_user.level.toString()}'),
+              gestureCard('Height', '${_userLocal.height.toString()} cm'),
+              gestureCard('Weight', '${_userLocal.weight.toString()} kg'),
+              gestureCard('Fitness level', '${_userLocal.level.toString()}'),
             ],
           ),
         ),

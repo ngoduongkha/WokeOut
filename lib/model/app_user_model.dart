@@ -1,11 +1,13 @@
+import 'package:json_annotation/json_annotation.dart';
 import "package:meta/meta.dart";
 import 'package:woke_out/enum.dart';
 
+@JsonSerializable()
 class MyAppUser {
   final String uid;
-  final String email;
-  final String photoUrl;
-  final String displayName;
+  String email;
+  String displayName;
+  String photoUrl;
   String bio;
   Gender gender;
   int height;
@@ -37,7 +39,9 @@ class MyAppUser {
       email: data["email"],
       photoUrl: data["photoUrl"],
       bio: data["bio"],
-      gender: data["gender"],
+      gender: data["gender"] == "Gender.female"
+          ? Gender.female
+          : (data["gender"] == "Gender.male" ? Gender.male : Gender.other),
       height: data["height"],
       weight: data["weight"],
       level: data["level"],
@@ -54,7 +58,7 @@ class MyAppUser {
       "email": email,
       "photoUrl": photoUrl,
       "bio": bio,
-      "gender": gender,
+      "gender": gender.toString(),
       "height": height,
       "weight": weight,
       "level": level,

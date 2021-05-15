@@ -167,13 +167,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.7+1"
-  flutter_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -198,13 +191,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  get_it:
-    dependency: "direct main"
-    description:
-      name: get_it
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
   google_fonts:
     dependency: "direct main"
     description:

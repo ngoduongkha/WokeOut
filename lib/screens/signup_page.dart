@@ -6,10 +6,11 @@ import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/constants.dart';
-import 'package:woke_out/enum/app_state.dart';
+import 'package:woke_out/enum.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
+import 'package:woke_out/widgets/password_text_form_field.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -28,29 +29,32 @@ class _Body extends StatelessWidget {
     final auth = Provider.of<AuthService>(context, listen: false);
     final userService = Provider.of<AppUserService>(context, listen: false);
 
-    _background() {
-      return Background(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/signup_background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            decoration:
+                BoxDecoration(color: Color(0xFF15152B).withOpacity(0.5)),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Text(
-                "SIGNUP",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: size.height * 0.03),
-              SvgPicture.asset(
-                "assets/icons/signup.svg",
-                height: size.height * 0.35,
-              ),
               RoundedInputField(
                 controller: emailController,
                 hintText: "Your Email",
                 onChanged: (value) {},
               ),
-              RoundedPasswordField(
-                controller: passwordController,
-                onChanged: (value) {},
+              PasswordField(
+                hintText: "Your password",
               ),
               RoundedButton(
                 text: "SIGNUP",
@@ -113,17 +117,10 @@ class _Body extends StatelessWidget {
                     },
                   ),
                 ],
-              )
+              ),
+              SizedBox(height: size.height * 0.05),
             ],
           ),
-        ),
-      );
-    }
-
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _background(),
         ],
       ),
     );
@@ -155,6 +152,7 @@ class SocialIcon extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           iconSrc,
+          color: Colors.white,
           height: 20,
           width: 20,
         ),
@@ -194,45 +192,6 @@ class OrDivider extends StatelessWidget {
       child: Divider(
         color: Color(0xFFD9D9D9),
         height: 1.5,
-      ),
-    );
-  }
-}
-
-class Background extends StatelessWidget {
-  final Widget child;
-  const Background({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Image.asset(
-              "assets/images/signup_top.png",
-              width: size.width * 0.35,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Image.asset(
-              "assets/images/main_bottom.png",
-              width: size.width * 0.25,
-            ),
-          ),
-          child,
-        ],
       ),
     );
   }

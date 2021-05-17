@@ -19,19 +19,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    screens = [
-      TodayPage(),
-      ChallengePage(),
-      StatisticPage(),
-      UserPage()
-    ];
+    screens = [TodayPage(), ChallengePage(), StatisticPage(), UserPage()];
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
-        builder: (context){
+        builder: (context) {
           return screens[_currentIndex];
         },
       ),
@@ -39,9 +35,9 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey[800],
-        onTap: (index){
+        onTap: (index) {
           setState(() {
-            _currentIndex= index;
+            _currentIndex = index;
           });
         },
         items: [
@@ -65,7 +61,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }
 
 class ChallengePage extends StatelessWidget {
@@ -75,11 +70,15 @@ class ChallengePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Challenge page", style: TextStyle(fontSize: 30),),
+        child: Text(
+          "Challenge page",
+          style: TextStyle(fontSize: 30),
+        ),
       ),
     );
   }
 }
+
 class StatisticPage extends StatelessWidget {
   const StatisticPage({Key key}) : super(key: key);
 
@@ -87,11 +86,15 @@ class StatisticPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Statistic page", style: TextStyle(fontSize: 30),),
+        child: Text(
+          "Statistic page",
+          style: TextStyle(fontSize: 30),
+        ),
       ),
     );
   }
 }
+
 class UserPage extends StatelessWidget {
   const UserPage({Key key}) : super(key: key);
 
@@ -99,7 +102,10 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("user page", style: TextStyle(fontSize: 30),),
+        child: Text(
+          "user page",
+          style: TextStyle(fontSize: 30),
+        ),
       ),
     );
   }

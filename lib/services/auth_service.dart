@@ -21,9 +21,7 @@ class AuthService {
 
   Stream<User> authStateChanges() => _firebaseAuth.authStateChanges();
 
-  Future<MyAppUser> currentUser() async {
-    return _userFromFirebase(_firebaseAuth.currentUser);
-  }
+  User currentUser() => _firebaseAuth.currentUser;
 
   Future<MyAppUser> signInWithEmailAndPassword(
       String email, String password) async {
@@ -59,7 +57,6 @@ class AuthService {
 
   Future<MyAppUser> createUserWithEmailAndPassword(
       String email, String password) async {
-
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);

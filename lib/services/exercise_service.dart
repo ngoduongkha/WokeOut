@@ -5,16 +5,6 @@ import 'package:woke_out/model/exercise_model.dart';
 class ExerciseService with ChangeNotifier {
   final ref = FirebaseFirestore.instance.collection("exercises");
 
-  // Future<List<Exercise>> loadTestExercises() async{
-  //   QuerySnapshot snapshot = await ref.get();
-  //
-  //   List<Exercise> testExercises = [];
-  //   for(int i=0; i< 3; i++){
-  //     Exercise exercise = Exercise.fromMap(snapshot.docs[i].data());
-  //     testExercises.add(exercise);
-  //   }
-  //   return testExercises;
-  // }
   Future<List<Exercise>> loadBeginnerExercises() async {
     QuerySnapshot snapshot =
         await ref.where("level", isEqualTo: "beginner").get();

@@ -25,17 +25,19 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^1.0.5
   cupertino_icons: ^1.0.2
+  email_validator: ^2.0.1
   firebase_auth: ^1.0.1
   firebase_core: ^1.0.2
+  firebase_storage: ^8.0.6
   flutter_facebook_login: ^3.0.0
   flutter_svg: ^0.21.0+1
-  get_it: ^6.0.0
   google_fonts: ^2.0.0
   google_sign_in: ^5.0.1
+  image_picker: ^0.7.4
   provider: ^5.0.0
+  uuid: ^3.0.4
   video_player: ^2.1.1
   table_calendar: ^3.0.0
-
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,20 @@
 import "package:meta/meta.dart";
+import 'package:woke_out/enum.dart';
 
 class MyAppUser {
+  final String uid;
+  String email;
+  String displayName;
+  String photoUrl;
+  String bio;
+  Gender gender;
+  int height;
+  int weight;
+  String level;
+  String goal;
+  String city;
+  String state;
+
   MyAppUser({
     @required this.uid,
     this.email,
@@ -12,18 +26,9 @@ class MyAppUser {
     this.weight,
     this.level,
     this.goal,
+    this.city,
+    this.state,
   });
-
-  final String uid;
-  final String email;
-  final String photoUrl;
-  final String displayName;
-  String bio;
-  String gender;
-  int height;
-  int weight;
-  String level;
-  String goal;
 
   factory MyAppUser.fromMap(Map<String, dynamic> data) {
     return MyAppUser(
@@ -32,11 +37,15 @@ class MyAppUser {
       email: data["email"],
       photoUrl: data["photoUrl"],
       bio: data["bio"],
-      gender: data["gender"],
+      gender: data["gender"] == "Gender.female"
+          ? Gender.female
+          : (data["gender"] == "Gender.male" ? Gender.male : Gender.other),
       height: data["height"],
       weight: data["weight"],
       level: data["level"],
       goal: data["goal"],
+      city: data["city"],
+      state: data["state"],
     );
   }
 
@@ -47,11 +56,13 @@ class MyAppUser {
       "email": email,
       "photoUrl": photoUrl,
       "bio": bio,
-      "gender": gender,
+      "gender": gender.toString(),
       "height": height,
       "weight": weight,
       "level": level,
       "goal": goal,
+      "city": city,
+      "state": state,
     };
   }
 }

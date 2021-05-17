@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 class Exercise {
   String name;
-  List muscle;
+  List<String> muscle;
   String level;
   int duration;
   bool equipment;
@@ -17,7 +17,7 @@ class Exercise {
 
   Exercise.fromMap(Map<String, dynamic> data) {
     name = data["name"];
-    muscle = data["muscle"];
+    muscle = List.from(data["muscle"]);
     level = data["level"];
     duration = data["duration"];
     equipment = data["equipment"];

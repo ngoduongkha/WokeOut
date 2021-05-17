@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:woke_out/screens/do_exercise_page.dart';
+import 'package:woke_out/screens/do_exercise_result_page.dart';
+import 'package:woke_out/screens/exercise_detail_page.dart';
+import 'package:woke_out/screens/exercise_list.dart';
 import 'package:woke_out/screens/landing_page.dart';
 import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/login_page.dart';
+import 'package:woke_out/screens/resting_page.dart';
 import 'package:woke_out/screens/signup_page.dart';
 import 'package:woke_out/screens/welcome_page.dart';
 
@@ -18,6 +23,16 @@ class Routers {
         return MaterialPageRoute(builder: (_) => WelcomePage());
       case 'signup':
         return MaterialPageRoute(builder: (_) => SignupPage());
+      case 'exerciseList':
+        return MaterialPageRoute(builder: (_) => ExerciseListPage());
+      case 'exerciseDetailPage':
+        return MaterialPageRoute(builder: (_) => DetailPage(exercise: settings.arguments,));
+      case 'doExercisePage':
+        return MaterialPageRoute(builder: (_) => DoExercisePage());
+      case 'restPage':
+        return MaterialPageRoute(builder: (_) => RestPage(player: settings.arguments,));
+      case 'resultPage':
+        return MaterialPageRoute(builder: (_) => ResultPage());
       default:
         return MaterialPageRoute(
           builder: (_) {

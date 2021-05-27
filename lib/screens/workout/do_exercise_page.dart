@@ -57,22 +57,7 @@ class _DoExercisePageState extends State<DoExercisePage> {
       ]
     );
   }
-  // Widget _addData(){
-  //   return Consumer<ExercisePlayer>(
-  //     builder: (context, data, child){
-  //       return Center(
-  //         child: Text(
-  //           data.currentExercise.toString(),
-  //           style: TextStyle(
-  //             fontSize: 40.0,
-  //             color: Colors.white,
-  //             fontWeight: FontWeight.bold
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+
   Widget _buildGetBackButton(BuildContext context) {
     return Positioned(
       top: 0,
@@ -359,9 +344,6 @@ class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator>
         });
       }
     });
-  }
-  void test(){
-    print("testing");
   }
   void nextAction(){
     if(player.currentIndex< player.length - 1){

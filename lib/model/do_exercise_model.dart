@@ -2,10 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/model/exercise_record_model.dart';
 
 class ExercisePlayer with ChangeNotifier
 {
   List<Exercise> exerciseList;
+  RecordModel record = new RecordModel();
   int currentIndex = 0;
 
   void init(List<Exercise> inputList){

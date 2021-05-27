@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/do_exercise_page.dart';
-import 'package:woke_out/screens/do_exercise_result_page.dart';
-import 'package:woke_out/screens/exercise_detail_page.dart';
-import 'package:woke_out/screens/exercise_list.dart';
+import 'package:woke_out/screens/workout/do_exercise_page.dart';
+import 'package:woke_out/screens/workout/do_exercise_result_page.dart';
+import 'package:woke_out/screens/workout/exercise_detail_page.dart';
+import 'package:woke_out/screens/workout/exercise_list.dart';
 import 'package:woke_out/screens/landing_page.dart';
 import 'package:woke_out/screens/home_page.dart';
 import 'package:woke_out/screens/login_page.dart';
-import 'package:woke_out/screens/resting_page.dart';
+import 'package:woke_out/screens/workout/resting_page.dart';
 import 'package:woke_out/screens/signup_page.dart';
 import 'package:woke_out/screens/welcome_page/welcome_page.dart';
 

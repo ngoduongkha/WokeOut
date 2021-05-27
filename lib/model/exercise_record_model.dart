@@ -3,26 +3,36 @@
 import 'package:flutter/cupertino.dart';
 
 class RecordModel {
-  RecordModel({
+  double calorie;
+  double score;
+  int totalTime;
+  int satisfactionLevel;
+  String exName;
+  String exLevel;
+  DateTime timeStamp;
+
+  RecordModel(){
+    this.calorie = 0;
+    this.score = 0;
+    totalTime = 0;
+    satisfactionLevel = 0;
+    exName = "";
+    exLevel = "";
+    timeStamp = null;
+  }
+
+  RecordModel.withRequire({
     @required this.calorie,
-    this.score,
-    this.totalTime,
     this.satisfactionLevel,
-    this.exName,
+    this.totalTime,
     this.exLevel,
-    this.timeStamp
+    this.exName,
+    this.timeStamp,
+    this.score
   });
 
-  final double calorie;
-  final double score;
-  final int totalTime;
-  final int satisfactionLevel;
-  final String exName;
-  final String exLevel;
-  final DateTime timeStamp;
-
-  factory RecordModel.fromMap(Map<String, dynamic> data) {
-    return RecordModel(
+  factory RecordModel.fromMap(Map<String, dynamic> data){
+    return RecordModel.withRequire(
       calorie: data["calorie"],
       score: data["score"],
       totalTime: data["totalTime"],

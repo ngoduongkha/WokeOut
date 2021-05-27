@@ -38,6 +38,8 @@ dependencies:
   uuid: ^3.0.4
   video_player: ^2.1.1
   table_calendar: ^3.0.0
+  fl_chart: ^0.36.1
+  month_picker_dialog: ^0.4.0
 
 dev_dependencies:
   flutter_test:

@@ -10,13 +10,15 @@ import 'package:woke_out/services/exercise_service.dart';
 class ExerciseSet
 {
   String name;
+  String level;
   List<Exercise> list;
   ExerciseSet({
     @required this.name,
-    @required this.list
+    this.level,
+    this.list
   });
 
-  String get category {return this.name;}
+  String get category {return this.level;}
   List<Exercise> get exerciseList {return this.list;}
 
 }
@@ -35,6 +37,7 @@ class ExerciseListPage extends StatefulWidget {
 }
 
 class _ExerciseListPageState extends State<ExerciseListPage> {
+
   final ExerciseService exService = ExerciseService();
   Future<List<ExerciseSet>> loadExercisesWithCategory() async{
     AuthService auth = Provider.of<AuthService>(context, listen: false);
@@ -42,13 +45,13 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
 
     List<ExerciseSet> exerciseSet = [];
     List<Exercise> beginner = await exService.loadBeginnerExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: "beginner", list: beginner));
+    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "beginner", list: beginner));
 
     List<Exercise> intermediate = await exService.loadIntermediateExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: "intermediate", list: intermediate));
+    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "intermediate", list: intermediate));
 
     List<Exercise> advance = await exService.loadAdvancedExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: "advance", list: advance));
+    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "advance", list: advance));
     return exerciseSet;
   }
 
@@ -77,12 +80,13 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
           ];
         },
         body: TabBarView(
-          children: data.map((ExerciseSet e)=> _buildExerciseSetPage(e.exerciseList,)).toList(),
+          children: data.map((ExerciseSet exerciseSet)=> _buildExerciseSetPage(exerciseSet,)).toList(),
         )
     );
   }
 
-  Widget _buildExerciseSetPage(List<Exercise> list) {
+  Widget _buildExerciseSetPage(ExerciseSet exerciseSet) {
+    List<Exercise> list = exerciseSet.list;
     String totalTime = getTotalTimeText(list);
     return Stack(
       children: [
@@ -107,7 +111,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
             ],
           ),
         ),
-        _buildStartExerciseButton(list)
+        _buildStartExerciseButton(exerciseSet)
       ]
     );
   }
@@ -125,39 +129,36 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
     return result;
   }
 
-  Widget _buildStartExerciseButton(List<Exercise> exerciseList){
+  Widget _buildStartExerciseButton(ExerciseSet exerciseSet){
     double screenWidth = MediaQuery.of(context).size.width;
-    return Consumer<ExercisePlayer>(
-      builder: (context, player, child){
-        return Positioned(
-          bottom: 0,
-          left: 0,
-          child: Container(
-            width: screenWidth,
-            height: 80.0,
-            color: Colors.white,
-            padding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
-            child: TextButton(
-              child: Text(
-                "Start",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0
-                ),
-              ),
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.blueAccent
-              ),
-              onPressed: ()=> startExercise(player, exerciseList),
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      child: Container(
+        width: screenWidth,
+        height: 80.0,
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+        child: TextButton(
+          child: Text(
+            "Start",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
             ),
           ),
-        );
-      },
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.blueAccent,
+          ),
+          onPressed: ()=> startExercise(exerciseSet),
+        ),
+      ),
     );
   }
-  void startExercise(ExercisePlayer player, List<Exercise> exerciseList){
-    player.init(exerciseList);
+  void startExercise(ExerciseSet exerciseSet){
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    player.init(exerciseSet.name, exerciseSet.level, exerciseSet.list);
     Navigator.of(context).pushNamed("doExercisePage");
   }
 

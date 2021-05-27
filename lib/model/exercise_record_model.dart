@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Time
@@ -39,6 +40,9 @@ class Time
     if(second< 10) return "0$second";
     else return second.toString();
   }
+  String getTimeText(){
+    return "${this.minute}m${this.second}s";
+  }
 }
 class RecordModel {
   double calorie;
@@ -47,7 +51,7 @@ class RecordModel {
   int satisfactionLevel;
   String exName;
   String exLevel;
-  DateTime timeStamp;
+  Timestamp timeStamp;
 
   RecordModel(){
     this.calorie = 0;
@@ -85,7 +89,7 @@ class RecordModel {
     return {
       "calorie": calorie,
       "score": score,
-      "totalTime": totalTime,
+      "totalTime": totalTime.getTimeInSeconds(),
       "satisfactionLevel": satisfactionLevel,
       "exLevel": exLevel,
       "exName": exName,

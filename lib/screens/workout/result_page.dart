@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/model/exercise_record_model.dart';
 import 'package:woke_out/services/auth_service.dart';
+import 'package:woke_out/services/exercise_record_service.dart';
+
+GlobalKey<_ExerciseRatingFeedbackState> ratingFeedbackKey = new GlobalKey<_ExerciseRatingFeedbackState>();
+// use global key to get rating value;
 
 class ResultPage extends StatefulWidget {
   const ResultPage({Key key}) : super(key: key);
@@ -15,6 +20,22 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultPageState extends State<ResultPage> {
+
+  int exAmount;
+  double calorie;
+  double score;
+  Time totalTime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    this.exAmount = player.exerciseList.length;
+    this.calorie = player.calculateCalories(40);
+    this.score = player.calculateScore();
+    this.totalTime = player.record.totalTime;
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -75,9 +96,9 @@ class _ResultPageState extends State<ResultPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildTopPanelInfoItem(Icons.stacked_bar_chart, "20 ex"),
-        _buildTopPanelInfoItem(Icons.local_fire_department, "50 kcal"),
-        _buildTopPanelInfoItem(Icons.access_time, "15s"),
+        _buildTopPanelInfoItem(Icons.stacked_bar_chart, "$exAmount ex"),
+        _buildTopPanelInfoItem(Icons.local_fire_department, "$calorie kcal"),
+        _buildTopPanelInfoItem(Icons.access_time, "${totalTime.getTimeText()}"),
       ],
     );
   }
@@ -157,7 +178,7 @@ class _ResultPageState extends State<ResultPage> {
         ),
         SizedBox(width: 10.0,),
         Text(
-          "50",
+          this.score.toString(),
           style: TextStyle(
             color: Colors.grey[600],
             fontSize: 35,
@@ -181,7 +202,7 @@ class _ResultPageState extends State<ResultPage> {
               SizedBox(height: 20.0,),
               _buildRatingScaleText(),
               SizedBox(height: 20.0,),
-              ExerciseRatingFeedback(),
+              ExerciseRatingFeedback(key: ratingFeedbackKey,),
               SizedBox(height: 40.0,),
               _buildSaveButton()
             ],
@@ -241,10 +262,24 @@ class _ResultPageState extends State<ResultPage> {
   }
   void save(){
     AuthService auth = Provider.of<AuthService>(context, listen: false);
-    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
-    double calorie = Measurement.calculateCalories(player.record.totalTime.getTimeInMinutes(), 40);
-    double score = Measurement.calculateScore(getTotalTimeInSeconds(player.exerciseList), player.record.totalTime.getTimeInSeconds());
+    String userId = auth.currentUser().uid;
+    // String userId = "cw1kyc8wsPWTdnQ3onXYWRZtyp13";
+    final recordService = ExerciseRecordService(userId: userId);
 
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    int satisfactionLevel = ratingFeedbackKey.currentState.getValue();
+
+    player.record.exName = player.name;
+    player.record.exLevel = player.level;
+    player.record.calorie = calorie;
+    player.record.score = score;
+    player.record.satisfactionLevel = satisfactionLevel;
+    player.record.timeStamp = Timestamp.fromDate(DateTime.now());
+    // put data to record
+
+    recordService.addRecord(player.record);
+    // add data to database
+    Navigator.of(context).pushNamedAndRemoveUntil("home", ModalRoute.withName("landing"));
   }
   int getTotalTimeInSeconds(List<Exercise> list){
     int result = 0;
@@ -255,17 +290,6 @@ class _ResultPageState extends State<ResultPage> {
   }
 }
 
-class Measurement{
-  static double calculateCalories(double duration, double weight){
-    const int METs = 3;
-    double calorie=  duration*(METs*3.5*weight)/200;
-    return double.parse((calorie).toStringAsFixed(1));
-  }
-  static double calculateScore(int requireTime, int userTime){
-    if(userTime>= requireTime) return 10.0;
-    else return double.parse((userTime/requireTime).toStringAsFixed(1));
-  }
-}
 class ExerciseRatingFeedback extends StatefulWidget {
   const ExerciseRatingFeedback({Key key}) : super(key: key);
 
@@ -284,7 +308,7 @@ class _ExerciseRatingFeedbackState extends State<ExerciseRatingFeedback> {
     {'icon': Icons.sentiment_satisfied_alt, 'color': Colors.grey[600]},
     {'icon': Icons.sentiment_very_satisfied_sharp, 'color': Colors.grey[600]},
   ];
-  // int _selectedItemIndex = 0;
+  int _selectedItemIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -308,12 +332,16 @@ class _ExerciseRatingFeedbackState extends State<ExerciseRatingFeedback> {
     setState(() {
       _clearItemsColor();
       items[index]['color'] = selectedColor;
+      _selectedItemIndex = index;
     });
   }
   void _clearItemsColor(){
     items.forEach((item){
       item['color'] = defaultColor;
     });
+  }
+  int getValue(){
+    return _selectedItemIndex;
   }
 }
 

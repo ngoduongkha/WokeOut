@@ -1,12 +1,10 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/workout/result_page.dart';
-import 'package:woke_out/screens/workout/exercise_list.dart';
+import 'package:woke_out/screens/statistic/statistic_main_page.dart';
 import 'package:woke_out/screens/workout/today_page.dart';
-import 'package:woke_out/screens/user_info_page.dart';
-import 'package:woke_out/services/exercise_service.dart';
 import 'package:woke_out/widgets/app_icons.dart';
-import 'package:woke_out/widgets/bottom_nav_item.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    screens = [TodayPage(), ChallengePage(), StatisticPage(), UserPage()];
+    screens = [TodayPage(), ChallengePage(), StatisticMainPage(), UserPage()];
     super.initState();
   }
 
@@ -74,22 +72,6 @@ class ChallengePage extends StatelessWidget {
       body: Center(
         child: Text(
           "Challenge page",
-          style: TextStyle(fontSize: 30),
-        ),
-      ),
-    );
-  }
-}
-
-class StatisticPage extends StatelessWidget {
-  const StatisticPage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Statistic page",
           style: TextStyle(fontSize: 30),
         ),
       ),

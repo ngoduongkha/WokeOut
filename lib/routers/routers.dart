@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woke_out/screens/statistic/date_record_page.dart';
 import 'package:woke_out/screens/workout/do_exercise_page.dart';
 import 'package:woke_out/screens/workout/result_page.dart';
 import 'package:woke_out/screens/workout/exercise_detail_page.dart';
@@ -34,6 +35,8 @@ class Routers {
         return MaterialPageRoute(builder: (_) => RestPage(player: settings.arguments,));
       case 'resultPage':
         return MaterialPageRoute(builder: (_) => ResultPage());
+      case 'dateRecordPage':
+        return MaterialPageRoute(builder: (_) => DateRecordPage(today: settings.arguments));
       default:
         return MaterialPageRoute(
           builder: (_) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/screens/workout/do_exercise_page.dart';
-import 'package:woke_out/screens/workout/do_exercise_result_page.dart';
+import 'package:woke_out/screens/workout/result_page.dart';
 import 'package:woke_out/screens/workout/exercise_detail_page.dart';
 import 'package:woke_out/screens/workout/exercise_list.dart';
 import 'package:woke_out/screens/landing_page.dart';
@@ -24,7 +24,8 @@ class Routers {
       case 'signup':
         return MaterialPageRoute(builder: (_) => SignupPage());
       case 'exerciseList':
-        return MaterialPageRoute(builder: (_) => ExerciseListPage());
+        List<dynamic> args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => ExerciseListPage(muscleName: args[0], imgPath: args[1],));
       case 'exerciseDetailPage':
         return MaterialPageRoute(builder: (_) => DetailPage(exercise: settings.arguments,));
       case 'doExercisePage':

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woke_out/screens/workout/result_page.dart';
+import 'package:woke_out/screens/workout/exercise_list.dart';
 import 'package:woke_out/screens/workout/today_page.dart';
 import 'package:woke_out/screens/user_info_page.dart';
 import 'package:woke_out/services/exercise_service.dart';

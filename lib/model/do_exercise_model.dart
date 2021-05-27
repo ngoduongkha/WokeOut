@@ -20,6 +20,7 @@ class ExercisePlayer with ChangeNotifier
 
   void reset(){
     this.currentIndex= 0;
+    this.record = new RecordModel();
     notifyListeners();
   }
 
@@ -32,4 +33,11 @@ class ExercisePlayer with ChangeNotifier
     notifyListeners();
   }
 
+  bool isAtLastExercise(){
+    return this.currentIndex == this.exerciseList.length -1;
+  }
+  void increaseTotalTimeByOne(){
+    this.record.totalTime.addOneSec();
+    notifyListeners();
+  }
 }

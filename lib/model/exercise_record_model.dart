@@ -2,10 +2,48 @@
 
 import 'package:flutter/cupertino.dart';
 
+class Time
+{
+  int minute;
+  int second;
+  Time(){
+    this.minute = 0;
+    this.second = 0;
+  }
+  Time.fromData(int inputMin, inputSec){
+    this.minute = inputMin;
+    this.second = inputSec;
+  }
+  factory Time.fromMap(Map<String, dynamic> data, String fieldName){
+    int min = data[fieldName]/60;
+    int sec = data[fieldName]%60;
+    return Time.fromData(min, sec);
+  }
+  void addOneSec(){
+    if(this.second >= 59){
+      this.minute ++;
+      this.second = 0;
+    }else this.second ++;
+  }
+  double getTimeInMinutes(){
+    return this.minute.toDouble()+ (this.second/60).toDouble();
+  }
+  int getTimeInSeconds(){
+    return this.second + this.minute*60;
+  }
+  String getMinText(){
+    if(minute< 10) return "0$minute";
+    else return minute.toString();
+  }
+  String getSecondText(){
+    if(second< 10) return "0$second";
+    else return second.toString();
+  }
+}
 class RecordModel {
   double calorie;
   double score;
-  int totalTime;
+  Time totalTime;
   int satisfactionLevel;
   String exName;
   String exLevel;
@@ -14,7 +52,7 @@ class RecordModel {
   RecordModel(){
     this.calorie = 0;
     this.score = 0;
-    totalTime = 0;
+    totalTime = Time();
     satisfactionLevel = 0;
     exName = "";
     exLevel = "";
@@ -35,7 +73,7 @@ class RecordModel {
     return RecordModel.withRequire(
       calorie: data["calorie"],
       score: data["score"],
-      totalTime: data["totalTime"],
+      totalTime: Time.fromMap(data, 'totalTime'),
       satisfactionLevel: data["satisfactionLevel"],
       exLevel: data["exLevel"],
       exName: data["exName"],
@@ -54,4 +92,5 @@ class RecordModel {
       "timeStamp": timeStamp
     };
   }
+
 }

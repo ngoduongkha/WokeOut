@@ -36,6 +36,8 @@ class _RestPageState extends State<RestPage> {
       if (rest > 0) {
         setState(() {
           rest--;
+          player.increaseTotalTimeByOne();
+        //  update totalTime for player;
         });
       } else {
         setState(() {
@@ -175,6 +177,7 @@ class _RestPageState extends State<RestPage> {
   Widget _buildNextExercisePanel(){
     return Container(
       height: 130.0,
+      color: Colors.white,
       padding: EdgeInsets.all(20.0),
       child: Row(
         children: [

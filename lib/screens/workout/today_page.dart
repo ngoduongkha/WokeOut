@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:woke_out/screens/workout/exercise_list.dart';
 import 'package:woke_out/screens/workout/today_exercise_page.dart';
 
 class TodayPage extends StatelessWidget {
@@ -208,16 +209,11 @@ class TodayPage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => TodayExercisePage(
-                    //       muscleName: list[index].name,
-                    //       imagePath: list[index].imageUrl,
-                    //     ),
-                    //   ),
-                    // ),
-                    Navigator.pushNamed(context, "exerciseList")
+                    Navigator.pushNamed(
+                      context,
+                      "exerciseList",
+                      arguments: [list[index].name, list[index].imageUrl]
+                    )
                   },
                   child: Container(
                     height: 200,

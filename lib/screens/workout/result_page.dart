@@ -1,8 +1,11 @@
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:woke_out/model/do_exercise_model.dart';
+import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/services/auth_service.dart';
 
 class ResultPage extends StatefulWidget {
   const ResultPage({Key key}) : super(key: key);
@@ -102,6 +105,7 @@ class _ResultPageState extends State<ResultPage> {
     return Expanded(
       flex: 5,
       child: Container(
+        color: Colors.white,
         child: Column(
           children: [
             _buildScoreInfoContainer(),
@@ -231,15 +235,37 @@ class _ResultPageState extends State<ResultPage> {
         style: TextButton.styleFrom(
           backgroundColor: Colors.blueAccent
         ),
-        onPressed: (){
-
-        },
+        onPressed: save
       ),
     );
   }
+  void save(){
+    AuthService auth = Provider.of<AuthService>(context, listen: false);
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    double calorie = Measurement.calculateCalories(player.record.totalTime.getTimeInMinutes(), 40);
+    double score = Measurement.calculateScore(getTotalTimeInSeconds(player.exerciseList), player.record.totalTime.getTimeInSeconds());
 
+  }
+  int getTotalTimeInSeconds(List<Exercise> list){
+    int result = 0;
+    list.forEach((exercise) {
+      result+= exercise.duration;
+    });
+    return result - list[list.length - 1].rest;
+  }
 }
 
+class Measurement{
+  static double calculateCalories(double duration, double weight){
+    const int METs = 3;
+    double calorie=  duration*(METs*3.5*weight)/200;
+    return double.parse((calorie).toStringAsFixed(1));
+  }
+  static double calculateScore(int requireTime, int userTime){
+    if(userTime>= requireTime) return 10.0;
+    else return double.parse((userTime/requireTime).toStringAsFixed(1));
+  }
+}
 class ExerciseRatingFeedback extends StatefulWidget {
   const ExerciseRatingFeedback({Key key}) : super(key: key);
 
@@ -291,16 +317,3 @@ class _ExerciseRatingFeedbackState extends State<ExerciseRatingFeedback> {
   }
 }
 
-// final userRef = FirebaseFirestore.instance.collection("users");
-// void addData(){
-//   RecordModel record = RecordModel.fromMap({
-//     "calorie": 50.0,
-//     "score": 3.6,
-//     "totalTime": 210,
-//     "satisfactionLevel": 2,
-//     "exLevel": "advanced",
-//     "exName": "push up",
-//     "timeStamp": DateTime.now()
-//   });
-//   userRef.doc("Nk36Enn5RBlHHvF5crqh").collection("Nk36Enn5RBlHHvF5crqh").add(record.toMap());
-// }

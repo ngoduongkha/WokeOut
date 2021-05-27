@@ -1,10 +1,10 @@
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_service.dart';
 
 class ExerciseSet
@@ -22,6 +22,14 @@ class ExerciseSet
 }
 
 class ExerciseListPage extends StatefulWidget {
+
+  final String muscleName;
+  final String imgPath;
+  ExerciseListPage({
+    @required this.muscleName,
+    this.imgPath,
+  });
+
   @override
   _ExerciseListPageState createState() => _ExerciseListPageState();
 }
@@ -29,21 +37,23 @@ class ExerciseListPage extends StatefulWidget {
 class _ExerciseListPageState extends State<ExerciseListPage> {
   final ExerciseService exService = ExerciseService();
   Future<List<ExerciseSet>> loadExercisesWithCategory() async{
+    AuthService auth = Provider.of<AuthService>(context, listen: false);
+    print(auth.currentUser().uid);
+
     List<ExerciseSet> exerciseSet = [];
-    List<Exercise> beginner = await exService.loadBeginnerExercises();
+    List<Exercise> beginner = await exService.loadBeginnerExercises(widget.muscleName);
     exerciseSet.add(ExerciseSet(name: "beginner", list: beginner));
 
-    List<Exercise> intermediate = await exService.loadIntermediateExercises();
+    List<Exercise> intermediate = await exService.loadIntermediateExercises(widget.muscleName);
     exerciseSet.add(ExerciseSet(name: "intermediate", list: intermediate));
 
-    List<Exercise> advance = await exService.loadAdvancedExercises();
+    List<Exercise> advance = await exService.loadAdvancedExercises(widget.muscleName);
     exerciseSet.add(ExerciseSet(name: "advance", list: advance));
     return exerciseSet;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: loadExercisesWithCategory(),
       builder: (BuildContext context, AsyncSnapshot<List<ExerciseSet>> snapshot){
@@ -63,7 +73,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
       return NestedScrollView(
         headerSliverBuilder: (context, isScrolled){
           return <Widget>[
-            ExerciseListSliverAppBar(exerciseSets: data)
+            ExerciseListSliverAppBar(muscleName: widget.muscleName, imgPath: widget.imgPath, exerciseSets: data)
           ];
         },
         body: TabBarView(
@@ -76,23 +86,26 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
     String totalTime = getTotalTimeText(list);
     return Stack(
       children: [
-        CustomScrollView(
-          slivers: [
-            _buildExerciseSetGeneralInfoItems(list.length, totalTime),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index){
-                  return _buildListItem(list[index]);
-                },
-                childCount: list.length
+        Container(
+          color: Colors.white,
+          child: CustomScrollView(
+            slivers: [
+              _buildExerciseSetGeneralInfoItems(list.length, totalTime),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index){
+                    return _buildListItem(list[index]);
+                  },
+                  childCount: list.length
+                ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 80.0,
-              ),
-            )
-          ],
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 80.0,
+                ),
+              )
+            ],
+          ),
         ),
         _buildStartExerciseButton(list)
       ]
@@ -269,9 +282,14 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
 }
 
 class ExerciseListSliverAppBar extends StatelessWidget {
+  final String muscleName;
+  final String imgPath;
   final List<ExerciseSet> exerciseSets;
+
   ExerciseListSliverAppBar({
-    @required this.exerciseSets
+    @required this.exerciseSets,
+    this.muscleName,
+    this.imgPath
   });
   @override
   Widget build(BuildContext context) {
@@ -281,16 +299,18 @@ class ExerciseListSliverAppBar extends StatelessWidget {
       floating: true,
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text("chest"),
+        title: Text(this.muscleName, style: TextStyle(color: Colors.white),),
         titlePadding: EdgeInsets.only(left: 50.0, bottom: 65.0),
         background: Image.asset(
-          "assets/images/chest.jpg",
+          this.imgPath,
           fit: BoxFit.cover,
         ),
       ),
       bottom: TabBar(
+        labelColor: Colors.white,
         tabs: exerciseSets.map((ExerciseSet e)=> Tab(text: e.category,)).toList(),
         indicatorWeight: 4.0,
+
       ),
     );
   }

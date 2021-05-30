@@ -26,7 +26,6 @@ class _RestPageState extends State<RestPage> {
   int moreTimeInterval = 20;
   @override
   void dispose() {
-    // TODO: implement dispose
     _timer.cancel();
     super.dispose();
   }

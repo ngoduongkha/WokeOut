@@ -1,5 +1,3 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +19,6 @@ class _DateRecordPageState extends State<DateRecordPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     AuthService auth = Provider.of<AuthService>(context, listen: false);
     recordService = ExerciseRecordService(userId: auth.currentUser().uid);
     super.initState();

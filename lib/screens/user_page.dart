@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserPage extends StatelessWidget {
-  TextEditingController uidController = TextEditingController();
+  final TextEditingController uidController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

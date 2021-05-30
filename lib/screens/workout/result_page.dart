@@ -27,7 +27,6 @@ class _ResultPageState extends State<ResultPage> {
   Time totalTime;
   @override
   void initState() {
-    // TODO: implement initState
     ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
     this.exAmount = player.exerciseList.length;
     this.calorie = player.calculateCalories(40);

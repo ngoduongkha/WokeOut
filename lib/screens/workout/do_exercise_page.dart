@@ -402,7 +402,6 @@ class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator>
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller.dispose();
     _timer.cancel();
     super.dispose();

@@ -15,7 +15,6 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
   ExerciseRecordService recordService;
   @override
   void initState() {
-    // TODO: implement initState
     AuthService auth = Provider.of<AuthService>(context, listen: false);
     recordService = ExerciseRecordService(userId: auth.currentUser().uid);
 

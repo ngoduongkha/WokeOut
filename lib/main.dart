@@ -7,7 +7,6 @@ import 'package:woke_out/routers/routers.dart';
 import 'package:woke_out/screens/landing_page.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
-import 'package:woke_out/services/exercise_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

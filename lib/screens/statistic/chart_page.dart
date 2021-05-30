@@ -14,7 +14,6 @@ class ChartMainPage extends StatefulWidget {
 }
 
 class _ChartMainPageState extends State<ChartMainPage> {
-
   final service = ExerciseRecordService();
   DateTime currentMonth = DateTime.now();
   List<RecordModel> currentMonthRecords = [];

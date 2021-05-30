@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/challenge/take_challenge.dart';
+import 'package:woke_out/pages/challenge/take_challenge.dart';
 
 class ChallengeReadyPage extends StatefulWidget {
   const ChallengeReadyPage({Key key}) : super(key: key);

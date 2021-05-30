@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/statistic/date_record_page.dart';
-import 'package:woke_out/screens/workout/do_exercise_page.dart';
-import 'package:woke_out/screens/workout/result_page.dart';
-import 'package:woke_out/screens/workout/exercise_detail_page.dart';
-import 'package:woke_out/screens/workout/exercise_list.dart';
-import 'package:woke_out/screens/landing_page.dart';
-import 'package:woke_out/screens/home_page.dart';
-import 'package:woke_out/screens/authentication_page/login_page.dart';
-import 'package:woke_out/screens/workout/resting_page.dart';
-import 'package:woke_out/screens/authentication_page/signup_page.dart';
-import 'package:woke_out/screens/welcome_page/welcome_page.dart';
+import 'package:woke_out/pages/statistic/date_record_page.dart';
+import 'package:woke_out/pages/workout/do_exercise_page.dart';
+import 'package:woke_out/pages/workout/result_page.dart';
+import 'package:woke_out/pages/workout/exercise_detail_page.dart';
+import 'package:woke_out/pages/workout/exercise_list.dart';
+import 'package:woke_out/pages/landing_page.dart';
+import 'package:woke_out/pages/home_page.dart';
+import 'package:woke_out/pages/authentication_page/login_page.dart';
+import 'package:woke_out/pages/workout/resting_page.dart';
+import 'package:woke_out/pages/authentication_page/signup_page.dart';
+import 'package:woke_out/pages/authentication_page/welcome_page.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings settings) {

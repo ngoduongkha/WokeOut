@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:woke_out/components/already_have_an_account_acheck.dart';
 import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
-import 'package:woke_out/components/rounded_password_field.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/enum.dart';
 import 'package:woke_out/services/app_user_service.dart';

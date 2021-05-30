@@ -1,13 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:woke_out/enum.dart';
-import 'package:woke_out/screens/bmi_page/card_title.dart';
+import 'package:woke_out/pages/bmi_page/card_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woke_out/screens/bmi_page/input_page.dart';
-
-import 'package:woke_out/screens/bmi_page/widget_utils.dart'
-    show screenAwareSize;
+import 'package:woke_out/pages/bmi_page/input_page.dart';
+import 'package:woke_out/pages/bmi_page/widget_utils.dart' show screenAwareSize;
 
 class GenderCard extends StatefulWidget {
   final Gender initialGender;

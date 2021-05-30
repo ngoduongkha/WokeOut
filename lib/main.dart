@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/routers/routers.dart';
-import 'package:woke_out/screens/landing_page.dart';
+import 'package:woke_out/pages/landing_page.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'WokeOut',
         theme: ThemeData(
-          fontFamily: "Cairo",
           scaffoldBackgroundColor: kBackgroundColor,
           textTheme:
               Theme.of(context).textTheme.apply(displayColor: kTextColor),

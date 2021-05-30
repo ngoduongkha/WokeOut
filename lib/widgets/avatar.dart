@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:woke_out/screens/user_info_page.dart';
+import 'package:woke_out/pages/user_info_page.dart';
 
 class AvatarWidget extends StatefulWidget {
   final String photoUrl;

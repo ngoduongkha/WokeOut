@@ -1,8 +1,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/statistic/statistic_main_page.dart';
-import 'package:woke_out/screens/workout/today_page.dart';
+import 'package:woke_out/pages/challenge/challenge_main.dart';
+import 'package:woke_out/pages/statistic/statistic_main_page.dart';
+import 'package:woke_out/pages/user_info_page.dart';
+import 'package:woke_out/pages/workout/today_page.dart';
 import 'package:woke_out/widgets/app_icons.dart';
 
 
@@ -18,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    screens = [TodayPage(), ChallengePage(), StatisticMainPage(), UserPage()];
+    screens = [TodayPage(), ChallengeMainPage(), StatisticMainPage(), UserInfoPage()];
     super.initState();
   }
 
@@ -61,36 +63,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-class ChallengePage extends StatelessWidget {
-  const ChallengePage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Challenge page",
-          style: TextStyle(fontSize: 30),
-        ),
-      ),
-    );
-  }
-}
-
-class UserPage extends StatelessWidget {
-  const UserPage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "user page",
-          style: TextStyle(fontSize: 30),
-        ),
-      ),
-    );
-  }
-}
-

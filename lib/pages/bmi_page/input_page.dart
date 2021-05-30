@@ -1,8 +1,8 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:woke_out/enum.dart';
-import 'package:woke_out/screens/bmi_page/gender/gender_card.dart';
-import 'package:woke_out/screens/bmi_page/height/height_card.dart';
-import 'package:woke_out/screens/bmi_page/weight/weight_card.dart';
+import 'package:woke_out/pages/bmi_page/gender/gender_card.dart';
+import 'package:woke_out/pages/bmi_page/height/height_card.dart';
+import 'package:woke_out/pages/bmi_page/weight/weight_card.dart';
 import 'package:flutter/material.dart';
 
 import 'widget_utils.dart' show screenAwareSize;

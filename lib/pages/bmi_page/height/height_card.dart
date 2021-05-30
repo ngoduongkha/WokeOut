@@ -1,7 +1,7 @@
-import 'package:woke_out/screens/bmi_page/card_title.dart';
-import 'package:woke_out/screens/bmi_page/height/height_picker.dart';
-import 'package:woke_out/screens/bmi_page/input_page.dart';
-import 'package:woke_out/screens/bmi_page/widget_utils.dart';
+import 'package:woke_out/pages/bmi_page/card_title.dart';
+import 'package:woke_out/pages/bmi_page/height/height_picker.dart';
+import 'package:woke_out/pages/bmi_page/input_page.dart';
+import 'package:woke_out/pages/bmi_page/widget_utils.dart';
 import 'package:flutter/material.dart';
 
 class HeightCard extends StatefulWidget {

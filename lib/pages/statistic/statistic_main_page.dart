@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woke_out/screens/statistic/calendar_page.dart';
-import 'package:woke_out/screens/statistic/chart_page.dart';
+import 'package:woke_out/pages/statistic/calendar_page.dart';
+import 'package:woke_out/pages/statistic/chart_page.dart';
 
 class StatisticMainPage extends StatefulWidget {
   const StatisticMainPage({Key key}) : super(key: key);

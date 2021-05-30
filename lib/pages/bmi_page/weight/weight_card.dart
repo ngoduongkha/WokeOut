@@ -1,7 +1,7 @@
-import 'package:woke_out/screens/bmi_page/card_title.dart';
-import 'package:woke_out/screens/bmi_page/input_page.dart';
-import 'package:woke_out/screens/bmi_page/weight/weight_slider.dart';
-import 'package:woke_out/screens/bmi_page/widget_utils.dart'
+import 'package:woke_out/pages/bmi_page/card_title.dart';
+import 'package:woke_out/pages/bmi_page/input_page.dart';
+import 'package:woke_out/pages/bmi_page/weight/weight_slider.dart';
+import 'package:woke_out/pages/bmi_page/widget_utils.dart'
     show screenAwareSize;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,7 +1,7 @@
-import 'package:woke_out/screens/bmi_page/widget_utils.dart';
+import 'package:woke_out/pages/bmi_page/widget_utils.dart';
 import 'package:flutter/material.dart';
 
-export 'package:woke_out/screens/bmi_page/styles.dart';
+export 'package:woke_out/pages/bmi_page/styles.dart';
 
 double marginBottomAdapted(BuildContext context) =>
     screenAwareSize(marginBottom, context);

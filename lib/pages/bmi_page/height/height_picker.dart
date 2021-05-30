@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:woke_out/screens/bmi_page/height/height_slider.dart';
-import 'package:woke_out/screens/bmi_page/height/height_styles.dart';
-import 'package:woke_out/screens/bmi_page/widget_utils.dart';
+import 'package:woke_out/pages/bmi_page/height/height_slider.dart';
+import 'package:woke_out/pages/bmi_page/height/height_styles.dart';
+import 'package:woke_out/pages/bmi_page/widget_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

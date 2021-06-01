@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:meta/meta.dart";
 import 'package:woke_out/enum.dart';
 
@@ -31,6 +32,9 @@ class MyAppUser {
   });
 
   factory MyAppUser.fromMap(Map<String, dynamic> data) {
+    if (data == null) {
+      return null;
+    }
     return MyAppUser(
       uid: data["uid"],
       displayName: data["displayName"],
@@ -46,6 +50,18 @@ class MyAppUser {
       goal: data["goal"],
       city: data["city"],
       state: data["state"],
+    );
+  }
+
+  factory MyAppUser.fromFirebase(User user) {
+    if (user == null) {
+      return null;
+    }
+    return MyAppUser(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoUrl: user.photoURL,
     );
   }
 

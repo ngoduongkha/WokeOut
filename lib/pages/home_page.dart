@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woke_out/pages/challenge/challenge_main.dart';
@@ -6,7 +5,6 @@ import 'package:woke_out/pages/statistic/statistic_main_page.dart';
 import 'package:woke_out/pages/user_info_page.dart';
 import 'package:woke_out/pages/workout/today_page.dart';
 import 'package:woke_out/widgets/app_icons.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,7 +18,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    screens = [TodayPage(), ChallengeMainPage(), StatisticMainPage(), UserInfoPage()];
+    screens = [
+      TodayPage(),
+      ChallengeMainPage(),
+      StatisticMainPage(),
+      UserInfoPage()
+    ];
     super.initState();
   }
 

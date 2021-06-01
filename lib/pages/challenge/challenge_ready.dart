@@ -1,10 +1,19 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woke_out/model/challenge_card_model.dart';
+import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/pages/challenge/take_challenge.dart';
+import 'package:woke_out/util.dart';
 
 class ChallengeReadyPage extends StatefulWidget {
-  const ChallengeReadyPage({Key key}) : super(key: key);
+  final List<ChallengeModel> challengeList;
+  final CardModel cardModel;
+
+  const ChallengeReadyPage({
+    Key key,
+    @required this.challengeList,
+    @required this.cardModel,
+  }) : super(key: key);  
 
   @override
   _ChallengeReadyPageState createState() => _ChallengeReadyPageState();
@@ -15,75 +24,73 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
             Color(0xff1e3799),
             Colors.blueAccent,
-          ]
-        )
-      ),
+          ])),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(
-            "Plank challenge",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(
+              "${widget.cardModel.title.capitalizeFirstofEach} Challenge",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
+            centerTitle: true,
+            leading: GestureDetector(
+              child: Icon(
+                Icons.chevron_left,
+                size: 35.0,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            elevation: 0,
           ),
-          centerTitle: true,
-          leading: GestureDetector(
-            child: Icon(Icons.chevron_left, size: 35.0,),
-            onTap: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          elevation: 0,
-        ),
-        body: Column(
-          children: [
-            _buildChallengeImage(),
-            _buildLowerPanel()
-          ],
-        )
-      ),
+          body: Column(
+            children: [_buildChallengeImage(), _buildLowerPanel()],
+          )),
     );
   }
-  Widget _buildChallengeImage(){
+
+  Widget _buildChallengeImage() {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: AspectRatio(
-        aspectRatio: 5/3,
+        aspectRatio: 5 / 3,
         child: Image.asset(
-          "assets/images/plank.png",
+          widget.cardModel.image,
           fit: BoxFit.fill,
         ),
       ),
     );
   }
-  Widget _buildLowerPanel(){
+
+  Widget _buildLowerPanel() {
     return Expanded(
       flex: 1,
       child: Stack(
         children: [
           _buildLowerPanelTopElements(),
-          _buildBestRecord()
+          widget.challengeList.isNotEmpty ? _buildBestRecord() : SizedBox(),
         ],
       ),
     );
   }
-  Widget _buildLowerPanelTopElements(){
+
+  Widget _buildLowerPanelTopElements() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: EdgeInsets.only(top: 25.0, bottom: 25.0),
           child: Text(
-            "Plank challenge".toUpperCase(),
+            "${widget.cardModel.title} challenge".toUpperCase(),
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -94,7 +101,7 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
         Padding(
           padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 40.0),
           child: Text(
-            "Challenge yourself and hold as long as you can.",
+            widget.cardModel.instruction,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
@@ -106,26 +113,28 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
           child: Text(
             "Start".toUpperCase(),
             style: TextStyle(
-              fontSize: 22.0,
-              color: Colors.blueAccent,
-              fontWeight: FontWeight.bold
-            ),
+                fontSize: 22.0,
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold),
           ),
           style: TextButton.styleFrom(
-            padding: EdgeInsets.fromLTRB(90.0, 13.0, 90.0, 13.0),
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40.0)
-            )
-          ),
-          onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> TakeChallengePage()));
+              padding: EdgeInsets.fromLTRB(90.0, 13.0, 90.0, 13.0),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40.0))),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TakeChallengePage(
+                      cardModel: widget.cardModel,
+                      challengeList: widget.challengeList,
+                    )));
           },
         )
       ],
     );
   }
-  Widget _buildBestRecord(){
+
+  Widget _buildBestRecord() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
@@ -135,19 +144,17 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
           children: [
             Text(
               "Best record".toUpperCase(),
-              style: TextStyle(
-                color: Colors.grey[200],
-                fontSize: 16.0
-              ),
+              style: TextStyle(color: Colors.grey[200], fontSize: 16.0),
             ),
-            Text(
-              "00:19".toUpperCase(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w900
-              ),
-            )
+            (widget.challengeList.isNotEmpty)
+                ? Text(
+                    durationToString(widget.challengeList[0].time),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w900),
+                  )
+                : SizedBox(),
           ],
         ),
       ),

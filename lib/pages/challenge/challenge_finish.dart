@@ -1,8 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:woke_out/model/challenge_card_model.dart';
+import 'package:woke_out/model/challenge_model.dart';
+import 'package:woke_out/services/app_user_service.dart';
+import 'package:woke_out/util.dart';
 
 class ChallengeFinishPage extends StatefulWidget {
-  const ChallengeFinishPage({Key key}) : super(key: key);
+  final List<ChallengeModel> challengeList;
+  final CardModel cardModel;
+  final ChallengeModel newRecord;
+
+  const ChallengeFinishPage({
+    Key key,
+    @required this.challengeList,
+    @required this.cardModel,
+    @required this.newRecord,
+  }) : super(key: key);
 
   @override
   _ChallengeFinishPageState createState() => _ChallengeFinishPageState();
@@ -66,7 +80,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
         },
         blendMode: BlendMode.dstIn,
         child: Image.asset(
-          'assets/images/plank.png',
+          widget.cardModel.image,
           fit: BoxFit.fill,
         ),
       ),
@@ -84,7 +98,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
           Opacity(
             opacity: 0.8,
             child: Text(
-              "plank challenge".toUpperCase(),
+              "${widget.cardModel.title} challenge".toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -97,7 +111,9 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 15.0,
           ),
           Text(
-            "challenge completed!".toUpperCase(),
+            widget.newRecord.time <= widget.challengeList[0].time
+                ? "challenge completed!".toUpperCase()
+                : "new record!".toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -109,7 +125,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 30.0,
           ),
           Text(
-            "00:49",
+            durationToString(widget.newRecord.time),
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
@@ -126,9 +142,17 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "-11 Secs",
+          widget.newRecord.time < widget.challengeList[0].time
+              ? "${widget.newRecord.time - widget.challengeList[0].time} Secs"
+              : widget.newRecord.time > widget.challengeList[0].time
+                  ? "+${widget.newRecord.time - widget.challengeList[0].time} Secs"
+                  : "0 Secs",
           style: TextStyle(
-              color: Colors.deepOrangeAccent,
+              color: widget.newRecord.time < widget.challengeList[0].time
+                  ? Colors.deepOrangeAccent
+                  : widget.newRecord.time > widget.challengeList[0].time
+                      ? Colors.green
+                      : Colors.white,
               fontSize: 20.0,
               fontWeight: FontWeight.bold),
         ),
@@ -145,6 +169,8 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
   }
 
   Widget _buildChallengeAgainButton() {
+    int count = 0;
+
     return Padding(
       padding: EdgeInsets.only(left: 30.0, right: 30.0),
       child: TextButton(
@@ -158,12 +184,16 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0))),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).popUntil((_) => count++ >= 2);
+        },
       ),
     );
   }
 
   Widget _buildFinishButton() {
+    int count = 0;
+
     return Padding(
       padding: EdgeInsets.only(left: 30.0, right: 30.0),
       child: TextButton(
@@ -178,7 +208,9 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0)),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).popUntil((_) => count++ >= 3);
+        },
       ),
     );
   }

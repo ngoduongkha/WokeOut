@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,19 +48,14 @@ class _ChallengeCardState extends State<ChallengeCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return Card(
       margin: EdgeInsets.fromLTRB(5.0, 15.0, 5.0, 15.0),
       color: Colors.grey[800],
-      child: Column(
+      child: Stack(
         children: [
-          _buildCardImageAndTitle(),
-          _buildDescription(),
-          Container(
-            height: 1.0,
-            color: Colors.grey,
-          ),
-          // break line
-          _buildLowerPanel()
+          _buildScrollPanel(),
+          _buildChallengeButton()
         ],
       ),
       clipBehavior: Clip.antiAlias,
@@ -67,7 +63,42 @@ class _ChallengeCardState extends State<ChallengeCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
     );
   }
-
+  Widget _buildScrollPanel(){
+    double screenWidth = MediaQuery.of(context).size.width;
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            child: Column(
+              children: [
+                _buildCardImageAndTitle(),
+                _buildDescription(),
+                Container(
+                  height: 1.0,
+                  color: Colors.grey,
+                  width: 0.8*screenWidth,
+                ),
+                _buildBestRecordSection(),
+              ],
+            )
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index){
+              return _buildRecordItem();
+            },
+            childCount: 3,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 75.0,
+          ),
+        )
+      ],
+    );
+  }
   Widget _buildCardImageAndTitle() {
     return Stack(
       children: [_buildCardImage(), _buildTitle()],
@@ -111,9 +142,9 @@ class _ChallengeCardState extends State<ChallengeCard> {
             Text(
               widget.cardModel.title.toUpperCase(),
               style: TextStyle(
-                  fontSize: 35.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
+              fontSize: 35.0,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -128,15 +159,6 @@ class _ChallengeCardState extends State<ChallengeCard> {
       child: Text(
         widget.cardModel.description,
         style: TextStyle(color: Colors.white, fontSize: 14.0, height: 1.2),
-      ),
-    );
-  }
-
-  Widget _buildLowerPanel() {
-    return Expanded(
-      flex: 3,
-      child: Stack(
-        children: [_buildBestRecordSection(), _buildChallengeButton()],
       ),
     );
   }
@@ -158,8 +180,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   Padding(
                     child: SvgPicture.asset(
                       "assets/icons/medal.svg",
-                      width: 80,
-                      height: 80,
+                      width: 60,
+                      height: 60,
                     ),
                     padding: EdgeInsets.only(right: 20.0),
                   ),
@@ -216,29 +238,86 @@ class _ChallengeCardState extends State<ChallengeCard> {
   Widget _buildChallengeButton() {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 20.0),
-        child: TextButton(
-          child: Text(
-            "challenge".toUpperCase(),
-            style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
+      child: FractionallySizedBox(
+        widthFactor: 1,
+        child: Container(
+          color: Colors.grey[800],
+          height: 75.0,
+          padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+          child: Padding(
+            padding: EdgeInsets.only(left: 25.0, right: 25.0),
+            child: TextButton(
+              child: Text(
+                "challenge".toUpperCase(),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0))
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChallengeReadyPage(
+                    challengeList: challengeList,
+                    cardModel: widget.cardModel,
+                )));
+              },
+            ),
           ),
-          style: TextButton.styleFrom(
-              backgroundColor: Colors.blueAccent,
-              padding: EdgeInsets.fromLTRB(70.0, 20.0, 70.0, 20.0),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0))),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChallengeReadyPage(
-                      challengeList: challengeList,
-                      cardModel: widget.cardModel,
-                    )));
-          },
         ),
+      ),
+    );
+  }
+
+  Widget _buildRecordItem(){
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 60,
+            child: Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child: Text(
+                "00:16",
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 20.0,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 5.0,),
+              Container(
+                height: 10.0,
+                width: 100.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.circular(10.0)
+                ),
+              ),
+              SizedBox(height: 10.0,),
+              Text(
+                "May 2, 2021 01:52 PM",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.0
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

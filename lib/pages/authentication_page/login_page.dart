@@ -48,7 +48,6 @@ class _Body extends StatelessWidget {
               RoundedInputField(
                 hintText: "Your Email",
                 controller: emailController,
-                onChanged: (value) {},
               ),
               PasswordField(
                 hintText: "Your Password",

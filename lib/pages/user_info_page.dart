@@ -95,6 +95,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       TextButton(
                         onPressed: () {
                           auth.signOut();
+
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, 'welcome', ModalRoute.withName('landing'));
                         },
                         child: Text(
                           'Log Out',

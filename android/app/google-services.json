@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:218718472908:android:0653bd0730d1c20ab09069",
+        "mobilesdk_app_id": "1:218718472908:android:3d26292be85782a9b09069",
         "android_client_info": {
           "package_name": "com.example.woke_out"
         }
@@ -23,11 +23,11 @@
           }
         },
         {
-          "client_id": "218718472908-uovglvjqe652pvsd8t0a1k1eq3o6asfo.apps.googleusercontent.com",
+          "client_id": "218718472908-beor9uj25j3hulu63ok8tcbo7et0p4j2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.woke_out",
-            "certificate_hash": "cc00f28fb9f6e02fc85642325028c57fc14dfe29"
+            "certificate_hash": "c59eae4d6bafe44b915f6cf7f5f9fb6b2ef6b6c3"
           }
         },
         {

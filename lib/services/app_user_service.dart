@@ -62,14 +62,9 @@ class AppUserService {
     return url;
   }
 
-  Future<bool> addUser(MyAppUser appUser) async {
-    var resultCreate = false;
-    var usersRef = _ref.doc(appUser.uid);
-    await usersRef.get().then((docSnapshot) => {
-          if (!docSnapshot.exists) {usersRef.set(appUser.toMap())},
-          resultCreate = true
-        });
-    return resultCreate;
+  void addUser(MyAppUser appUser) async {
+    print(appUser.toMap());
+    await _ref.doc(appUser.uid).set(appUser.toMap());
   }
 
   void addChallengeRecord(ChallengeModel record) async {

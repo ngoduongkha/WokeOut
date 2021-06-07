@@ -13,7 +13,10 @@ class LandingPage extends StatelessWidget {
     return StreamBuilder<User>(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
-        return snapshot.hasData ? HomePage() : WelcomePage();
+        if (snapshot.connectionState == ConnectionState.done)
+          return snapshot.hasData ? HomePage() : WelcomePage();
+        else
+          return Center(child: CircularProgressIndicator());
       },
     );
   }

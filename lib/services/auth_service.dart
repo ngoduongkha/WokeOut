@@ -28,6 +28,9 @@ class AuthService {
         case "user-not-found":
           errorMessage = "Tài khoản hoặc mật khẩu không đúng";
           break;
+        case "user-disabled":
+          errorMessage = "Tài khoản đã bị khóa";
+          break;
         case "invalid-email":
           errorMessage = "Tài khoản email không hợp lệ";
           break;
@@ -60,6 +63,9 @@ class AuthService {
       print("Failed with error message: ${e.message}");
 
       switch (e.code) {
+        case "operation-not-allowed":
+          errorMessage = "Email hoặc mật khẩu chứa kí tự không hợp lệ";
+          break;
         case "invalid-email":
           errorMessage = "Tài khoản email không hợp lệ";
           break;

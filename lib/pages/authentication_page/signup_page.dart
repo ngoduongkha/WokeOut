@@ -11,14 +11,12 @@ import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
 import 'package:woke_out/widgets/password_text_form_field.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return _Body();
-  }
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _Body extends StatelessWidget {
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -26,101 +24,120 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final auth = Provider.of<AuthService>(context, listen: false);
-    final userService = Provider.of<AppUserService>(context, listen: false);
+    bool isLoading = false;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/signup_background.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(
-            decoration:
-                BoxDecoration(color: Color(0xFF15152B).withOpacity(0.5)),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                controller: emailController,
-                hintText: "Your Email",
-                onChanged: (value) {},
-              ),
-              PasswordField(
-                hintText: "Your password",
-              ),
-              RoundedButton(
-                text: "SIGNUP",
-                press: () async {
-                  var user = await auth.createUserWithEmailAndPassword(
-                      emailController.text, passwordController.text);
-                  if (user != null) {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'home', ModalRoute.withName('landing'));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialogBox(
-                          dialogType: DialogType.error,
-                          title: "Đăng ký thất bại",
-                          descriptions: auth.errorMessage,
-                        );
+      body: !isLoading
+          ? Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/signup_background.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration:
+                      BoxDecoration(color: Color(0xFF15152B).withOpacity(0.5)),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    SizedBox(height: size.height * 0.03),
+                    RoundedInputField(
+                      controller: emailController,
+                      hintText: "Your Email",
+                    ),
+                    PasswordField(
+                      hintText: "Your password",
+                      controller: passwordController,
+                    ),
+                    RoundedButton(
+                      text: "SIGNUP",
+                      press: () async {
+                        var user = await auth.createUserWithEmailAndPassword(
+                            emailController.text, passwordController.text);
+                        if (user != null) {
+                          AppUserService().addUser(user);
+
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, 'home', ModalRoute.withName('landing'));
+                        } else if (emailController.text.isEmpty ||
+                            passwordController.text.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialogBox(
+                                dialogType: DialogType.error,
+                                title: "Đăng ký thất bại",
+                                descriptions:
+                                    "Email và mật khẩu không được để trống!",
+                              );
+                            },
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialogBox(
+                                dialogType: DialogType.error,
+                                title: "Đăng ký thất bại",
+                                descriptions: auth.errorMessage,
+                              );
+                            },
+                          );
+                        }
                       },
-                    );
-                  }
-                },
-              ),
-              SizedBox(height: size.height * 0.03),
-              AlreadyHaveAnAccountCheck(
-                login: false,
-                press: () {
-                  Navigator.popAndPushNamed(context, 'login');
-                },
-              ),
-              OrDivider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SocialIcon(
-                    iconSrc: "assets/icons/facebook.svg",
-                    press: () async {
-                      var user = await auth.signInWithFacebook();
-                      if (user != null) {
-                        userService.addUser(user);
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, 'home', ModalRoute.withName('landing'));
-                      }
-                    },
-                  ),
-                  SocialIcon(
-                    iconSrc: "assets/icons/twitter.svg",
-                    press: () {},
-                  ),
-                  SocialIcon(
-                    iconSrc: "assets/icons/google-plus.svg",
-                    press: () async {
-                      var user = await auth.signInWithGoogle();
-                      if (user != null) {
-                        userService.addUser(user);
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, 'home', ModalRoute.withName('landing'));
-                      }
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: size.height * 0.05),
-            ],
-          ),
-        ],
-      ),
+                    ),
+                    SizedBox(height: size.height * 0.03),
+                    AlreadyHaveAnAccountCheck(
+                      login: false,
+                      press: () {
+                        Navigator.popAndPushNamed(context, 'login');
+                      },
+                    ),
+                    OrDivider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SocialIcon(
+                          iconSrc: "assets/icons/facebook.svg",
+                          press: () async {
+                            var user = await auth.signInWithFacebook();
+                            if (user != null) {
+                              AppUserService().addUser(user);
+                              Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                  ModalRoute.withName('landing'));
+                            }
+                          },
+                        ),
+                        SocialIcon(
+                          iconSrc: "assets/icons/twitter.svg",
+                          press: () {},
+                        ),
+                        SocialIcon(
+                          iconSrc: "assets/icons/google-plus.svg",
+                          press: () async {
+                            isLoading = true;
+                            var user = await auth.signInWithGoogle();
+                            isLoading = false;
+                            if (user != null) {
+                              AppUserService().addUser(user);
+                              Navigator.pushNamedAndRemoveUntil(context, 'home',
+                                  ModalRoute.withName('landing'));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                  ],
+                ),
+              ],
+            )
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }

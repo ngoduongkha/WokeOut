@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:woke_out/enum.dart';
 
 class CustomDialogBox extends StatefulWidget {
-  final String title, descriptions, text;
+  final String title, descriptions;
   final Image image;
   final DialogType dialogType;
+  final VoidCallback function;
 
-  const CustomDialogBox(
-      {Key key,
-      this.title,
-      this.descriptions,
-      this.text,
-      this.image,
-      this.dialogType})
-      : super(key: key);
+  const CustomDialogBox({
+    Key key,
+    this.title,
+    this.descriptions,
+    this.image,
+    this.dialogType,
+    this.function,
+  }) : super(key: key);
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
@@ -73,17 +74,48 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               SizedBox(
                 height: 22,
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      widget.text,
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ),
+              widget.dialogType != DialogType.warning
+                  ? Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "OK",
+                            style: TextStyle(fontSize: 18),
+                          )),
+                    )
+                  : Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              widget.function();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Yes",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "No",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           ),
         ),

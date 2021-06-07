@@ -21,30 +21,34 @@ class Constants {
 
 const List<CardModel> cardsList = [
   CardModel(
+    "plank",
+    Category.stop_watch,
     "assets/images/plank.jpg",
     Colors.red,
-    "plank",
     "The most intuitive core strength assessment. Challenge yourself and hold the plank as long as you can.",
     "Challenge yourself and hold as long as you can",
   ),
   CardModel(
+    "hold breath",
+    Category.stop_watch,
     "assets/images/hold_breath.jpg",
     Colors.green,
-    "hold breath",
     "Self-test of your cardiorespiratory capacity. Hold your breath as long as you can and find your limit.",
     "Self-test of your cardiorespiratory capacity. Hold your breath as long as you can and find your limit.",
   ),
   CardModel(
+    "push-ups",
+    Category.count,
     "assets/images/push_ups.jpg",
     Colors.orange,
-    "push-ups",
     "Test and challenge your full body fitness level. Do as many push-ups as you can at once!",
     "Touch anywhere on the screen with your nose or chin when your body moves down to count your repetitions.",
   ),
   CardModel(
+    "squats",
+    Category.count,
     "assets/images/squats.jpg",
     Colors.blue,
-    "squats",
     "Measure the power of your large muscle groups. Do as many squats as you can at once!",
     "Hold your phone above your chest with two hands while your body moves up and down.",
   ),

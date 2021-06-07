@@ -3,19 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
-import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/util.dart';
 
 class ChallengeFinishPage extends StatefulWidget {
-  final List<ChallengeModel> challengeList;
   final CardModel cardModel;
   final ChallengeModel newRecord;
 
   const ChallengeFinishPage({
     Key key,
-    @required this.challengeList,
-    @required this.cardModel,
     @required this.newRecord,
+    @required this.cardModel,
   }) : super(key: key);
 
   @override
@@ -23,6 +20,16 @@ class ChallengeFinishPage extends StatefulWidget {
 }
 
 class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
+  List<ChallengeModel> _challengeList = [];
+
+  @override
+  void initState() {
+    final ChallengeNotifier challengeNotifier =
+        Provider.of<ChallengeNotifier>(context, listen: false);
+    _challengeList = challengeNotifier.challengeList;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +118,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 15.0,
           ),
           Text(
-            widget.newRecord.time <= widget.challengeList[0].time
+            _challengeList[0].time <= _challengeList[0].time
                 ? "challenge completed!".toUpperCase()
                 : "new record!".toUpperCase(),
             textAlign: TextAlign.center,
@@ -125,7 +132,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 30.0,
           ),
           Text(
-            durationToString(widget.newRecord.time),
+            durationToString(_challengeList[0].time),
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
@@ -142,15 +149,17 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.newRecord.time < widget.challengeList[0].time
-              ? "${widget.newRecord.time - widget.challengeList[0].time} Secs"
-              : widget.newRecord.time > widget.challengeList[0].time
-                  ? "+${widget.newRecord.time - widget.challengeList[0].time} Secs"
-                  : "0 Secs",
+          _challengeList.length == 1
+              ? "0 Secs"
+              : widget.newRecord.time < _challengeList[0].time
+                  ? "${widget.newRecord.time - _challengeList[0].time} Secs"
+                  : widget.newRecord.time > _challengeList[0].time
+                      ? "+${widget.newRecord.time - _challengeList[0].time} Secs"
+                      : "0 Secs",
           style: TextStyle(
-              color: widget.newRecord.time < widget.challengeList[0].time
+              color: widget.newRecord.time < _challengeList[0].time
                   ? Colors.deepOrangeAccent
-                  : widget.newRecord.time > widget.challengeList[0].time
+                  : widget.newRecord.time > _challengeList[0].time
                       ? Colors.green
                       : Colors.white,
               fontSize: 20.0,

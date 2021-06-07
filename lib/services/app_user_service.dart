@@ -79,6 +79,17 @@ class AppUserService {
     await _challengeRef.add(record.toMap());
   }
 
+  void clearChallengeRecord() async {
+    final _userUid = FirebaseAuth.instance.currentUser.uid;
+    final _challengeRef = _ref.doc(_userUid).collection("challenges");
+
+    await _challengeRef.get().then((snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+  }
+
   Future<List<ChallengeModel>> getChallengeRecordsByName(String name) async {
     List<ChallengeModel> _challengeList = [];
     final _userUid = FirebaseAuth.instance.currentUser.uid;
@@ -90,7 +101,7 @@ class AppUserService {
         .then((value) => value.docs.forEach((element) {
               _challengeList.add(ChallengeModel.fromMap(element.data()));
             }));
-    
+
     _challengeList.sort((a, b) {
       int cmp = b.time.compareTo(a.time);
       if (cmp != 0) return cmp;
@@ -98,8 +109,9 @@ class AppUserService {
     });
 
     if (_challengeList == null) {
-      return null;
+      return [];
     }
+
     return _challengeList;
   }
 }

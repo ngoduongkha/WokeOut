@@ -32,7 +32,7 @@ class _PasswordFieldState extends State<PasswordField> {
       child: TextFormField(
         key: widget.fieldKey,
         obscureText: _obscureText,
-        maxLength: widget.maxLength ?? 8,
+        maxLength: widget.maxLength ?? 20,
         onSaved: widget.onSaved,
         validator: widget.validator,
         onFieldSubmitted: widget.onFieldSubmitted,

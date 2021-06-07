@@ -1,25 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
-import 'package:woke_out/pages/challenge/take_challenge.dart';
+import 'package:woke_out/pages/challenge/take_challenge_count.dart';
+import 'package:woke_out/pages/challenge/take_challenge_stopwatch.dart';
 import 'package:woke_out/util.dart';
 
 class ChallengeReadyPage extends StatefulWidget {
-  final List<ChallengeModel> challengeList;
   final CardModel cardModel;
 
-  const ChallengeReadyPage({
+  ChallengeReadyPage({
     Key key,
-    @required this.challengeList,
     @required this.cardModel,
-  }) : super(key: key);  
+  }) : super(key: key);
 
   @override
   _ChallengeReadyPageState createState() => _ChallengeReadyPageState();
 }
 
 class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
+  List<ChallengeModel> _challengeList = [];
+
+  @override
+  void initState() {
+    final ChallengeNotifier challengeNotifier =
+        Provider.of<ChallengeNotifier>(context, listen: true);
+    _challengeList = challengeNotifier.challengeList;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +87,7 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
       child: Stack(
         children: [
           _buildLowerPanelTopElements(),
-          widget.challengeList.isNotEmpty ? _buildBestRecord() : SizedBox(),
+          _challengeList.isNotEmpty ? _buildBestRecord() : SizedBox(),
         ],
       ),
     );
@@ -123,11 +133,14 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40.0))),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => TakeChallengePage(
-                      cardModel: widget.cardModel,
-                      challengeList: widget.challengeList,
-                    )));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => widget.cardModel.category !=
+                        Category.count
+                    ? TakeChallengeStopWatchPage(cardModel: widget.cardModel)
+                    : TakeChallengeCountPage(cardModel: widget.cardModel),
+              ),
+            );
           },
         )
       ],
@@ -146,14 +159,18 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
               "Best record".toUpperCase(),
               style: TextStyle(color: Colors.grey[200], fontSize: 16.0),
             ),
-            (widget.challengeList.isNotEmpty)
-                ? Text(
-                    durationToString(widget.challengeList[0].time),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w900),
-                  )
+            (_challengeList.isNotEmpty)
+                ? widget.cardModel.category == Category.stop_watch
+                    ? Text(durationToString(_challengeList[0].time),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w900))
+                    : Text("${_challengeList[0].time} REPS",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w900))
                 : SizedBox(),
           ],
         ),

@@ -69,7 +69,6 @@ class _Body extends StatelessWidget {
                           dialogType: DialogType.error,
                           title: "Đăng nhập thất bại",
                           descriptions: auth.errorMessage,
-                          text: "OK",
                         );
                       },
                     );

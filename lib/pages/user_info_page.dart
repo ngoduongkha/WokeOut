@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/enum.dart';
 import 'package:woke_out/model/app_user_model.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/avatar.dart';
 import 'package:woke_out/pages/bmi_page/input_page.dart';
 import 'package:woke_out/string_extension.dart';
+import 'package:woke_out/widgets/custom_dialog_box.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -66,18 +68,43 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       accountProfile(),
                       fitnessProfile(),
                       TextButton(
-                  onPressed: () {
-                    auth.signOut();
-                  },
-                  child: Text(
-                    'Log out',
-                    style: GoogleFonts.lato(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialogBox(
+                                dialogType: DialogType.warning,
+                                title: "Warning",
+                                descriptions:
+                                    "Are you sure to delete all data?",
+                                function: () =>
+                                    AppUserService().clearChallengeRecord(),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Delete All Data',
+                          style: GoogleFonts.lato(
+                            fontSize: 20,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          auth.signOut();
+                        },
+                        child: Text(
+                          'Log Out',
+                          style: GoogleFonts.lato(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -97,10 +124,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   void saveProfile() async {
     if (_userLocal != _userInternet) _userInternet = _userLocal;
-    if (_image != null) 
-    await AppUserService()
-        .updateUser(_userInternet, localFile: _image)
-        .then((value) => print(value));
+    if (_image != null)
+      await AppUserService()
+          .updateUser(_userInternet, localFile: _image)
+          .then((value) => print(value));
   }
 
   Widget settingAppBar(BuildContext context) {
@@ -161,36 +188,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
           color: Colors.white,
           child: Column(
             children: [
-              settingCard('Tên', _userLocal.displayName, _nameController),
+              settingCard('Name', _userLocal.displayName, _nameController),
               settingCard('Email', _userLocal.email, _emailController),
-              settingCard('Quận/Huyện', _userLocal.state, _stateController),
-              settingCard('Tỉnh/Thành phố', _userLocal.city, _cityController),
-              settingCard('Tiểu sử', _userLocal.bio, _bioController),
+              settingCard('District/Town', _userLocal.state, _stateController),
+              settingCard('Province/City', _userLocal.city, _cityController),
+              settingCard('Bio', _userLocal.bio, _bioController),
             ],
           ),
         ),
-      ],
-    );
-  }
-
-  Widget settingCard1(String title, String value) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: normalStyle()),
-              Container(
-                width: 250,
-                child: null,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 1),
       ],
     );
   }
@@ -214,7 +219,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   style: normalBoldStyle(),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintText: "Nhập ${title.toLowerCase()}",
+                    hintText: "Your ${title.toLowerCase()}",
                     border: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,

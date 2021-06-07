@@ -24,8 +24,8 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
 
   @override
   void initState() {
-    final ChallengeNotifier challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: true);
+    final challengeNotifier =
+        Provider.of<ChallengeNotifier>(context, listen: false);
     _challengeList = challengeNotifier.challengeList;
     super.initState();
   }

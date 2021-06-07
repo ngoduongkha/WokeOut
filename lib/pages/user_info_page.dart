@@ -159,7 +159,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               saveProfile();
             },
             child: Text(
-              'Lưu',
+              'Save',
               style: GoogleFonts.lato(
                 color: Color(0xFFFFFFFE),
                 fontSize: 18,

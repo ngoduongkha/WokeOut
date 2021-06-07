@@ -52,6 +52,7 @@ class _Body extends StatelessWidget {
               ),
               PasswordField(
                 hintText: "Your Password",
+                controller: passwordController,
               ),
               RoundedButton(
                 text: "LOGIN",

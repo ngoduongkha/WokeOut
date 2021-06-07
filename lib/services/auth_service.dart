@@ -1,4 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
+import 'package:flutter/services.dart';
 import "package:google_sign_in/google_sign_in.dart";
 import "package:woke_out/model/app_user_model.dart";
 import "package:flutter_facebook_login/flutter_facebook_login.dart";
@@ -13,6 +14,7 @@ class AuthService {
 
   Future<MyAppUser> signInWithEmailAndPassword(
       String email, String password) async {
+    print("$email, $password");
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -39,6 +41,10 @@ class AuthService {
           errorMessage = "Lỗi không xác định";
           break;
       }
+      return null;
+    } on PlatformException catch (e) {
+      print("Failed with error code: ${e.code}");
+      errorMessage = e.message;
       return null;
     }
   }
@@ -127,8 +133,12 @@ class AuthService {
       print("Failed with error code: ${e.code}");
       errorMessage = e.message;
       return null;
+    } on PlatformException catch (e) {
+      errorMessage = e.message;
+      print(errorMessage);
+      return null;
     } catch (e) {
-      errorMessage = e;
+      errorMessage = e.toString();
       print(errorMessage);
       return null;
     }

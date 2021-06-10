@@ -46,7 +46,8 @@ class ExerciseNotifier with ChangeNotifier {
   List<Exercise> _exerciseList = [];
   Exercise _currentExecise;
 
-  UnmodifiableListView<Exercise> get exerciseList => UnmodifiableListView(_exerciseList);
+  UnmodifiableListView<Exercise> get exerciseList =>
+      UnmodifiableListView(_exerciseList);
 
   Exercise get currentExercise => _currentExecise;
 

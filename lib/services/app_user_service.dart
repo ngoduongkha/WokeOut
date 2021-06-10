@@ -1,13 +1,15 @@
 import 'dart:io';
 
 import "package:cloud_firestore/cloud_firestore.dart";
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 import "package:woke_out/model/app_user_model.dart";
 import 'package:path/path.dart' as path;
+import 'package:woke_out/model/challenge_model.dart';
 
 class AppUserService {
-  final ref = FirebaseFirestore.instance.collection("users");
+  final _ref = FirebaseFirestore.instance.collection("users");
 
   static final AppUserService _singleton = AppUserService._internal();
 
@@ -18,7 +20,7 @@ class AppUserService {
   AppUserService._internal();
 
   Future<MyAppUser> loadProfile(String uid) {
-    return ref
+    return _ref
         .doc(uid)
         .snapshots()
         .map((snapshot) => MyAppUser.fromMap(snapshot.data()))
@@ -29,15 +31,14 @@ class AppUserService {
     var resultUpdate = false;
 
     if (localFile != null) {
-      _uploadImage(user, localFile).then((value) {
+      await _uploadImage(user, localFile).then((value) {
         user.photoUrl = value;
-        print(user.toMap());
       });
     }
-
-    await ref
+    
+    await _ref
         .doc(user.uid)
-        .update(user.toMap())
+        .set(user.toMap())
         .then((value) => resultUpdate = true)
         .catchError((error) => resultUpdate = false);
 
@@ -60,13 +61,51 @@ class AppUserService {
     return url;
   }
 
-  Future<bool> addUser(MyAppUser appUser) async {
-    var resultCreate = false;
-    var usersRef = ref.doc(appUser.uid);
-    await usersRef.get().then((docSnapshot) => {
-          if (!docSnapshot.exists) {usersRef.set(appUser.toMap())},
-          resultCreate = true
-        });
-    return resultCreate;
+  void addUser(MyAppUser appUser) async {
+    print(appUser.toMap());
+    await _ref.doc(appUser.uid).set(appUser.toMap());
+  }
+
+  void addChallengeRecord(ChallengeModel record) async {
+    final _userUid = FirebaseAuth.instance.currentUser.uid;
+    final _challengeRef = _ref.doc(_userUid).collection("challenges");
+
+    await _challengeRef.add(record.toMap());
+  }
+
+  void clearChallengeRecord() async {
+    final _userUid = FirebaseAuth.instance.currentUser.uid;
+    final _challengeRef = _ref.doc(_userUid).collection("challenges");
+
+    await _challengeRef.get().then((snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  Future<List<ChallengeModel>> getChallengeRecordsByName(String name) async {
+    List<ChallengeModel> _challengeList = [];
+    final _userUid = FirebaseAuth.instance.currentUser.uid;
+    final _challengeRef = _ref.doc(_userUid).collection("challenges");
+
+    await _challengeRef
+        .where("name", isEqualTo: name)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              _challengeList.add(ChallengeModel.fromMap(element.data()));
+            }));
+
+    _challengeList.sort((a, b) {
+      int cmp = b.time.compareTo(a.time);
+      if (cmp != 0) return cmp;
+      return b.createdAt.compareTo(a.createdAt);
+    });
+
+    if (_challengeList == null) {
+      return [];
+    }
+
+    return _challengeList;
   }
 }

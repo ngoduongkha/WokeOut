@@ -10,6 +10,7 @@ class PasswordField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.onFieldSubmitted,
+    this.controller,
   });
 
   final Key fieldKey;
@@ -18,6 +19,7 @@ class PasswordField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
+  final TextEditingController controller;
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -30,9 +32,10 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextFormField(
+        controller: widget.controller,
         key: widget.fieldKey,
         obscureText: _obscureText,
-        maxLength: widget.maxLength ?? 8,
+        maxLength: widget.maxLength ?? 20,
         onSaved: widget.onSaved,
         validator: widget.validator,
         onFieldSubmitted: widget.onFieldSubmitted,

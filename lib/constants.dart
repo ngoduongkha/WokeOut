@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woke_out/model/challenge_card_model.dart';
 
 const kPrimaryColor = Color(0xFF40D876);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
@@ -17,3 +18,38 @@ class Constants {
   static const double padding = 20;
   static const double avatarRadius = 45;
 }
+
+const List<CardModel> cardsList = [
+  CardModel(
+    "plank",
+    Category.stop_watch,
+    "assets/images/plank.jpg",
+    Colors.red,
+    "The most intuitive core strength assessment. Challenge yourself and hold the plank as long as you can.",
+    "Challenge yourself and hold as long as you can",
+  ),
+  CardModel(
+    "hold breath",
+    Category.stop_watch,
+    "assets/images/hold_breath.jpg",
+    Colors.green,
+    "Self-test of your cardiorespiratory capacity. Hold your breath as long as you can and find your limit.",
+    "Self-test of your cardiorespiratory capacity. Hold your breath as long as you can and find your limit.",
+  ),
+  CardModel(
+    "push-ups",
+    Category.count,
+    "assets/images/push_ups.jpg",
+    Colors.orange,
+    "Test and challenge your full body fitness level. Do as many push-ups as you can at once!",
+    "Touch anywhere on the screen with your nose or chin when your body moves down to count your repetitions.",
+  ),
+  CardModel(
+    "squats",
+    Category.count,
+    "assets/images/squats.jpg",
+    Colors.blue,
+    "Measure the power of your large muscle groups. Do as many squats as you can at once!",
+    "Hold your phone above your chest with two hands while your body moves up and down.",
+  ),
+];

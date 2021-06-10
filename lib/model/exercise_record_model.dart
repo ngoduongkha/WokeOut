@@ -1,49 +1,57 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class Time
-{
+class Time {
   int minute;
   int second;
-  Time(){
+  Time() {
     this.minute = 0;
     this.second = 0;
   }
-  Time.fromData(int inputMin, inputSec){
+  Time.fromData(int inputMin, inputSec) {
     this.minute = inputMin;
     this.second = inputSec;
   }
-  factory Time.fromMap(Map<String, dynamic> data, String fieldName){
-    int min = data[fieldName]/60;
-    int sec = data[fieldName]%60;
+  factory Time.fromMap(Map<String, dynamic> data, String fieldName) {
+    int min = data[fieldName] / 60;
+    int sec = data[fieldName] % 60;
     return Time.fromData(min, sec);
   }
-  void addOneSec(){
-    if(this.second >= 59){
-      this.minute ++;
+  void addOneSec() {
+    if (this.second >= 59) {
+      this.minute++;
       this.second = 0;
-    }else this.second ++;
+    } else
+      this.second++;
   }
-  double getTimeInMinutes(){
-    return this.minute.toDouble()+ (this.second/60).toDouble();
+
+  double getTimeInMinutes() {
+    return this.minute.toDouble() + (this.second / 60).toDouble();
   }
-  int getTimeInSeconds(){
-    return this.second + this.minute*60;
+
+  int getTimeInSeconds() {
+    return this.second + this.minute * 60;
   }
-  String getMinText(){
-    if(minute< 10) return "0$minute";
-    else return minute.toString();
+
+  String getMinText() {
+    if (minute < 10)
+      return "0$minute";
+    else
+      return minute.toString();
   }
-  String getSecondText(){
-    if(second< 10) return "0$second";
-    else return second.toString();
+
+  String getSecondText() {
+    if (second < 10)
+      return "0$second";
+    else
+      return second.toString();
   }
-  String getTimeText(){
+
+  String getTimeText() {
     return "${this.minute}m${this.second}s";
   }
 }
+
 class RecordModel {
   double calorie;
   double score;
@@ -53,7 +61,7 @@ class RecordModel {
   String exLevel;
   Timestamp timeStamp;
 
-  RecordModel(){
+  RecordModel() {
     this.calorie = 0;
     this.score = 0;
     totalTime = Time();
@@ -63,26 +71,24 @@ class RecordModel {
     timeStamp = null;
   }
 
-  RecordModel.withRequire({
-    @required this.calorie,
-    this.satisfactionLevel,
-    this.totalTime,
-    this.exLevel,
-    this.exName,
-    this.timeStamp,
-    this.score
-  });
+  RecordModel.withRequire(
+      {@required this.calorie,
+      this.satisfactionLevel,
+      this.totalTime,
+      this.exLevel,
+      this.exName,
+      this.timeStamp,
+      this.score});
 
-  factory RecordModel.fromMap(Map<String, dynamic> data){
+  factory RecordModel.fromMap(Map<String, dynamic> data) {
     return RecordModel.withRequire(
-      calorie: data["calorie"],
-      score: data["score"],
-      totalTime: Time.fromMap(data, 'totalTime'),
-      satisfactionLevel: data["satisfactionLevel"],
-      exLevel: data["exLevel"],
-      exName: data["exName"],
-      timeStamp: data["timeStamp"]
-    );
+        calorie: data["calorie"],
+        score: data["score"],
+        totalTime: Time.fromMap(data, 'totalTime'),
+        satisfactionLevel: data["satisfactionLevel"],
+        exLevel: data["exLevel"],
+        exName: data["exName"],
+        timeStamp: data["timeStamp"]);
   }
 
   Map<String, dynamic> toMap() {
@@ -96,5 +102,4 @@ class RecordModel {
       "timeStamp": timeStamp
     };
   }
-
 }

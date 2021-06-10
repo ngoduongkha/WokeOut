@@ -1,4 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
+import 'package:flutter/services.dart';
 import "package:google_sign_in/google_sign_in.dart";
 import "package:woke_out/model/app_user_model.dart";
 import "package:flutter_facebook_login/flutter_facebook_login.dart";
@@ -7,28 +8,17 @@ class AuthService {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String errorMessage;
 
-  MyAppUser _userFromFirebase(User user) {
-    if (user == null) {
-      return null;
-    }
-    return MyAppUser(
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoUrl: user.photoURL,
-    );
-  }
-
   Stream<User> authStateChanges() => _firebaseAuth.authStateChanges();
 
   User currentUser() => _firebaseAuth.currentUser;
 
   Future<MyAppUser> signInWithEmailAndPassword(
       String email, String password) async {
+    print("$email, $password");
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return _userFromFirebase(userCredential.user);
+      return MyAppUser.fromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print("Failed with error code: ${e.code}");
       print("Failed with error message: ${e.message}");
@@ -37,6 +27,9 @@ class AuthService {
         case "wrong-password":
         case "user-not-found":
           errorMessage = "Tài khoản hoặc mật khẩu không đúng";
+          break;
+        case "user-disabled":
+          errorMessage = "Tài khoản đã bị khóa";
           break;
         case "invalid-email":
           errorMessage = "Tài khoản email không hợp lệ";
@@ -52,6 +45,10 @@ class AuthService {
           break;
       }
       return null;
+    } on PlatformException catch (e) {
+      print("Failed with error code: ${e.code}");
+      errorMessage = e.message;
+      return null;
     }
   }
 
@@ -60,12 +57,15 @@ class AuthService {
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return _userFromFirebase(userCredential.user);
+      return MyAppUser.fromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print("Failed with error code: ${e.code}");
       print("Failed with error message: ${e.message}");
 
       switch (e.code) {
+        case "operation-not-allowed":
+          errorMessage = "Email hoặc mật khẩu chứa kí tự không hợp lệ";
+          break;
         case "invalid-email":
           errorMessage = "Tài khoản email không hợp lệ";
           break;
@@ -106,7 +106,7 @@ class AuthService {
               FacebookAuthProvider.credential(facebookAccessToken.token);
           final userCredential =
               await _firebaseAuth.signInWithCredential(authCredential);
-          return _userFromFirebase(userCredential.user);
+          return MyAppUser.fromFirebase(userCredential.user);
         case FacebookLoginStatus.error:
           errorMessage = "Facebook login error";
           return null;
@@ -134,13 +134,17 @@ class AuthService {
 
       final userCredential =
           await _firebaseAuth.signInWithCredential(googleCredential);
-      return _userFromFirebase(userCredential.user);
+      return MyAppUser.fromFirebase(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print("Failed with error code: ${e.code}");
       errorMessage = e.message;
       return null;
+    } on PlatformException catch (e) {
+      errorMessage = e.message;
+      print(errorMessage);
+      return null;
     } catch (e) {
-      errorMessage = e;
+      errorMessage = e.toString();
       print(errorMessage);
       return null;
     }

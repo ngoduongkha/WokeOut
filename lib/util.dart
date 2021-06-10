@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:woke_out/model/challenge_model.dart';
+import 'package:dvhcvn/dvhcvn.dart';
 
 String durationToString(int seconds) {
   var duration = Duration(seconds: seconds);

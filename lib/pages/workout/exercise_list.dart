@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,24 +6,22 @@ import 'package:woke_out/model/exercise_model.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_service.dart';
 
-class ExerciseSet
-{
+class ExerciseSet {
   String name;
   String level;
   List<Exercise> list;
-  ExerciseSet({
-    @required this.name,
-    this.level,
-    this.list
-  });
+  ExerciseSet({@required this.name, this.level, this.list});
 
-  String get category {return this.level;}
-  List<Exercise> get exerciseList {return this.list;}
+  String get category {
+    return this.level;
+  }
 
+  List<Exercise> get exerciseList {
+    return this.list;
+  }
 }
 
 class ExerciseListPage extends StatefulWidget {
-
   final String muscleName;
   final String imgPath;
   ExerciseListPage({
@@ -37,99 +34,110 @@ class ExerciseListPage extends StatefulWidget {
 }
 
 class _ExerciseListPageState extends State<ExerciseListPage> {
-
   final ExerciseService exService = ExerciseService();
-  Future<List<ExerciseSet>> loadExercisesWithCategory() async{
+  Future<List<ExerciseSet>> loadExercisesWithCategory() async {
     AuthService auth = Provider.of<AuthService>(context, listen: false);
     print(auth.currentUser().uid);
 
     List<ExerciseSet> exerciseSet = [];
-    List<Exercise> beginner = await exService.loadBeginnerExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "beginner", list: beginner));
+    List<Exercise> beginner =
+        await exService.loadBeginnerExercises(widget.muscleName);
+    exerciseSet.add(ExerciseSet(
+        name: widget.muscleName, level: "beginner", list: beginner));
 
-    List<Exercise> intermediate = await exService.loadIntermediateExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "intermediate", list: intermediate));
+    List<Exercise> intermediate =
+        await exService.loadIntermediateExercises(widget.muscleName);
+    exerciseSet.add(ExerciseSet(
+        name: widget.muscleName, level: "intermediate", list: intermediate));
 
-    List<Exercise> advance = await exService.loadAdvancedExercises(widget.muscleName);
-    exerciseSet.add(ExerciseSet(name: widget.muscleName, level: "advance", list: advance));
+    List<Exercise> advance =
+        await exService.loadAdvancedExercises(widget.muscleName);
+    exerciseSet.add(
+        ExerciseSet(name: widget.muscleName, level: "advance", list: advance));
     return exerciseSet;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: loadExercisesWithCategory(),
-      builder: (BuildContext context, AsyncSnapshot<List<ExerciseSet>> snapshot){
-        if(snapshot.hasData){
-          return DefaultTabController(
-            length: snapshot.data.length,
-            child: Scaffold(
-              body: _buildMainPage(snapshot.data),
-            ),
-          );
-        }
-        return Center(child: CircularProgressIndicator(),);
-      }
-    );
+        future: loadExercisesWithCategory(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ExerciseSet>> snapshot) {
+          if (snapshot.hasData) {
+            return DefaultTabController(
+              length: snapshot.data.length,
+              child: Scaffold(
+                body: _buildMainPage(snapshot.data),
+              ),
+            );
+          }
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        });
   }
-  Widget _buildMainPage(List<ExerciseSet> data){
-      return NestedScrollView(
-        headerSliverBuilder: (context, isScrolled){
+
+  Widget _buildMainPage(List<ExerciseSet> data) {
+    return NestedScrollView(
+        headerSliverBuilder: (context, isScrolled) {
           return <Widget>[
-            ExerciseListSliverAppBar(muscleName: widget.muscleName, imgPath: widget.imgPath, exerciseSets: data)
+            ExerciseListSliverAppBar(
+                muscleName: widget.muscleName,
+                imgPath: widget.imgPath,
+                exerciseSets: data)
           ];
         },
         body: TabBarView(
-          children: data.map((ExerciseSet exerciseSet)=> _buildExerciseSetPage(exerciseSet,)).toList(),
-        )
-    );
+          children: data
+              .map((ExerciseSet exerciseSet) => _buildExerciseSetPage(
+                    exerciseSet,
+                  ))
+              .toList(),
+        ));
   }
 
   Widget _buildExerciseSetPage(ExerciseSet exerciseSet) {
     List<Exercise> list = exerciseSet.list;
     String totalTime = getTotalTimeText(list);
-    return Stack(
-      children: [
-        Container(
-          color: Colors.white,
-          child: CustomScrollView(
-            slivers: [
-              _buildExerciseSetGeneralInfoItems(list.length, totalTime),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index){
-                    return _buildListItem(list[index]);
-                  },
-                  childCount: list.length
-                ),
+    return Stack(children: [
+      Container(
+        color: Colors.white,
+        child: CustomScrollView(
+          slivers: [
+            _buildExerciseSetGeneralInfoItems(list.length, totalTime),
+            SliverList(
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                return _buildListItem(list[index]);
+              }, childCount: list.length),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 80.0,
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 80.0,
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
-        _buildStartExerciseButton(exerciseSet)
-      ]
-    );
+      ),
+      _buildStartExerciseButton(exerciseSet)
+    ]);
   }
-  String getTotalTimeText(List<Exercise> list){
+
+  String getTotalTimeText(List<Exercise> list) {
     int seconds = getTotalTimeInSeconds(list);
-    if(seconds>= 60){
-      return "${(seconds~/60)}m ${seconds%60}s";
-    }else return "${seconds}s";
+    if (seconds >= 60) {
+      return "${(seconds ~/ 60)}m ${seconds % 60}s";
+    } else
+      return "${seconds}s";
   }
-  int getTotalTimeInSeconds(List<Exercise> list){
+
+  int getTotalTimeInSeconds(List<Exercise> list) {
     int result = 0;
     list.forEach((element) {
-      result+= element.duration+ element.rest;
+      result += element.duration + element.rest;
     });
     return result;
   }
 
-  Widget _buildStartExerciseButton(ExerciseSet exerciseSet){
+  Widget _buildStartExerciseButton(ExerciseSet exerciseSet) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Positioned(
       bottom: 0,
@@ -151,33 +159,34 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
           style: TextButton.styleFrom(
             backgroundColor: Colors.blueAccent,
           ),
-          onPressed: ()=> startExercise(exerciseSet),
+          onPressed: () => startExercise(exerciseSet),
         ),
       ),
     );
   }
-  void startExercise(ExerciseSet exerciseSet){
+
+  void startExercise(ExerciseSet exerciseSet) {
     ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
     player.init(exerciseSet.name, exerciseSet.level, exerciseSet.list);
     Navigator.of(context).pushNamed("doExercisePage");
   }
 
-  Widget _buildExerciseSetGeneralInfoItems(int amount, String totalTime){
+  Widget _buildExerciseSetGeneralInfoItems(int amount, String totalTime) {
     return SliverToBoxAdapter(
-      child: Row(
-        children: [
-          _buildGeneralInfoItem(Icons.bar_chart, amount, "exercises"),
-          Container(
-            width: 1.0,
-            height: 30.0,
-            color: Colors.grey,
-          ),
-          _buildGeneralInfoItem(Icons.access_time_outlined, totalTime, " seconds")
-        ],
-      )
-    );
+        child: Row(
+      children: [
+        _buildGeneralInfoItem(Icons.bar_chart, amount, "exercises"),
+        Container(
+          width: 1.0,
+          height: 30.0,
+          color: Colors.grey,
+        ),
+        _buildGeneralInfoItem(Icons.access_time_outlined, totalTime, " seconds")
+      ],
+    ));
   }
-  Widget _buildGeneralInfoItem(IconData icon, dynamic amount, String text){
+
+  Widget _buildGeneralInfoItem(IconData icon, dynamic amount, String text) {
     return Expanded(
       flex: 1,
       child: Container(
@@ -190,33 +199,29 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
             children: [
               RichText(
                 text: TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Icon(icon, color: Colors.black,)
-                    ),
-                    TextSpan(
-                      text: " $amount"
-                    )
-                  ],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
+                    children: [
+                      WidgetSpan(
+                          child: Icon(
+                        icon,
+                        color: Colors.black,
+                      )),
+                      TextSpan(text: " $amount")
+                    ],
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
               ),
-              Text(
-                text,
-                style: TextStyle(
-                  color: Colors.grey[500],
-                )
-              )
+              Text(text,
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ))
             ],
           ),
         ),
       ),
     );
   }
-  Widget _buildListItem(Exercise exercise){
+
+  Widget _buildListItem(Exercise exercise) {
     return ListTile(
       contentPadding: EdgeInsets.fromLTRB(25.0, 4.0, 25.0, 4.0),
       title: Container(
@@ -229,12 +234,14 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
           ],
         ),
       ),
-      onTap: (){
-        Navigator.of(context).pushNamed("exerciseDetailPage", arguments: exercise);
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed("exerciseDetailPage", arguments: exercise);
       },
     );
   }
-  Widget _buildLeftImageBox(String imageUrl){
+
+  Widget _buildLeftImageBox(String imageUrl) {
     return Expanded(
       flex: 7,
       child: Container(
@@ -244,9 +251,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
           fit: BoxFit.cover,
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Colors.grey[900]
-        ),
+            borderRadius: BorderRadius.circular(5.0), color: Colors.grey[900]),
       ),
     );
   }
@@ -269,17 +274,15 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
             Text(
               "${exercise.duration} seconds - rest ${exercise.rest} seconds",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[500],
-                fontSize: 12.0
-              ),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[500],
+                  fontSize: 12.0),
             )
           ],
         ),
       ),
     );
   }
-
 }
 
 class ExerciseListSliverAppBar extends StatelessWidget {
@@ -287,11 +290,8 @@ class ExerciseListSliverAppBar extends StatelessWidget {
   final String imgPath;
   final List<ExerciseSet> exerciseSets;
 
-  ExerciseListSliverAppBar({
-    @required this.exerciseSets,
-    this.muscleName,
-    this.imgPath
-  });
+  ExerciseListSliverAppBar(
+      {@required this.exerciseSets, this.muscleName, this.imgPath});
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -300,7 +300,10 @@ class ExerciseListSliverAppBar extends StatelessWidget {
       floating: true,
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(this.muscleName, style: TextStyle(color: Colors.white),),
+        title: Text(
+          this.muscleName,
+          style: TextStyle(color: Colors.white),
+        ),
         titlePadding: EdgeInsets.only(left: 50.0, bottom: 65.0),
         background: Image.asset(
           this.imgPath,
@@ -309,12 +312,13 @@ class ExerciseListSliverAppBar extends StatelessWidget {
       ),
       bottom: TabBar(
         labelColor: Colors.white,
-        tabs: exerciseSets.map((ExerciseSet e)=> Tab(text: e.category,)).toList(),
+        tabs: exerciseSets
+            .map((ExerciseSet e) => Tab(
+                  text: e.category,
+                ))
+            .toList(),
         indicatorWeight: 4.0,
-
       ),
     );
   }
 }
-
-

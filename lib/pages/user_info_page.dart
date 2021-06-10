@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/enum.dart';
+import 'package:woke_out/model/administrative_unit.dart';
 import 'package:woke_out/model/app_user_model.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
+import 'package:woke_out/widgets/address_picker.dart';
 import 'package:woke_out/widgets/avatar.dart';
 import 'package:woke_out/pages/bmi_page/input_page.dart';
 import 'package:woke_out/string_extension.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
+import 'package:dvhcvn/dvhcvn.dart' as dvhcvn;
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -27,9 +30,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
   File _image;
 
   TextEditingController _nameController;
-  TextEditingController _emailController;
-  TextEditingController _stateController;
-  TextEditingController _cityController;
   TextEditingController _bioController;
 
   set image(File value) {
@@ -51,67 +51,66 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
           _nameController =
               new TextEditingController(text: _userLocal.displayName);
-          _emailController = new TextEditingController(text: _userLocal.email);
-          _stateController = new TextEditingController(text: _userLocal.state);
-          _cityController = new TextEditingController(text: _userLocal.city);
           _bioController = new TextEditingController(text: _userLocal.bio);
 
-          return Scaffold(
-            backgroundColor: Color(0xFFEBEDF0),
-            body: CustomScrollView(
-              slivers: [
-                settingAppBar(context),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      AvatarWidget(photoUrl: _userLocal.photoUrl),
-                      accountProfile(),
-                      fitnessProfile(),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialogBox(
-                                dialogType: DialogType.warning,
-                                title: "Warning",
-                                descriptions:
-                                    "Are you sure to delete all data?",
-                                function: () =>
-                                    AppUserService().clearChallengeRecord(),
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          'Delete All Data',
-                          style: GoogleFonts.lato(
-                            fontSize: 20,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+          return GestureDetector(
+            child: Scaffold(
+              backgroundColor: Color(0xFFEBEDF0),
+              body: CustomScrollView(
+                slivers: [
+                  settingAppBar(context),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        AvatarWidget(photoUrl: _userLocal.photoUrl),
+                        accountProfile(),
+                        fitnessProfile(),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CustomDialogBox(
+                                  dialogType: DialogType.warning,
+                                  title: "Warning",
+                                  descriptions:
+                                      "Are you sure to delete all data?",
+                                  function: () =>
+                                      AppUserService().clearChallengeRecord(),
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            'Delete All Data',
+                            style: GoogleFonts.lato(
+                              fontSize: 20,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          auth.signOut();
+                        TextButton(
+                          onPressed: () {
+                            auth.signOut();
 
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, 'welcome', ModalRoute.withName('landing'));
-                        },
-                        child: Text(
-                          'Log Out',
-                          style: GoogleFonts.lato(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                'welcome', ModalRoute.withName('landing'));
+                          },
+                          child: Text(
+                            'Log Out',
+                            style: GoogleFonts.lato(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else {
@@ -126,11 +125,41 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   void saveProfile() async {
-    if (_userLocal != _userInternet) _userInternet = _userLocal;
-    if (_image != null)
+    _userLocal.displayName = _nameController.text;
+    _userInternet.bio = _bioController.text;
+
+    if (_userLocal != _userInternet) {
+      _userInternet = _userLocal;
+    }
+    if (_image != null) {
       await AppUserService()
           .updateUser(_userInternet, localFile: _image)
-          .then((value) => print(value));
+          .then((value) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return CustomDialogBox(
+              title: "Done",
+              descriptions: "Your update successfully!",
+              dialogType: DialogType.success,
+            );
+          },
+        );
+      });
+    } else {
+      await AppUserService().updateUser(_userInternet).then((value) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return CustomDialogBox(
+              title: "Done",
+              descriptions: "Your update successfully!",
+              dialogType: DialogType.success,
+            );
+          },
+        );
+      });
+    }
   }
 
   Widget settingAppBar(BuildContext context) {
@@ -175,7 +204,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
-//Begin Account Profile
   Widget accountProfile() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,13 +220,65 @@ class _UserInfoPageState extends State<UserInfoPage> {
           child: Column(
             children: [
               settingCard('Name', _userLocal.displayName, _nameController),
-              settingCard('Email', _userLocal.email, _emailController),
-              settingCard('District/Town', _userLocal.state, _stateController),
-              settingCard('Province/City', _userLocal.city, _cityController),
+              addressField('Address'),
               settingCard('Bio', _userLocal.bio, _bioController),
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  String getVietnameseString(dvhcvn.Entity entity) {
+    if (entity == null) return null;
+    final parent = getVietnameseString(entity.parent);
+    return parent != null ? '${entity.name}, $parent' : entity.name;
+  }
+
+  Widget addressField(String title) {
+    final data = AdministrativeUnit.of(context, listen: true);
+
+    dvhcvn.Entity entity = data.level3;
+    entity ??= data.level2;
+    entity ??= data.level1;
+
+    _userLocal.address = getVietnameseString(entity) ?? _userLocal.address;
+
+
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: normalStyle()),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => AddressPicker()));
+                },
+                child: Container(
+                  width: 250,
+                  child: Text(
+                    _userLocal.address ?? "Your ${title.toLowerCase()}",
+                    textAlign: TextAlign.end,
+                    style: _userLocal.address != null
+                        ? normalBoldStyle()
+                        : GoogleFonts.lato(
+                            fontSize: 17,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 1),
       ],
     );
   }
@@ -220,7 +300,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   controller: scontroller,
                   textAlign: TextAlign.right,
                   style: normalBoldStyle(),
-                  cursorColor: Colors.black,
                   decoration: InputDecoration(
                     hintText: "Your ${title.toLowerCase()}",
                     border: InputBorder.none,

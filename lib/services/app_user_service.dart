@@ -31,15 +31,14 @@ class AppUserService {
     var resultUpdate = false;
 
     if (localFile != null) {
-      _uploadImage(user, localFile).then((value) {
+      await _uploadImage(user, localFile).then((value) {
         user.photoUrl = value;
-        print(user.toMap());
       });
     }
-
+    
     await _ref
         .doc(user.uid)
-        .update(user.toMap())
+        .set(user.toMap())
         .then((value) => resultUpdate = true)
         .catchError((error) => resultUpdate = false);
 

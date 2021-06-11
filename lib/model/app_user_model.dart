@@ -12,7 +12,6 @@ class MyAppUser {
   int height;
   int weight;
   String level;
-  String goal;
   String address;
 
   MyAppUser({
@@ -25,7 +24,6 @@ class MyAppUser {
     this.height,
     this.weight,
     this.level,
-    this.goal,
     this.address,
   });
 
@@ -45,7 +43,6 @@ class MyAppUser {
       height: data["height"],
       weight: data["weight"],
       level: data["level"],
-      goal: data["goal"],
       address: data["address"],
     );
   }
@@ -73,7 +70,6 @@ class MyAppUser {
       "height": height,
       "weight": weight,
       "level": level,
-      "goal": goal,
       "address": address,
     };
   }

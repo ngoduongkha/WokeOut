@@ -66,9 +66,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
     final screenWidth = MediaQuery.of(context).size.width;
     final appUserService = Provider.of<AppUserService>(context, listen: true);
 
-    return StreamBuilder<List<ChallengeModel>>(
-      stream: Stream.fromFuture(
-          appUserService.getChallengeRecordsByName(widget.cardModel.title)),
+    return FutureBuilder<List<ChallengeModel>>(
+      future: appUserService.getChallengeRecordsByName(widget.cardModel.title),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           _challengeList = snapshot.data;
@@ -184,6 +183,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
   }
 
   Widget _buildBestRecordSection(ChallengeModel bestRecord) {
+    final size = MediaQuery.of(context).size;
+
     return Padding(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +228,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                     ),
               Container(
                 height: 10.0,
-                width: 220.0,
+                width: size.width * 0.5,
                 decoration: BoxDecoration(
                   color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
@@ -293,6 +294,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
   }
 
   Widget _buildRecordItem(List<ChallengeModel> challengeList, int index) {
+    final size = MediaQuery.of(context).size;
+
     return Padding(
       padding: EdgeInsets.all(15.0),
       child: Row(
@@ -334,11 +337,12 @@ class _ChallengeCardState extends State<ChallengeCard> {
               Container(
                 height: 10.0,
                 width: challengeList[index + 1].time == challengeList[0].time
-                    ? 220.0
+                    ? size.width * 0.5
                     : challengeList[index + 1].time != 0
                         ? (challengeList[index + 1].time /
                                 challengeList[0].time) *
-                            220.0
+                            size.width *
+                            0.5
                         : 0,
                 decoration: BoxDecoration(
                     color: Colors.grey[600],

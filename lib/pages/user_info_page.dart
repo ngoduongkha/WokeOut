@@ -194,7 +194,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
               'Save',
               style: GoogleFonts.lato(
                 color: Color(0xFFFFFFFE),
-                fontSize: 18,
+                fontSize: 15,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -269,7 +269,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                     style: _userLocal.address != null
                         ? normalBoldStyle()
                         : GoogleFonts.lato(
-                            fontSize: 17,
+                            fontSize: 12,
                             color: Colors.black54,
                             fontWeight: FontWeight.w900),
                   ),
@@ -396,7 +396,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
                       .capitalize()),
               gestureCard('Height', '${_userLocal.height.toString()} cm'),
               gestureCard('Weight', '${_userLocal.weight.toString()} kg'),
-              gestureCard('Fitness level', '${_userLocal.level.toString()}'),
             ],
           ),
         ),
@@ -416,7 +415,7 @@ TextStyle headerStyle() {
 
 TextStyle normalStyle() {
   return GoogleFonts.lato(
-    fontSize: 17,
+    fontSize: 12,
     color: Colors.black,
     fontWeight: FontWeight.normal,
   );
@@ -424,7 +423,7 @@ TextStyle normalStyle() {
 
 TextStyle normalBoldStyle() {
   return GoogleFonts.lato(
-    fontSize: 17,
+    fontSize: 12,
     color: Colors.black,
     fontWeight: FontWeight.w900,
   );

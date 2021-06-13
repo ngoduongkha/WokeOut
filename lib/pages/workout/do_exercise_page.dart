@@ -2,25 +2,49 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
 
-GlobalKey<_CountdownProgressIndicatorState> countdownProgressIndicatorKey =
-    new GlobalKey<_CountdownProgressIndicatorState>();
-// use global key storing countdown progress indicator state to access function like: pause, resume...
-
 class DoExercisePage extends StatefulWidget {
-  // List<int>
   @override
   _DoExercisePageState createState() => _DoExercisePageState();
 }
 
 class _DoExercisePageState extends State<DoExercisePage> {
+  CountdownProgressIndicator counter;
+
+  VideoPlayerController _controller;
+  Future<void> _initVideoPlayerFuture;
+
+  void initVideoController(Exercise exercise) async {
+    _controller = VideoPlayerController.network(exercise.video);
+    _initVideoPlayerFuture = _controller.initialize();
+    _controller.setLooping(true);
+    _controller.setVolume(0.0);
+    _controller.play();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    initVideoController(player.currentExercise);
+    counter = CountdownProgressIndicator(player: player);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Column(
+        body: Column(
         children: [
           _buildHalfPageTop(),
           _buildDoExerciseProgressBar(),
@@ -29,7 +53,6 @@ class _DoExercisePageState extends State<DoExercisePage> {
       )),
     );
   }
-
   Widget _buildDoExerciseProgressBar() {
     return Consumer<ExercisePlayer>(
       builder: (context, player, child) {
@@ -38,28 +61,36 @@ class _DoExercisePageState extends State<DoExercisePage> {
       },
     );
   }
-
   Widget _buildHalfPageTop() {
+    double defaultAspectRatio = 427/240;
     return Stack(children: <Widget>[
-      AspectRatio(
-        aspectRatio: 5 / 3,
-        child: Container(
-          decoration: BoxDecoration(color: Colors.teal),
-          // child: _addData(),
-        ),
+      FutureBuilder(
+        future: _initVideoPlayerFuture,
+        builder: (context, snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            return AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            );
+          }else{
+            return AspectRatio(
+              aspectRatio: defaultAspectRatio,
+            );
+          }
+        },
       ),
       _buildGetBackButton(context)
     ]);
   }
-
   Widget _buildGetBackButton(BuildContext context) {
     return Positioned(
       top: 0,
       left: 0,
       child: TextButton(
         child: Icon(
-          Icons.arrow_back,
-          color: Colors.grey[800],
+          Icons.chevron_left,
+          color: Colors.white,
+          size: 30.0,
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
@@ -70,53 +101,36 @@ class _DoExercisePageState extends State<DoExercisePage> {
       ),
     );
   }
-
   void getOutDoExercisePage() {
-    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
-    player.reset();
-    Navigator.of(context).pop();
+    Navigator.pop(context);
   }
 
   Widget _buildHalfPageLow() {
     return Expanded(
       flex: 1,
-      child: Container(
-        color: Colors.white,
-        child: Stack(children: [
-          Column(
-            children: [
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildTimeCountText(),
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildExerciseDetailButton(),
-              SizedBox(
-                height: 30.0,
-              ),
-              _buildCountDownProgressIndicator(),
-              SizedBox(
-                height: 40.0,
-              ),
-              _buildDoneButton()
-            ],
-          ),
-          _buildSkipButtons()
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildCountDownProgressIndicator() {
-    return Consumer<ExercisePlayer>(
-      builder: (context, player, child) {
-        return new CountdownProgressIndicator(
-          key: countdownProgressIndicatorKey,
-          player: player,
-        );
-      },
+      child: Stack(children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 10.0,
+            ),
+            _buildTimeCountText(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _buildExerciseDetailButton(),
+            SizedBox(
+              height: 30.0,
+            ),
+            counter,
+            SizedBox(
+              height: 40.0,
+            ),
+            _buildDoneButton()
+          ],
+        ),
+        _buildSkipButtons()
+      ]),
     );
   }
 
@@ -127,12 +141,11 @@ class _DoExercisePageState extends State<DoExercisePage> {
         String sec = player.record.totalTime.getSecondText();
         return Text(
           "$min:$sec",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.0),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.0, color: Colors.white),
         );
       },
     );
   }
-
   Widget _buildDoneButton() {
     // ExercisePlayer player = Provider.of<ExercisePlayer>(context);
     return Consumer<ExercisePlayer>(
@@ -154,13 +167,13 @@ class _DoExercisePageState extends State<DoExercisePage> {
                 Text(
                   btnName,
                   style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 25.0,
-                      color: Colors.white),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 25.0,
+                    color: Colors.white),
                 ),
               ],
             ),
-            style: TextButton.styleFrom(backgroundColor: Colors.blueAccent),
+            style: TextButton.styleFrom(backgroundColor: kPrimaryColor),
             onPressed: () {
               doneEvent(player);
             },
@@ -169,7 +182,6 @@ class _DoExercisePageState extends State<DoExercisePage> {
       },
     );
   }
-
   Widget _buildExerciseDetailButton() {
     return Consumer<ExercisePlayer>(
       builder: (context, player, child) {
@@ -179,14 +191,15 @@ class _DoExercisePageState extends State<DoExercisePage> {
               TextSpan(
                 text: player.currentExercise.name,
                 style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20.0,
-                    color: Colors.black),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
               ),
               WidgetSpan(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.help_outline),
+                  child: Icon(Icons.help_outline,),
                 ),
               )
             ]),
@@ -201,13 +214,15 @@ class _DoExercisePageState extends State<DoExercisePage> {
   }
 
   void watchExerciseDetailEvent(ExercisePlayer player) async {
-    countdownProgressIndicatorKey.currentState.pause();
+    counter.state.pause();
+    _controller.pause();
     var result = await Navigator.of(context)
         .pushNamed("exerciseDetailPage", arguments: player.currentExercise);
-    if (result == "detail_back")
-      countdownProgressIndicatorKey.currentState.resume();
+    if (result == "detail_back"){
+      counter.state.resume();
+      _controller.play();
+    }
   }
-
   Widget _buildSkipButtons() {
     double screenWidth = MediaQuery.of(context).size.width;
     return Positioned(
@@ -226,13 +241,13 @@ class _DoExercisePageState extends State<DoExercisePage> {
       ]),
     );
   }
-
   Widget _buildSkipButton(String type) {
     return Expanded(
       flex: 1,
       child: Consumer<ExercisePlayer>(
         builder: (context, player, child) {
-          Color textCol = Colors.grey[700];
+          Color textCol = Colors.white;
+          Color disableColor = Colors.grey[600];
           Function event;
           IconData icon;
           String name;
@@ -242,7 +257,7 @@ class _DoExercisePageState extends State<DoExercisePage> {
             icon = Icons.skip_next_outlined;
             name = "Next";
             if (player.isAtLastExercise()) {
-              textCol = Colors.grey[300];
+              textCol = disableColor;
               event = null;
               param = null;
             }
@@ -251,7 +266,7 @@ class _DoExercisePageState extends State<DoExercisePage> {
             icon = Icons.skip_previous_outlined;
             name = "Previous";
             if (player.currentIndex == 0) {
-              textCol = Colors.grey[300];
+              textCol = disableColor;
               event = null;
               param = null;
             }
@@ -267,7 +282,6 @@ class _DoExercisePageState extends State<DoExercisePage> {
       ),
     );
   }
-
   Widget _buildSkipButtonWithCondition(Map<String, dynamic> data) {
     return TextButton(
       child: Row(
@@ -283,9 +297,9 @@ class _DoExercisePageState extends State<DoExercisePage> {
           Text(
             data['name'],
             style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 20.0,
-                color: data['color']),
+              fontWeight: FontWeight.w800,
+              fontSize: 20.0,
+              color: data['color']),
           ),
         ],
       ),
@@ -297,14 +311,15 @@ class _DoExercisePageState extends State<DoExercisePage> {
       },
     );
   }
-
   void backToPrevious(ExercisePlayer player) {
     player.decreaseIndexByOne();
     Exercise previous = player.currentExercise;
-    countdownProgressIndicatorKey.currentState.reset(previous.duration);
+    counter.state.reset(previous.duration);
+    setState(() {
+      initVideoController(previous);
+    });
     // Navigator.of(context).pushReplacementNamed("doExercisePage");
   }
-
   void doneEvent(ExercisePlayer player) {
     if (player.isAtLastExercise()) {
       Navigator.of(context).pushReplacementNamed("resultPage");
@@ -316,26 +331,31 @@ class _DoExercisePageState extends State<DoExercisePage> {
 
 class CountdownProgressIndicator extends StatefulWidget {
   final ExercisePlayer player;
+  _CountdownProgressIndicatorState state;
 
-  CountdownProgressIndicator({Key key, @required this.player})
-      : super(key: key);
+  CountdownProgressIndicator({Key key, @required this.player}): super(key: key);
   @override
-  _CountdownProgressIndicatorState createState() =>
-      _CountdownProgressIndicatorState(player);
+  _CountdownProgressIndicatorState createState(){
+    state = _CountdownProgressIndicatorState(player);
+    return state;
+  }
 }
 
-class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator>
-    with TickerProviderStateMixin {
-  ExercisePlayer player;
+
+
+class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator> with TickerProviderStateMixin {
+  // ExercisePlayer player;
   int duration;
-  _CountdownProgressIndicatorState(ExercisePlayer inputPlayer) {
-    this.player = inputPlayer;
-    this.duration = player.currentExercise.duration;
+  ExercisePlayer player;
+  _CountdownProgressIndicatorState(ExercisePlayer player){
+    this.player = player;
+    duration = player.currentExercise.duration;
   }
   AnimationController _controller;
   Timer _timer;
   double size = 130.0;
   double textSize = 50.0;
+
 
   void startCounting() {
     const interval = Duration(seconds: 1);
@@ -417,6 +437,7 @@ class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator>
             value: _controller.value,
             strokeWidth: 8.0,
             backgroundColor: Colors.grey[200],
+            valueColor: new AlwaysStoppedAnimation<Color>(kPrimaryColor),
           ),
         ),
         Container(
@@ -426,7 +447,10 @@ class _CountdownProgressIndicatorState extends State<CountdownProgressIndicator>
             child: Text(
               "$duration",
               style: TextStyle(
-                  fontSize: this.textSize, fontWeight: FontWeight.w600),
+                fontSize: this.textSize,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
           ),
         )

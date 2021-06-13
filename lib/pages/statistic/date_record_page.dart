@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/exercise_record_model.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_record_service.dart';
@@ -30,40 +32,34 @@ class _DateRecordPageState extends State<DateRecordPage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(date, style: TextStyle(color: Colors.black),),
+          title: Text(date, style: TextStyle(color: kTextColor, fontWeight: FontWeight.bold),),
           leading: GestureDetector(
-            child: Icon(Icons.arrow_back, color: Colors.black,),
+            child: Icon(Icons.chevron_left, color: kTextColor, size: 30.0,),
             onTap: (){
               setState(() {
                 Navigator.of(context).pop();
               });
             },
           ),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0.0,
+          centerTitle: true,
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildGeneralInfoPanel(),
-            SizedBox(height: 10.0,),
-            Container(
-              height: 1,
-              color: Colors.grey[500],
-            ),
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                "Your Exercises",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold
-                ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildGeneralInfoPanel(),
+              SizedBox(height: 10.0,),
+              Container(
+                height: 2,
+                color: kActiveIconColor,
               ),
-            ),
-            _buildExerciseSetsList()
-          ],
+
+              _buildExerciseSetsList()
+            ],
+          ),
         ),
       ),
     );
@@ -87,10 +83,11 @@ class _DateRecordPageState extends State<DateRecordPage> {
     }
   }
   Widget _buildGeneralInfoPanel(){
-    return FutureBuilder(
+    return FutureBuilder<List<RecordModel>>(
         future: recordService.getRecordsByDate(widget.today),
-        builder: (context, snapshot){
+        builder: (BuildContext context, AsyncSnapshot<List<RecordModel>> snapshot){
           if(snapshot.hasData){
+
             double totalCalorie = getTotalCalorie(snapshot.data);
             double avgScore = getAvgScore(snapshot.data);
             return _buildGeneralInfoPanelWithData(snapshot.data.length, totalCalorie, avgScore);
@@ -106,9 +103,9 @@ class _DateRecordPageState extends State<DateRecordPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildGeneralInfoItem(Icons.stacked_bar_chart, "Total exercise", totalExercise, Colors.grey[500]),
-          _buildGeneralInfoItem(Icons.local_fire_department_outlined, "Calories", calories.toStringAsFixed(1), Colors.red),
-          _buildGeneralInfoItem(Icons.star, "Average score", avgScore.toStringAsFixed(1), Colors.amber)
+          _buildGeneralInfoItem(Icons.stacked_bar_chart, "Total exercise", totalExercise, kActiveIconColor),
+          _buildGeneralInfoItem(Icons.local_fire_department_outlined, "Calories", calories.toStringAsFixed(1), kActiveIconColor),
+          _buildGeneralInfoItem(Icons.star, "Average score", avgScore.toStringAsFixed(1), kActiveIconColor)
         ],
       ),
     );
@@ -129,9 +126,9 @@ class _DateRecordPageState extends State<DateRecordPage> {
         Text(
           value.toString(),
           style: TextStyle(
-              color: Colors.grey[800],
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
+            color: Colors.grey[800],
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
           ),
         )
       ],
@@ -145,13 +142,32 @@ class _DateRecordPageState extends State<DateRecordPage> {
           return Expanded(
             flex: 5,
             child: Container(
-              color: Colors.grey[200],
-              child: ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index){
-                  return _buildExerciseSetDetailPanel(snapshot.data[index]);
-                },
-              ),
+              color: kBackgroundColor,
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        "Your Exercises",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index){
+                        return _buildExerciseSetDetailPanel(snapshot.data[index]);
+                      },
+                      childCount: snapshot.data.length,
+                    ),
+                  )
+                ],
+              )
             ),
           );
         }else{
@@ -163,7 +179,7 @@ class _DateRecordPageState extends State<DateRecordPage> {
   Widget _buildExerciseSetDetailPanel(RecordModel record){
     DateTime recordDate = DateTime.fromMillisecondsSinceEpoch(record.timeStamp.seconds*1000);
     return Card(
-      // elevation: 2.0,
+      margin: EdgeInsets.all(10.0),
       child: ListTile(
         contentPadding: EdgeInsets.all(10.0),
         title: Container(
@@ -203,36 +219,42 @@ class _DateRecordPageState extends State<DateRecordPage> {
         SizedBox(height: 10.0,),
         Row(
           children: [
-            _buildInfoItem(Icons.access_time, "Time: ${record.totalTime}"),
-            _buildInfoItem(Icons.star, "Score: ${record.score}")
+            Expanded(flex: 5, child: _buildInfoItem(Icons.access_time, "Time: ${record.totalTime.getTimeText()}")),
+            Expanded(flex: 3, child: _buildInfoItem(Icons.star, "Score: ${record.score}")),
           ],
         ),
         SizedBox(height: 5.0,),
         Row(
           children: [
-            _buildInfoItem(Icons.local_fire_department_outlined, "Calories: ${record.calorie}"),
-            _buildInfoItem(Icons.sentiment_satisfied_outlined, "Rating: ${record.satisfactionLevel}")
+            Expanded(flex: 5, child: _buildInfoItem(Icons.local_fire_department_outlined, "Calories: ${record.calorie}")),
+            Expanded(flex: 3, child: _buildInfoItem(_getRatingIcon(record.satisfactionLevel), "Rating: ${record.satisfactionLevel}")),
           ],
         ),
       ],
     );
   }
-
   Widget _buildInfoItem(IconData icon, String text){
-    return Expanded(
-      flex: 1,
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 30.0,
-            color: Colors.blueAccent,
-          ),
-          SizedBox(width: 10.0,),
-          Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),)
-        ],
-      ),
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 25.0,
+          color: kBlueColor,
+        ),
+        SizedBox(width: 10.0,),
+        Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700]),)
+      ],
     );
+  }
+  IconData _getRatingIcon(int index){
+    final items = [
+      Icons.sentiment_very_dissatisfied_outlined,
+      Icons.sentiment_dissatisfied_outlined,
+      Icons.sentiment_satisfied,
+      Icons.sentiment_satisfied_alt,
+      Icons.sentiment_very_satisfied_sharp,
+    ];
+    return items[index];
   }
 }
 

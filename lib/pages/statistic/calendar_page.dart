@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_record_service.dart';
 
@@ -23,30 +24,26 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "Training record",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black
-                  ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                "Training record",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              _buildCalendar()
-            ],
-          ),
+            ),
+            _buildCalendar()
+          ],
         )
     );
   }
   Widget _buildCalendar(){
-    print(context);
     return FutureBuilder(
         future: recordService.getAllRecordDates(),
         builder: (context, snapshot){
@@ -60,10 +57,36 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
                 return isSameDay(day, DateTime.now());
               },
               calendarStyle: CalendarStyle(
-                  selectedDecoration: BoxDecoration(
-                    color: Colors.grey[800],
-                    shape: BoxShape.circle,
-                  )
+                selectedDecoration: BoxDecoration(
+                  color: kActiveIconColor,
+                  shape: BoxShape.circle,
+                ),
+                selectedTextStyle: TextStyle(color: Colors.white),
+                defaultTextStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              headerStyle: HeaderStyle(
+                titleTextStyle: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                leftChevronIcon: Icon(
+                  Icons.chevron_left,
+                  color: Colors.white,
+                ),
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  color: Colors.white,
+                ),
+                formatButtonDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(width: 2.0, color: Colors.white),
+                ),
+                formatButtonTextStyle: TextStyle(
+                  color: Colors.white,
+                )
               ),
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, current, date){
@@ -97,7 +120,7 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
         height: 40.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.blueAccent,
+          color: kPrimaryColor,
         ),
         child: Center(
           child: Text(date.day.toString(), style: TextStyle(color: Colors.white),),

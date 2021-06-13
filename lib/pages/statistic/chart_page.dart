@@ -3,7 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/exercise_record_model.dart';
+import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_record_service.dart';
 
 class ChartMainPage extends StatefulWidget {
@@ -14,8 +17,15 @@ class ChartMainPage extends StatefulWidget {
 }
 
 class _ChartMainPageState extends State<ChartMainPage> {
-  final service = ExerciseRecordService(userId: '');
-  
+  ExerciseRecordService service;
+  @override
+  void initState() {
+    AuthService auth = Provider.of<AuthService>(context, listen: false);
+    service = ExerciseRecordService(userId: auth.currentUser().uid);
+
+    super.initState();
+  }
+
   DateTime currentMonth = DateTime.now();
   List<RecordModel> currentMonthRecords = [];
   List<FlSpot> dataPoints = [];
@@ -134,46 +144,57 @@ class _ChartMainPageState extends State<ChartMainPage> {
   Widget _buildDatePickerButton(){
     return Container(
       width: 160.0,
-      child: TextButton(
-        child: Row(
-          children: [
-            Text(
-              "Choose Month  ",
-              style: TextStyle(fontSize: 16, color: Colors.grey[800]),
-            ),
-            Icon(
-              Icons.calendar_today_sharp,
-              size: 20,
-              color: Colors.black,
-            )
-          ],
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          primaryColor: kBackgroundColor,
+          accentColor: kPrimaryColor,
         ),
-        style: TextButton.styleFrom(
-            padding: EdgeInsets.all(10.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                side: BorderSide(color: Colors.blueAccent, width: 1)
-            )
+        child: Builder(
+          builder: (context){
+            return TextButton(
+                child: Row(
+                  children: [
+                    Text(
+                      "Choose Month  ",
+                      style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                    ),
+                    Icon(
+                      Icons.calendar_today_sharp,
+                      size: 20,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.all(10.0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: Colors.blueAccent, width: 1)
+                    )
+                ),
+                onPressed: (){
+                  showMonthPicker(
+                    context: context,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2022),
+                    initialDate: DateTime.now(),
+                  ).then((value){
+                    if(value!= null){
+                      setState(() {
+                        currentMonth = value;
+                      });
+                    }
+                  });
+                }
+            );
+          },
         ),
-        onPressed: (){
-          showMonthPicker(
-            context: context,
-            firstDate: DateTime(2020),
-            lastDate: DateTime(2022),
-            initialDate: DateTime.now(),
-          ).then((value){
-            setState(() {
-              currentMonth = value;
-              // _updateChartDataScore();
-            });
-          });
-        }
       ),
     );
   }
   Widget _buildChartWrapper(){
     return Container(
-      color: Color(0xff232d37),
+      color: kBackgroundColor,
       child: Column(
         children: [
           _buildChartTopBar(),
@@ -227,10 +248,10 @@ class _ChartMainPageState extends State<ChartMainPage> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
-              width: screenWidth*2,
-              height: containerHeight,
-              padding: EdgeInsets.only(top: 20.0, bottom: 10.0, right: 20.0),
-              child: _buildChart(),
+            width: screenWidth*2,
+            height: containerHeight,
+            padding: EdgeInsets.only(top: 20.0, bottom: 10.0, right: 20.0),
+            child: _buildChart(),
           ),
         ),
         Positioned(

@@ -3,14 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
 import 'package:woke_out/model/exercise_record_model.dart';
+import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_record_service.dart';
-
-GlobalKey<_ExerciseRatingFeedbackState> ratingFeedbackKey = new GlobalKey<_ExerciseRatingFeedbackState>();
-// use global key to get rating value;
 
 class ResultPage extends StatefulWidget {
   const ResultPage({Key key}) : super(key: key);
@@ -25,11 +24,13 @@ class _ResultPageState extends State<ResultPage> {
   double calorie;
   double score;
   Time totalTime;
+  final ExerciseRatingFeedback ratingFeedback = ExerciseRatingFeedback();
   @override
   void initState() {
     ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+
     this.exAmount = player.exerciseList.length;
-    this.calorie = player.calculateCalories(40);
+    // this.calorie = player.calculateCalories(40);
     this.score = player.calculateScore();
     this.totalTime = player.record.totalTime;
 
@@ -37,22 +38,38 @@ class _ResultPageState extends State<ResultPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            _buildHalfTopPanel(),
-            _buildHalfLowPanel()
-          ],
-        ),
-      ),
+    String userId = Provider.of<AuthService>(context, listen: false).currentUser().uid;
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    return Consumer<AppUserService>(
+      builder: (context, service, child){
+        return FutureBuilder(
+          future: service.loadProfile(userId),
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              int userWeight = snapshot.data.weight;
+              this.calorie = player.calculateCalories(userWeight);
+              // get calorie;
+              return SafeArea(
+                child: Scaffold(
+                  body: Column(
+                    children: [
+                      _buildHalfTopPanel(),
+                      _buildHalfLowPanel()
+                    ],
+                  ),
+                ),
+              );
+            }else return Center(child: CircularProgressIndicator(),);
+          },
+        );
+      },
     );
   }
   Widget _buildHalfTopPanel(){
     return Expanded(
       flex: 4,
       child: Container(
-        color: Colors.grey[800],
+        color: kBackgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -76,7 +93,7 @@ class _ResultPageState extends State<ResultPage> {
         color: Colors.white,
       ),
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: kPrimaryColor,
         borderRadius: BorderRadius.circular(50.0),
       ),
     );
@@ -161,7 +178,7 @@ class _ResultPageState extends State<ResultPage> {
     return Text(
       "Your score",
       style: TextStyle(
-        color: Colors.black,
+        color: kTextColor,
         fontSize: 25,
         fontWeight: FontWeight.bold
       ),
@@ -201,7 +218,7 @@ class _ResultPageState extends State<ResultPage> {
               SizedBox(height: 20.0,),
               _buildRatingScaleText(),
               SizedBox(height: 20.0,),
-              ExerciseRatingFeedback(key: ratingFeedbackKey,),
+              ratingFeedback,
               SizedBox(height: 40.0,),
               _buildSaveButton()
             ],
@@ -232,7 +249,7 @@ class _ResultPageState extends State<ResultPage> {
     return Text(
       "Rate Exercise",
       style: TextStyle(
-        color: Colors.black,
+        color: kTextColor,
         fontSize: 25,
         fontWeight: FontWeight.bold,
       ),
@@ -253,7 +270,7 @@ class _ResultPageState extends State<ResultPage> {
           ),
         ),
         style: TextButton.styleFrom(
-          backgroundColor: Colors.blueAccent
+          backgroundColor: kPrimaryColor,
         ),
         onPressed: save
       ),
@@ -261,12 +278,11 @@ class _ResultPageState extends State<ResultPage> {
   }
   void save(){
     AuthService auth = Provider.of<AuthService>(context, listen: false);
+    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
     String userId = auth.currentUser().uid;
-    // String userId = "cw1kyc8wsPWTdnQ3onXYWRZtyp13";
     final recordService = ExerciseRecordService(userId: userId);
 
-    ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
-    int satisfactionLevel = ratingFeedbackKey.currentState.getValue();
+    int satisfactionLevel = ratingFeedback.state.getValue();
 
     player.record.exName = player.name;
     player.record.exLevel = player.level;
@@ -279,6 +295,7 @@ class _ResultPageState extends State<ResultPage> {
     recordService.addRecord(player.record);
     // add data to database
     Navigator.of(context).pushNamedAndRemoveUntil("home", ModalRoute.withName("landing"));
+    player.reset();
   }
   int getTotalTimeInSeconds(List<Exercise> list){
     int result = 0;
@@ -290,16 +307,17 @@ class _ResultPageState extends State<ResultPage> {
 }
 
 class ExerciseRatingFeedback extends StatefulWidget {
-  const ExerciseRatingFeedback({Key key}) : super(key: key);
+  final state = _ExerciseRatingFeedbackState();
+  ExerciseRatingFeedback({Key key}) : super(key: key);
 
   @override
-  _ExerciseRatingFeedbackState createState() => _ExerciseRatingFeedbackState();
+  _ExerciseRatingFeedbackState createState() => state;
 }
 
 class _ExerciseRatingFeedbackState extends State<ExerciseRatingFeedback> {
 
   Color defaultColor = Colors.grey[600];
-  Color selectedColor = Colors.amber;
+  Color selectedColor = kActiveIconColor;
   final items = [
     {'icon': Icons.sentiment_very_dissatisfied_outlined, 'color': Colors.grey[600]},
     {'icon': Icons.sentiment_dissatisfied_outlined, 'color': Colors.grey[600]},

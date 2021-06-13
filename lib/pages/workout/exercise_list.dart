@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
-import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/services/exercise_service.dart';
+
+import '../../constants.dart';
 
 class ExerciseSet
 {
@@ -40,8 +41,6 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
 
   final ExerciseService exService = ExerciseService();
   Future<List<ExerciseSet>> loadExercisesWithCategory() async{
-    AuthService auth = Provider.of<AuthService>(context, listen: false);
-    print(auth.currentUser().uid);
 
     List<ExerciseSet> exerciseSet = [];
     List<Exercise> beginner = await exService.loadBeginnerExercises(widget.muscleName);
@@ -90,26 +89,23 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
     String totalTime = getTotalTimeText(list);
     return Stack(
       children: [
-        Container(
-          color: Colors.white,
-          child: CustomScrollView(
-            slivers: [
-              _buildExerciseSetGeneralInfoItems(list.length, totalTime),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index){
-                    return _buildListItem(list[index]);
-                  },
-                  childCount: list.length
-                ),
+        CustomScrollView(
+          slivers: [
+            _buildExerciseSetGeneralInfoItems(list.length, totalTime),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index){
+                  return _buildListItem(list[index]);
+                },
+                childCount: list.length
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 80.0,
-                ),
-              )
-            ],
-          ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 80.0,
+              ),
+            )
+          ],
         ),
         _buildStartExerciseButton(exerciseSet)
       ]
@@ -149,7 +145,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
             ),
           ),
           style: TextButton.styleFrom(
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: kPrimaryColor,
           ),
           onPressed: ()=> startExercise(exerciseSet),
         ),
@@ -158,6 +154,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
   }
   void startExercise(ExerciseSet exerciseSet){
     ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
+    player.reset();
     player.init(exerciseSet.name, exerciseSet.level, exerciseSet.list);
     Navigator.of(context).pushNamed("doExercisePage");
   }
@@ -170,7 +167,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
           Container(
             width: 1.0,
             height: 30.0,
-            color: Colors.grey,
+            color: Colors.white,
           ),
           _buildGeneralInfoItem(Icons.access_time_outlined, totalTime, " seconds")
         ],
@@ -182,7 +179,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
       flex: 1,
       child: Container(
         height: 60.0,
-        color: Colors.white,
+        color: kBackgroundColor,
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,14 +189,14 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                 text: TextSpan(
                   children: [
                     WidgetSpan(
-                      child: Icon(icon, color: Colors.black,)
+                      child: Icon(icon, color: Colors.white,)
                     ),
                     TextSpan(
-                      text: " $amount"
-                    )
+                      text: " $amount",
+                    ),
                   ],
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold
                   )
                 ),
@@ -217,6 +214,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
     );
   }
   Widget _buildListItem(Exercise exercise){
+    print(exercise.image);
     return ListTile(
       contentPadding: EdgeInsets.fromLTRB(25.0, 4.0, 25.0, 4.0),
       title: Container(
@@ -225,11 +223,11 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
         child: Row(
           children: [
             _buildLeftImageBox(exercise.image),
-            _buildExerciseInfoSection(exercise)
+            _buildExerciseInfoSection(exercise),
           ],
         ),
       ),
-      onTap: (){
+      onTap: () {
         Navigator.of(context).pushNamed("exerciseDetailPage", arguments: exercise);
       },
     );
@@ -238,14 +236,14 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
     return Expanded(
       flex: 7,
       child: Container(
-        height: 60.0,
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Colors.grey[900]
+          height: 60.0,
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+          ),
+          decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: Colors.white,
         ),
       ),
     );
@@ -262,6 +260,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
             Text(
               exercise.name,
               style: TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 15.0,
               ),
@@ -295,22 +294,31 @@ class ExerciseListSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: kBackgroundColor,
       pinned: true,
       floating: true,
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(this.muscleName, style: TextStyle(color: Colors.white),),
-        titlePadding: EdgeInsets.only(left: 50.0, bottom: 65.0),
+        titlePadding: EdgeInsets.only(left: 30.0, bottom: 60.0),
         background: Image.asset(
           this.imgPath,
           fit: BoxFit.cover,
         ),
       ),
+      leading: GestureDetector(
+        child: Icon(
+          Icons.chevron_left,
+          size: 30.0,
+          color: Colors.white,
+        ),
+        onTap: () => Navigator.of(context).pop(),
+      ),
       bottom: TabBar(
         labelColor: Colors.white,
         tabs: exerciseSets.map((ExerciseSet e)=> Tab(text: e.category,)).toList(),
         indicatorWeight: 4.0,
+        indicatorColor: kPrimaryColor,
 
       ),
     );

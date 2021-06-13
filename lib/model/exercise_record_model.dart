@@ -12,9 +12,9 @@ class Time {
     this.minute = inputMin;
     this.second = inputSec;
   }
-  factory Time.fromMap(Map<String, dynamic> data, String fieldName) {
-    int min = data[fieldName] / 60;
-    int sec = data[fieldName] % 60;
+  factory Time.fromMap(int seconds) {
+    int min = seconds ~/ 60;
+    int sec = seconds % 60;
     return Time.fromData(min, sec);
   }
   void addOneSec() {
@@ -78,17 +78,19 @@ class RecordModel {
       this.exLevel,
       this.exName,
       this.timeStamp,
-      this.score});
+      this.score}
+  );
 
   factory RecordModel.fromMap(Map<String, dynamic> data) {
     return RecordModel.withRequire(
-        calorie: data["calorie"],
-        score: data["score"],
-        totalTime: Time.fromMap(data, 'totalTime'),
-        satisfactionLevel: data["satisfactionLevel"],
-        exLevel: data["exLevel"],
-        exName: data["exName"],
-        timeStamp: data["timeStamp"]);
+      calorie: data["calorie"].toDouble(),
+      score: data["score"].toDouble(),
+      totalTime: Time.fromMap(data['totalTime']),
+      satisfactionLevel: data["satisfactionLevel"],
+      exLevel: data["exLevel"],
+      exName: data["exName"],
+      timeStamp: data["timeStamp"]
+    );
   }
 
   Map<String, dynamic> toMap() {

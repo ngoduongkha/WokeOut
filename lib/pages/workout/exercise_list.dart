@@ -59,19 +59,20 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: loadExercisesWithCategory(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<ExerciseSet>> snapshot) {
-          if (snapshot.hasData) {
-            return DefaultTabController(
-              length: snapshot.data.length,
-              child: Scaffold(
-                body: _buildMainPage(snapshot.data),
-              ),
-            );
-          }
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
-        });
+      future: loadExercisesWithCategory(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ExerciseSet>> snapshot) {
+        if (snapshot.hasData) {
+          return DefaultTabController(
+            length: snapshot.data.length,
+            child: Scaffold(
+              body: _buildMainPage(snapshot.data),
+            ),
+          );
+        }
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
+      },
+    );
   }
 
   Widget _buildMainPage(List<ExerciseSet> data) {

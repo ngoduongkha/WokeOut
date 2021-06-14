@@ -15,26 +15,26 @@ class ExerciseRecordService {
   Future<List<RecordModel>> getRecordsByDate(DateTime targetDate) async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) => isSameDate(doc.data()['timeStamp'], targetDate))
-            .map((doc){
-              print(RecordModel.fromMap(doc.data()).calorie);
+                .where((doc) =>
+                    isSameDate((doc.data() as Map)['timeStamp'], targetDate))
+                .map((doc) {
               return RecordModel.fromMap(doc.data());
-        })
-            .toList());
+            }).toList());
   }
 
   Future<dynamic> getAllRecordDates() async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
             .map((doc) => DateTime.fromMillisecondsSinceEpoch(
-                doc.data()['timeStamp'].seconds * 1000))
+                (doc.data() as Map)['timeStamp'].seconds * 1000))
             .toList());
   }
 
   Future<dynamic> getRecordsByMonth(DateTime targetDate) async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) => isSameMonth(doc.data()['timeStamp'], targetDate))
+            .where((doc) =>
+                isSameMonth((doc.data() as Map)['timeStamp'], targetDate))
             .map((doc) => RecordModel.fromMap(doc.data()))
             .toList());
   }

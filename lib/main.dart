@@ -25,8 +25,10 @@ class MyApp extends StatelessWidget {
         Provider<AuthService>(create: (_) => AuthService()),
         Provider<AppUserService>(create: (_) => AppUserService()),
         ChangeNotifierProvider<ExercisePlayer>(create: (_) => ExercisePlayer()),
-        ChangeNotifierProvider<ChallengeNotifier>(create: (_) => ChallengeNotifier()),
-        ChangeNotifierProvider<AdministrativeUnit>(create: (_) => AdministrativeUnit()),
+        ChangeNotifierProvider<ChallengeNotifier>(
+            create: (_) => ChallengeNotifier()),
+        ChangeNotifierProvider<AdministrativeUnit>(
+            create: (_) => AdministrativeUnit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

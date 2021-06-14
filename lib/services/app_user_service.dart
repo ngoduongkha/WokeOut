@@ -62,7 +62,6 @@ class AppUserService {
   }
 
   void addUser(MyAppUser appUser) async {
-    print(appUser.toMap());
     await _ref.doc(appUser.uid).set(appUser.toMap());
   }
 

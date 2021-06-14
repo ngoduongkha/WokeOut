@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "218718472908-beor9uj25j3hulu63ok8tcbo7et0p4j2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.woke_out",
-            "certificate_hash": "c59eae4d6bafe44b915f6cf7f5f9fb6b2ef6b6c3"
-          }
-        },
-        {
           "client_id": "218718472908-6j6d9c2peb15u0l13ff7hr8pl0q8fraj.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,8 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/widgets/app_icons.dart';
+import 'package:woke_out/util.dart';
 
 class ExerciseCategory {
   final String imageUrl;
@@ -22,29 +22,38 @@ class TodayPage extends StatefulWidget {
 }
 
 class _TodayPageState extends State<TodayPage> {
-  List<Map<String, dynamic>> groups=[
+  List<Map<String, dynamic>> groups = [
     {
       'groupName': 'upper body',
       'muscles': [
-        ExerciseCategory(imageUrl: "assets/images/workout/chest.jpg", name: "chest"),
-        ExerciseCategory(imageUrl: "assets/images/workout/back.jpg", name: "back"),
-        ExerciseCategory(imageUrl: "assets/images/workout/shoulder.jpeg", name: "shoulder"),
-        ExerciseCategory(imageUrl: "assets/images/workout/biceps.jpg", name: "biceps"),
-        ExerciseCategory(imageUrl: "assets/images/workout/triceps.jpg", name: "triceps"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/chest.jpg", name: "chest"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/back.jpg", name: "back"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/shoulder.jpeg", name: "shoulder"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/biceps.jpg", name: "biceps"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/triceps.jpg", name: "triceps"),
       ]
     },
     {
       'groupName': 'lower body',
       'muscles': [
-        ExerciseCategory(imageUrl: "assets/images/workout/abs.jpg", name: "abs"),
-        ExerciseCategory(imageUrl: "assets/images/workout/legs.jpg", name: "legs"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/abs.jpg", name: "abs"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/legs.jpg", name: "legs"),
       ]
     },
     {
       'groupName': 'full body',
       'muscles': [
-        ExerciseCategory(imageUrl: "assets/images/workout/strength.jpg", name: "strength"),
-        ExerciseCategory(imageUrl: "assets/images/workout/cardio.jpg", name: "cardio"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/strength.jpg", name: "strength"),
+        ExerciseCategory(
+            imageUrl: "assets/images/workout/cardio.jpg", name: "cardio"),
       ]
     }
   ];
@@ -59,7 +68,7 @@ class _TodayPageState extends State<TodayPage> {
             _buildExerciseLibraryText(),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
+                (BuildContext context, int index) {
                   return ExerciseGroup(group: groups[index]);
                 },
                 childCount: groups.length,
@@ -70,7 +79,8 @@ class _TodayPageState extends State<TodayPage> {
       ),
     );
   }
-  Widget _buildTopPanel(){
+
+  Widget _buildTopPanel() {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.all(20.0),
@@ -86,7 +96,9 @@ class _TodayPageState extends State<TodayPage> {
                 ),
               ),
             ),
-            SizedBox(height: 15.0,),
+            SizedBox(
+              height: 15.0,
+            ),
             Center(
               child: Container(
                 width: 120.0,
@@ -104,7 +116,9 @@ class _TodayPageState extends State<TodayPage> {
                 ),
               ),
             ),
-            SizedBox(height: 15.0,),
+            SizedBox(
+              height: 15.0,
+            ),
             Text(
               "Muscle emphasis",
               style: TextStyle(
@@ -133,11 +147,14 @@ class _TodayPageState extends State<TodayPage> {
       ),
     );
   }
-  Widget _buildExerciseLibraryText(){
+
+  Widget _buildExerciseLibraryText() {
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          SizedBox(height: 20.0,),
+          SizedBox(
+            height: 20.0,
+          ),
           Container(
             padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             child: Text(
@@ -149,15 +166,18 @@ class _TodayPageState extends State<TodayPage> {
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(width: 2.0, color: Theme.of(context).primaryColor)
-            ),
+                border: Border.all(
+                    width: 2.0, color: Theme.of(context).primaryColor)),
           ),
-          SizedBox(height: 20.0,),
+          SizedBox(
+            height: 20.0,
+          ),
         ],
       ),
     );
   }
 }
+
 class ExerciseGroup extends StatefulWidget {
   final group;
   const ExerciseGroup({
@@ -169,7 +189,6 @@ class ExerciseGroup extends StatefulWidget {
 }
 
 class _ExerciseGroupState extends State<ExerciseGroup> {
-
   final pageController = PageController(initialPage: 0, viewportFraction: 0.9);
   @override
   Widget build(BuildContext context) {
@@ -178,34 +197,37 @@ class _ExerciseGroupState extends State<ExerciseGroup> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 0.05*screenWidth),
+          padding: EdgeInsets.only(left: 0.05 * screenWidth),
           child: Text(
             widget.group['groupName'].toUpperCase(),
             style: TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor
-            ),
+                color: Theme.of(context).primaryColor),
           ),
         ),
-        SizedBox(height: 10.0,),
+        SizedBox(
+          height: 10.0,
+        ),
         Container(
           width: screenWidth,
           height: 200.0,
           child: PageView.builder(
             controller: pageController,
             itemCount: widget.group['muscles'].length,
-            itemBuilder: (context, index){
+            itemBuilder: (context, index) {
               return _buildExerciseThumbnail(widget.group['muscles'][index]);
             },
           ),
         ),
-        SizedBox(height: 30.0,),
+        SizedBox(
+          height: 30.0,
+        ),
       ],
     );
   }
 
-  Widget _buildExerciseThumbnail(ExerciseCategory category){
+  Widget _buildExerciseThumbnail(ExerciseCategory category) {
     return GestureDetector(
       child: Card(
         color: Colors.white,
@@ -223,14 +245,13 @@ class _ExerciseGroupState extends State<ExerciseGroup> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    category.name,
+                    category.name.capitalizeFirstofEach,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
                     ),
                   ),
-
                   Row(
                     children: [
                       Icon(
@@ -238,7 +259,9 @@ class _ExerciseGroupState extends State<ExerciseGroup> {
                         color: Colors.white,
                         size: 25.0,
                       ),
-                      SizedBox(width: 5.0,),
+                      SizedBox(
+                        width: 5.0,
+                      ),
                       Text(
                         "3 level",
                         style: TextStyle(
@@ -262,15 +285,14 @@ class _ExerciseGroupState extends State<ExerciseGroup> {
         ),
         clipBehavior: Clip.antiAlias,
       ),
-      onTap: (){
+      onTap: () {
         goToExerciseListPage(category);
       },
     );
   }
-  void goToExerciseListPage(ExerciseCategory category){
-    Navigator.of(context).pushNamed(
-      "exerciseList",
-      arguments: [category.name, category.imageUrl]
-    );
+
+  void goToExerciseListPage(ExerciseCategory category) {
+    Navigator.of(context).pushNamed("exerciseList",
+        arguments: [category.name, category.imageUrl]);
   }
 }

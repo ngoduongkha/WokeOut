@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
 import 'package:woke_out/services/exercise_service.dart';
+import 'package:woke_out/util.dart';
 
 import '../../constants.dart';
 
@@ -25,9 +26,10 @@ class ExerciseSet {
 class ExerciseListPage extends StatefulWidget {
   final String muscleName;
   final String imgPath;
+
   ExerciseListPage({
     @required this.muscleName,
-    this.imgPath,
+    @required this.imgPath,
   });
 
   @override
@@ -39,6 +41,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
 
   Future<List<ExerciseSet>> loadExercisesWithCategory() async {
     List<ExerciseSet> exerciseSet = [];
+
     List<Exercise> beginner =
         await exService.loadBeginnerExercises(widget.muscleName);
     exerciseSet.add(ExerciseSet(
@@ -53,6 +56,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
         await exService.loadAdvancedExercises(widget.muscleName);
     exerciseSet.add(
         ExerciseSet(name: widget.muscleName, level: "advance", list: advance));
+
     return exerciseSet;
   }
 
@@ -80,16 +84,15 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
         headerSliverBuilder: (context, isScrolled) {
           return <Widget>[
             ExerciseListSliverAppBar(
-                muscleName: widget.muscleName,
+                muscleName: widget.muscleName.capitalizeFirstofEach,
                 imgPath: widget.imgPath,
                 exerciseSets: data)
           ];
         },
         body: TabBarView(
           children: data
-              .map((ExerciseSet exerciseSet) => _buildExerciseSetPage(
-                    exerciseSet,
-                  ))
+              .map((ExerciseSet exerciseSet) =>
+                  _buildExerciseSetPage(exerciseSet))
               .toList(),
         ));
   }
@@ -97,6 +100,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
   Widget _buildExerciseSetPage(ExerciseSet exerciseSet) {
     List<Exercise> list = exerciseSet.list;
     String totalTime = getTotalTimeText(list);
+
     return Stack(children: [
       CustomScrollView(
         slivers: [
@@ -222,7 +226,6 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
   }
 
   Widget _buildListItem(Exercise exercise) {
-    print(exercise.image);
     return ListTile(
       contentPadding: EdgeInsets.fromLTRB(25.0, 4.0, 25.0, 4.0),
       title: Container(
@@ -250,6 +253,20 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
         child: Image.network(
           imageUrl,
           fit: BoxFit.cover,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes
+                    : null,
+              ),
+            );
+          },
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),
@@ -325,9 +342,7 @@ class ExerciseListSliverAppBar extends StatelessWidget {
       bottom: TabBar(
         labelColor: Colors.white,
         tabs: exerciseSets
-            .map((ExerciseSet e) => Tab(
-                  text: e.category,
-                ))
+            .map((ExerciseSet e) => Tab(text: e.category.capitalizeFirstofEach))
             .toList(),
         indicatorWeight: 4.0,
         indicatorColor: kPrimaryColor,

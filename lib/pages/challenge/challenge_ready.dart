@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/pages/challenge/take_challenge_count.dart';
@@ -38,8 +39,8 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-            Color(0xff1e3799),
-            Colors.blueAccent,
+            kChallengeCardColor,
+            kBackgroundColor,
           ])),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -102,7 +103,7 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
           child: Text(
             "${widget.cardModel.title} challenge".toUpperCase(),
             style: TextStyle(
-              color: Colors.white,
+              color: kActiveIconColor,
               fontWeight: FontWeight.bold,
               fontSize: 22.0,
             ),
@@ -124,7 +125,7 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
             "Start".toUpperCase(),
             style: TextStyle(
                 fontSize: 22.0,
-                color: Colors.blueAccent,
+                color: kPrimaryColor,
                 fontWeight: FontWeight.bold),
           ),
           style: TextButton.styleFrom(
@@ -157,18 +158,18 @@ class _ChallengeReadyPageState extends State<ChallengeReadyPage> {
           children: [
             Text(
               "Best record".toUpperCase(),
-              style: TextStyle(color: Colors.grey[200], fontSize: 16.0),
+              style: TextStyle(color: kActiveIconColor, fontSize: 16.0),
             ),
             (_challengeList.isNotEmpty)
                 ? widget.cardModel.category == Category.stop_watch
                     ? Text(durationToString(_challengeList[0].time),
                         style: TextStyle(
-                            color: Colors.white,
+                            color: kActiveIconColor,
                             fontSize: 18.0,
                             fontWeight: FontWeight.w900))
                     : Text("${_challengeList[0].time} REPS",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: kActiveIconColor,
                             fontSize: 18.0,
                             fontWeight: FontWeight.w900))
                 : SizedBox(),

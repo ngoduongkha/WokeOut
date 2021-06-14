@@ -3,7 +3,7 @@ import 'package:woke_out/model/challenge_card_model.dart';
 
 const kPrimaryColor = Color(0xFF27ae60);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
-
+const kChallengeCardColor = Color(0xFF262626);
 const kBackgroundColor = Color(0xFF272c34);
 const kActiveIconColor = Color(0xFFE68342);
 const kTextColor = Color(0xFF222B45);

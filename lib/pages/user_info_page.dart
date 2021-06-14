@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/enum.dart';
 import 'package:woke_out/model/administrative_unit.dart';
 import 'package:woke_out/model/app_user_model.dart';
@@ -55,7 +56,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
           return GestureDetector(
             child: Scaffold(
-              backgroundColor: Color(0xFFEBEDF0),
               body: CustomScrollView(
                 slivers: [
                   settingAppBar(context),
@@ -101,7 +101,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                             'Log Out',
                             style: GoogleFonts.lato(
                               fontSize: 20,
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -174,7 +174,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           style: GoogleFonts.lato(
             fontSize: 25,
             fontWeight: FontWeight.w900,
-            color: Colors.black,
+            color: kTextColor,
             letterSpacing: 1.2,
           ),
         ),
@@ -184,7 +184,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           width: 100,
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: MaterialButton(
-            color: Color(0xFF40D876),
+            color: kPrimaryColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onPressed: () {
@@ -193,7 +193,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             child: Text(
               'Save',
               style: GoogleFonts.lato(
-                color: Color(0xFFFFFFFE),
+                color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
               ),
@@ -408,7 +408,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
 TextStyle headerStyle() {
   return GoogleFonts.lato(
     fontSize: 20,
-    color: Colors.black,
+    color: Colors.white,
     fontWeight: FontWeight.w900,
   );
 }
@@ -416,7 +416,7 @@ TextStyle headerStyle() {
 TextStyle normalStyle() {
   return GoogleFonts.lato(
     fontSize: 12,
-    color: Colors.black,
+    color: kTextColor,
     fontWeight: FontWeight.normal,
   );
 }
@@ -424,7 +424,7 @@ TextStyle normalStyle() {
 TextStyle normalBoldStyle() {
   return GoogleFonts.lato(
     fontSize: 12,
-    color: Colors.black,
+    color: kTextColor,
     fontWeight: FontWeight.w900,
   );
 }

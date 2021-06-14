@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,15 +19,12 @@ class ChallengeMainPage extends StatelessWidget {
         PageController(initialPage: 0, viewportFraction: 0.9);
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          color: Colors.black,
-          child: PageView.builder(
-            controller: pageController,
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return ChallengeCard(cardModel: cardsList[index]);
-            },
-          ),
+        body: PageView.builder(
+          controller: pageController,
+          itemCount: 4,
+          itemBuilder: (context, index) {
+            return ChallengeCard(cardModel: cardsList[index]);
+          },
         ),
       ),
     );
@@ -49,7 +47,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.fromLTRB(5.0, 15.0, 5.0, 15.0),
-      color: Colors.grey[800],
+      color: kChallengeCardColor,
       child: Stack(
         children: [
           _buildScrollPanel(),
@@ -73,10 +71,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
           _challengeList = snapshot.data;
 
           return CustomScrollView(
+            shrinkWrap: true,
             slivers: [
               SliverToBoxAdapter(
-                child: Container(
-                    child: Column(
+                child: Column(
                   children: [
                     _buildCardImageAndTitle(),
                     _buildDescription(),
@@ -85,11 +83,13 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       color: Colors.grey,
                       width: 0.8 * screenWidth,
                     ),
-                    _challengeList.isNotEmpty
-                        ? _buildBestRecordSection(_challengeList[0])
-                        : Text("No data"),
                   ],
-                )),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _challengeList.isNotEmpty
+                    ? _buildBestRecordSection(_challengeList[0])
+                    : _buildNoDataPanel(),
               ),
               _challengeList.length >= 2
                   ? SliverList(
@@ -100,10 +100,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
                         childCount: _challengeList.length - 1,
                       ),
                     )
-                  : SliverPadding(padding: EdgeInsetsGeometry.infinity),
+                  : SliverToBoxAdapter(child: Container()),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 75.0,
+                  height: 70.0,
                 ),
               )
             ],
@@ -161,7 +161,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
             Text(
               widget.cardModel.title.toUpperCase(),
               style: TextStyle(
-                  fontSize: 35.0,
+                  fontSize: 32.0,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
@@ -216,21 +216,21 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       durationToString(bestRecord.time),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 40.0,
+                          fontSize: 35.0,
                           fontWeight: FontWeight.bold),
                     )
                   : Text(
                       "${bestRecord.time} REPS",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 40.0,
+                          fontSize: 35.0,
                           fontWeight: FontWeight.bold),
                     ),
               Container(
                 height: 10.0,
                 width: size.width * 0.5,
                 decoration: BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -260,8 +260,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
       child: FractionallySizedBox(
         widthFactor: 1,
         child: Container(
-          color: Colors.grey[800],
-          height: 75.0,
+          color: kChallengeCardColor,
+          height: 70.0,
           padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
           child: Padding(
             padding: EdgeInsets.only(left: 25.0, right: 25.0),
@@ -269,12 +269,12 @@ class _ChallengeCardState extends State<ChallengeCard> {
               child: Text(
                 "challenge".toUpperCase(),
                 style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 18.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
               style: TextButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0))),
               onPressed: () {
@@ -357,6 +357,43 @@ class _ChallengeCardState extends State<ChallengeCard> {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoDataPanel() {
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            "assets/icons/no-data-medal.svg",
+            width: 100.0,
+            height: 100.0,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            "NO RECORDS YET",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            "Create your first record now",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );

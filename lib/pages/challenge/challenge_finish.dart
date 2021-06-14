@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/util.dart';
@@ -34,7 +35,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.black87,
+        color: kChallengeCardColor,
         child: Column(
           children: [
             _buildHaftTopPanel(),
@@ -158,9 +159,9 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
                       : "0 Secs",
           style: TextStyle(
               color: widget.newRecord.time < _challengeList[0].time
-                  ? Colors.deepOrangeAccent
+                  ? kActiveIconColor
                   : widget.newRecord.time > _challengeList[0].time
-                      ? Colors.green
+                      ? kPrimaryColor
                       : Colors.white,
               fontSize: 20.0,
               fontWeight: FontWeight.bold),
@@ -186,7 +187,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
         child: Text(
           "Challenge Again",
           style: TextStyle(
-              fontSize: 22.0, color: Colors.black, fontWeight: FontWeight.bold),
+              fontSize: 22.0, color: kTextColor, fontWeight: FontWeight.bold),
         ),
         style: TextButton.styleFrom(
             padding: EdgeInsets.only(top: 18.0, bottom: 18.0),
@@ -213,7 +214,8 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
         ),
         style: TextButton.styleFrom(
           padding: EdgeInsets.only(top: 18.0, bottom: 18.0),
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: kPrimaryColor,
+
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0)),
         ),

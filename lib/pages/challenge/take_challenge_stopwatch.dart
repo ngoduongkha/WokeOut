@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/services/app_user_service.dart';
@@ -93,8 +94,8 @@ class _TakeChallengeStopWatchPageState
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-            Color(0xff1e3799),
-            Colors.blueAccent,
+            kChallengeCardColor,
+            kBackgroundColor,
           ])),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -185,14 +186,14 @@ class _TakeChallengeStopWatchPageState
               style: TextStyle(
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: Colors.white,
               ),
             ),
             style: TextButton.styleFrom(
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                padding: EdgeInsets.only(top: 18.0, bottom: 18.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0)),
-                backgroundColor: Colors.white),
+                backgroundColor: kPrimaryColor),
             onPressed: () {
               timerSubscription.cancel();
               timerStream = null;
@@ -228,13 +229,13 @@ class _TakeChallengeStopWatchPageState
             Text(
               "Best Record".toUpperCase(),
               style: TextStyle(
-                  color: Colors.grey[200], fontWeight: FontWeight.bold),
+                  color: kActiveIconColor, fontWeight: FontWeight.bold),
             ),
             (_challengeList.isNotEmpty)
                 ? Text(
                     durationToString(_challengeList[0].time),
                     style: TextStyle(
-                        color: Colors.white,
+                        color: kActiveIconColor,
                         fontSize: 18.0,
                         fontWeight: FontWeight.w900),
                   )

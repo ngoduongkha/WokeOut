@@ -23,13 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^1.0.5
+  cloud_firestore: ^2.2.2
   cupertino_icons: ^1.0.2
   dvhcvn: ^1.3.20210701
   email_validator: ^2.0.1
   firebase_auth: ^1.0.1
   firebase_core: ^1.0.2
-  firebase_storage: ^8.0.6
+  firebase_storage: ^8.1.3
   fl_chart: ^0.36.1
   flutter_facebook_login: ^3.0.0
   flutter_svg: ^0.21.0+1
@@ -68,6 +68,7 @@ flutter:
     - assets/images/
     - assets/data/tinh_tp.json
     - assets/data/quan_huyen.json
+    - assets/images/workout/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

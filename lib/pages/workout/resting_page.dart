@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/model/exercise_model.dart';
 
@@ -74,7 +75,7 @@ class _RestPageState extends State<RestPage> {
     return Expanded(
       flex: 1,
       child: Container(
-        color: Color(0xff1e272e),
+        color: kBackgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -92,9 +93,9 @@ class _RestPageState extends State<RestPage> {
     return Text(
       "Rest time".toUpperCase(),
       style: TextStyle(
-          fontSize: 30.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.white
+        fontSize: 30.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
       ),
     );
   }
@@ -103,9 +104,9 @@ class _RestPageState extends State<RestPage> {
     return Text(
       countdownText,
       style: TextStyle(
-          fontSize: 75.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.white
+        fontSize: 75.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
       ),
     );
   }
@@ -138,7 +139,7 @@ class _RestPageState extends State<RestPage> {
         ),
       ),
       style: TextButton.styleFrom(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: kPrimaryColor,
         padding: EdgeInsets.fromLTRB(50.0, 15.0, 50.0, 15.0)
       ),
       onPressed: addMoreTime,
@@ -154,7 +155,7 @@ class _RestPageState extends State<RestPage> {
           child: Text(
             "Skip",
             style: TextStyle(
-              color: Colors.blueAccent,
+              color: kPrimaryColor,
               fontSize: 17.0,
               fontWeight: FontWeight.bold
             ),
@@ -171,6 +172,7 @@ class _RestPageState extends State<RestPage> {
   void completeResting(){
     this.player.increaseIndexByOne();
     Navigator.of(context).pushReplacementNamed("doExercisePage");
+    // Navigator.of(context).pop();
   }
 
   Widget _buildNextExercisePanel(){
@@ -178,12 +180,18 @@ class _RestPageState extends State<RestPage> {
       height: 130.0,
       color: Colors.white,
       padding: EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          _buildNextExerciseInfo(),
-          _buildNextExerciseImg()
-        ],
-      ),
+      child: Builder(
+        builder: (context){
+          if(this.player.nextExercise!= null){
+            return Row(
+              children: [
+                _buildNextExerciseInfo(),
+                _buildNextExerciseImg()
+              ],
+            );
+          }else return CircularProgressIndicator();
+        }
+      )
     );
   }
   Widget _buildNextExerciseInfo(){
@@ -265,7 +273,7 @@ class _RestPageState extends State<RestPage> {
           this.player.nextExercise.image,
           fit: BoxFit.cover,
         ),
-        color: Colors.teal,
+        color: Colors.grey[800],
       )
     );
   }

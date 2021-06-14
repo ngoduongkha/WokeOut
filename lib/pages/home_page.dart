@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/pages/challenge/challenge_main.dart';
 import 'package:woke_out/pages/statistic/statistic_main_page.dart';
 import 'package:woke_out/pages/user_info_page.dart';
+import 'package:woke_out/pages/workout/exercise_list.dart';
 import 'package:woke_out/pages/workout/today_page.dart';
 import 'package:woke_out/widgets/app_icons.dart';
 
@@ -36,9 +38,10 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 5,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey[800],
+        selectedItemColor: kActiveIconColor,
+        unselectedItemColor: kTextColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;

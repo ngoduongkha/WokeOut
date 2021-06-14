@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 
-const kPrimaryColor = Color(0xFF40D876);
+const kPrimaryColor = Color(0xFF27ae60);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 
-const kBackgroundColor = Color(0xFF15152B);
+const kBackgroundColor = Color(0xFF272c34);
 const kActiveIconColor = Color(0xFFE68342);
 const kTextColor = Color(0xFF222B45);
 const kBlueLightColor = Color(0xFFC7B8F5);

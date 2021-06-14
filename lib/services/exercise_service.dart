@@ -10,34 +10,31 @@ class ExerciseService with ChangeNotifier {
       .get()
       .then((QuerySnapshot snapshot) =>
           snapshot.docs
-              .where((doc) => isInMuscle(List.from(doc.data()['muscle']), muscleName))
+              .where((doc) => isInMuscle(List.from((doc.data() as Map)['muscle']), muscleName))
               .map((doc) => Exercise.fromMap(doc.data()))
               .toList()
     );
   }
 
   Future<List<Exercise>> loadIntermediateExercises(String muscleName) async {
-    return ref.where("level", isEqualTo: "intermediate")
-        .get()
-        .then((QuerySnapshot snapshot) =>
-        snapshot.docs
-            .where((doc) => isInMuscle(List.from(doc.data()['muscle']), muscleName))
+    return ref.where("level", isEqualTo: "intermediate").get().then(
+        (QuerySnapshot snapshot) => snapshot.docs
+            .where((doc) =>
+                isInMuscle(List.from((doc.data() as Map)['muscle']), muscleName))
             .map((doc) => Exercise.fromMap(doc.data()))
-            .toList()
-    );
+            .toList());
   }
 
   Future<List<Exercise>> loadAdvancedExercises(String muscleName) async {
-    return ref.where("level", isEqualTo: "advanced")
-        .get()
-        .then((QuerySnapshot snapshot) =>
-        snapshot.docs
-            .where((doc) => isInMuscle(List.from(doc.data()['muscle']), muscleName))
+    return ref.where("level", isEqualTo: "advanced").get().then(
+        (QuerySnapshot snapshot) => snapshot.docs
+            .where((doc) =>
+                isInMuscle(List.from((doc.data() as Map)['muscle']), muscleName))
             .map((doc) => Exercise.fromMap(doc.data()))
-            .toList()
-    );
+            .toList());
   }
-  bool isInMuscle(List<String> muscleNames, String input){
+
+  bool isInMuscle(List<String> muscleNames, String input) {
     return muscleNames.contains(input);
   }
 

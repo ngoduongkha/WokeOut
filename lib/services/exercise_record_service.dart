@@ -12,26 +12,29 @@ class ExerciseRecordService {
     recordRef.doc(this.userId).collection("records").add(record.toMap());
   }
 
-  Future<dynamic> getRecordsByDate(DateTime targetDate) async {
+  Future<List<RecordModel>> getRecordsByDate(DateTime targetDate) async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) => isSameDate(doc.data()['timeStamp'], targetDate))
-            .map((doc) => RecordModel.fromMap(doc.data()))
-            .toList());
+                .where((doc) =>
+                    isSameDate((doc.data() as Map)['timeStamp'], targetDate))
+                .map((doc) {
+              return RecordModel.fromMap(doc.data());
+            }).toList());
   }
 
   Future<dynamic> getAllRecordDates() async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
             .map((doc) => DateTime.fromMillisecondsSinceEpoch(
-                doc.data()['timeStamp'].seconds * 1000))
+                (doc.data() as Map)['timeStamp'].seconds * 1000))
             .toList());
   }
 
   Future<dynamic> getRecordsByMonth(DateTime targetDate) async {
     return recordRef.doc(this.userId).collection("records").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) => isSameMonth(doc.data()['timeStamp'], targetDate))
+            .where((doc) =>
+                isSameMonth((doc.data() as Map)['timeStamp'], targetDate))
             .map((doc) => RecordModel.fromMap(doc.data()))
             .toList());
   }
@@ -53,10 +56,5 @@ class ExerciseRecordService {
       return true;
     else
       return false;
-  }
-
-  Future<String> test() async {
-    String userId = "Nk36Enn5RBlHHvF5crqh";
-    return recordRef.doc(userId).get().then((value) => value.data()['name']);
   }
 }

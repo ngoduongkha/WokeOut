@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,11 +63,12 @@ class _ChallengeCardState extends State<ChallengeCard> {
     final screenWidth = MediaQuery.of(context).size.width;
     final appUserService = Provider.of<AppUserService>(context, listen: true);
 
-    return FutureBuilder<List<ChallengeModel>>(
-      future: appUserService.getChallengeRecordsByName(widget.cardModel.title),
+    return StreamBuilder<List<ChallengeModel>>(
+      stream: appUserService.getChallengeRecordsByName(widget.cardModel.title),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
           _challengeList = snapshot.data;
+          _challengeList.sort((a, b) => b.time.compareTo(a.time));
 
           return CustomScrollView(
             shrinkWrap: true,
@@ -252,9 +252,6 @@ class _ChallengeCardState extends State<ChallengeCard> {
   }
 
   Widget _buildChallengeButton() {
-    final challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: false);
-
     return Align(
       alignment: Alignment.bottomCenter,
       child: FractionallySizedBox(
@@ -278,11 +275,11 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0))),
               onPressed: () {
-                challengeNotifier.challengeList = _challengeList;
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ChallengeReadyPage(cardModel: widget.cardModel),
+                    builder: (context) => ChallengeReadyPage(
+                        cardModel: widget.cardModel,
+                        challengeList: _challengeList),
                   ),
                 );
               },

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
@@ -14,10 +13,12 @@ import 'challenge_finish.dart';
 
 class TakeChallengeStopWatchPage extends StatefulWidget {
   final CardModel cardModel;
+  final List<ChallengeModel> challengeList;
 
   const TakeChallengeStopWatchPage({
     Key key,
     @required this.cardModel,
+    @required this.challengeList,
   }) : super(key: key);
 
   @override
@@ -31,7 +32,6 @@ class _TakeChallengeStopWatchPageState
   int duration = 0;
   Stream<int> timerStream;
   StreamSubscription<int> timerSubscription;
-  List<ChallengeModel> _challengeList = [];
 
   Stream<int> stopWatchStream() {
     StreamController<int> streamController;
@@ -72,10 +72,6 @@ class _TakeChallengeStopWatchPageState
 
   @override
   void initState() {
-    final challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: false);
-    _challengeList = challengeNotifier.challengeList;
-
     timerStream = stopWatchStream();
     timerSubscription = timerStream.listen((int newTick) {
       setState(() {
@@ -128,9 +124,8 @@ class _TakeChallengeStopWatchPageState
   }
 
   Widget _buildCenterElements() {
-    ChallengeModel secondBestRecord = findSecondBestRecord(_challengeList);
-    final challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: false);
+    ChallengeModel secondBestRecord =
+        findSecondBestRecord(widget.challengeList);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -204,13 +199,12 @@ class _TakeChallengeStopWatchPageState
                   createdAt: Timestamp.now());
 
               AppUserService().addChallengeRecord(record);
-              challengeNotifier.addChallenge(record);
 
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ChallengeFinishPage(
-                        cardModel: widget.cardModel,
-                        newRecord: record,
-                      )));
+                      cardModel: widget.cardModel,
+                      newRecord: record,
+                      challengeList: widget.challengeList)));
             },
           ),
         )
@@ -231,9 +225,9 @@ class _TakeChallengeStopWatchPageState
               style: TextStyle(
                   color: kActiveIconColor, fontWeight: FontWeight.bold),
             ),
-            (_challengeList.isNotEmpty)
+            (widget.challengeList.isNotEmpty)
                 ? Text(
-                    durationToString(_challengeList[0].time),
+                    durationToString(widget.challengeList[0].time),
                     style: TextStyle(
                         color: kActiveIconColor,
                         fontSize: 18.0,

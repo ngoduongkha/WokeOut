@@ -39,7 +39,7 @@ class _AvatarWidgetState extends State<AvatarWidget> {
           height: 120,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            border: Border.all(width: 5, color: Colors.white),
+            border: Border.all(width: 5, color: Colors.grey),
             image: DecorationImage(
               image: _image != null
                   ? FileImage(_image)

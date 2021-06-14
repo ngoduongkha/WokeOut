@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/administrative_unit.dart';
-import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/model/do_exercise_model.dart';
 import 'package:woke_out/routers/routers.dart';
 import 'package:woke_out/pages/landing_page.dart';
@@ -25,8 +24,6 @@ class MyApp extends StatelessWidget {
         Provider<AuthService>(create: (_) => AuthService()),
         Provider<AppUserService>(create: (_) => AppUserService()),
         ChangeNotifierProvider<ExercisePlayer>(create: (_) => ExercisePlayer()),
-        ChangeNotifierProvider<ChallengeNotifier>(
-            create: (_) => ChallengeNotifier()),
         ChangeNotifierProvider<AdministrativeUnit>(
             create: (_) => AdministrativeUnit()),
       ],

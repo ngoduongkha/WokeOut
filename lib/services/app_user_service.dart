@@ -35,7 +35,7 @@ class AppUserService {
         user.photoUrl = value;
       });
     }
-    
+
     await _ref
         .doc(user.uid)
         .set(user.toMap())
@@ -83,28 +83,15 @@ class AppUserService {
     });
   }
 
-  Future<List<ChallengeModel>> getChallengeRecordsByName(String name) async {
-    List<ChallengeModel> _challengeList = [];
+  Stream<List<ChallengeModel>> getChallengeRecordsByName(String name) {
     final _userUid = FirebaseAuth.instance.currentUser.uid;
     final _challengeRef = _ref.doc(_userUid).collection("challenges");
 
-    await _challengeRef
+    return _challengeRef
         .where("name", isEqualTo: name)
-        .get()
-        .then((value) => value.docs.forEach((element) {
-              _challengeList.add(ChallengeModel.fromMap(element.data()));
-            }));
-
-    _challengeList.sort((a, b) {
-      int cmp = b.time.compareTo(a.time);
-      if (cmp != 0) return cmp;
-      return b.createdAt.compareTo(a.createdAt);
-    });
-
-    if (_challengeList == null) {
-      return [];
-    }
-
-    return _challengeList;
+        .snapshots(includeMetadataChanges: true)
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ChallengeModel.fromMap(doc.data()))
+            .toList());
   }
 }

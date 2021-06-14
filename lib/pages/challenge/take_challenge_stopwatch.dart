@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/services/app_user_service.dart';
@@ -13,10 +13,12 @@ import 'challenge_finish.dart';
 
 class TakeChallengeStopWatchPage extends StatefulWidget {
   final CardModel cardModel;
+  final List<ChallengeModel> challengeList;
 
   const TakeChallengeStopWatchPage({
     Key key,
     @required this.cardModel,
+    @required this.challengeList,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,6 @@ class _TakeChallengeStopWatchPageState
   int duration = 0;
   Stream<int> timerStream;
   StreamSubscription<int> timerSubscription;
-  List<ChallengeModel> _challengeList = [];
 
   Stream<int> stopWatchStream() {
     StreamController<int> streamController;
@@ -71,10 +72,6 @@ class _TakeChallengeStopWatchPageState
 
   @override
   void initState() {
-    final challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: false);
-    _challengeList = challengeNotifier.challengeList;
-
     timerStream = stopWatchStream();
     timerSubscription = timerStream.listen((int newTick) {
       setState(() {
@@ -93,8 +90,8 @@ class _TakeChallengeStopWatchPageState
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-            Color(0xff1e3799),
-            Colors.blueAccent,
+            kChallengeCardColor,
+            kBackgroundColor,
           ])),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -127,9 +124,8 @@ class _TakeChallengeStopWatchPageState
   }
 
   Widget _buildCenterElements() {
-    ChallengeModel secondBestRecord = findSecondBestRecord(_challengeList);
-    final challengeNotifier =
-        Provider.of<ChallengeNotifier>(context, listen: false);
+    ChallengeModel secondBestRecord =
+        findSecondBestRecord(widget.challengeList);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -185,14 +181,14 @@ class _TakeChallengeStopWatchPageState
               style: TextStyle(
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: Colors.white,
               ),
             ),
             style: TextButton.styleFrom(
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                padding: EdgeInsets.only(top: 18.0, bottom: 18.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0)),
-                backgroundColor: Colors.white),
+                backgroundColor: kPrimaryColor),
             onPressed: () {
               timerSubscription.cancel();
               timerStream = null;
@@ -203,13 +199,12 @@ class _TakeChallengeStopWatchPageState
                   createdAt: Timestamp.now());
 
               AppUserService().addChallengeRecord(record);
-              challengeNotifier.addChallenge(record);
 
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ChallengeFinishPage(
-                        cardModel: widget.cardModel,
-                        newRecord: record,
-                      )));
+                      cardModel: widget.cardModel,
+                      newRecord: record,
+                      challengeList: widget.challengeList)));
             },
           ),
         )
@@ -228,13 +223,13 @@ class _TakeChallengeStopWatchPageState
             Text(
               "Best Record".toUpperCase(),
               style: TextStyle(
-                  color: Colors.grey[200], fontWeight: FontWeight.bold),
+                  color: kActiveIconColor, fontWeight: FontWeight.bold),
             ),
-            (_challengeList.isNotEmpty)
+            (widget.challengeList.isNotEmpty)
                 ? Text(
-                    durationToString(_challengeList[0].time),
+                    durationToString(widget.challengeList[0].time),
                     style: TextStyle(
-                        color: Colors.white,
+                        color: kActiveIconColor,
                         fontSize: 18.0,
                         fontWeight: FontWeight.w900),
                   )

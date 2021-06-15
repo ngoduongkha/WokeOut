@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,23 +27,33 @@ class ChallengeFinishPage extends StatefulWidget {
 
 class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
   ConfettiController _confettiController;
+  ChallengeModel bestRecord;
+  bool isFirstRecord = false;
 
   @override
   void initState() {
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 10));
 
-    int index = 0;
+    if (widget.challengeList.isNotEmpty) {
+      bestRecord = widget.challengeList[0];
+      int index = 0;
 
-    widget.challengeList.forEach((element) {
-      if (element.time > widget.newRecord.time) {
-        index++;
-      }
-    });
+      widget.challengeList.forEach((element) {
+        if (element.time > widget.newRecord.time) {
+          index++;
+        }
+      });
 
-    widget.challengeList.insert(index, widget.newRecord);
+      widget.challengeList.insert(index, widget.newRecord);
+    } else {
+      isFirstRecord = true;
+      widget.challengeList.add(widget.newRecord);
+    }
 
-    if (widget.newRecord.time == widget.challengeList[0].time) {
+    if (isFirstRecord) {
+      _confettiController.play();
+    } else if (widget.newRecord.time > bestRecord.time) {
       _confettiController.play();
     }
 
@@ -87,6 +98,7 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
         child: Column(
           children: [
             _buildHaftTopPanel(),
+            _buildConfetti(),
             Expanded(
                 flex: 1,
                 child: Column(
@@ -101,6 +113,27 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
                 ))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildConfetti() {
+    return Align(
+      alignment: Alignment.center,
+      child: ConfettiWidget(
+        confettiController: _confettiController,
+        blastDirectionality: BlastDirectionality
+            .explosive, // don't specify a direction, blast randomly
+        shouldLoop: true, // start again as soon as the animation is finished
+        maxBlastForce: 25,
+        colors: const [
+          Colors.green,
+          Colors.blue,
+          Colors.pink,
+          Colors.orange,
+          Colors.purple
+        ], // manually specify the colors to be used
+        createParticlePath: drawStar, // define a custom shape/path.
       ),
     );
   }
@@ -160,9 +193,11 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 15.0,
           ),
           Text(
-            widget.newRecord.time == widget.challengeList[0].time
+            isFirstRecord
                 ? "new record!".toUpperCase()
-                : "challenge completed!".toUpperCase(),
+                : widget.newRecord.time > bestRecord.time
+                    ? "new record!".toUpperCase()
+                    : "challenge completed!".toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -170,29 +205,13 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
               fontSize: 25.0,
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality
-                  .explosive, // don't specify a direction, blast randomly
-              shouldLoop:
-                  true, // start again as soon as the animation is finished
-              colors: const [
-                Colors.green,
-                Colors.blue,
-                Colors.pink,
-                Colors.orange,
-                Colors.purple
-              ], // manually specify the colors to be used
-              createParticlePath: drawStar, // define a custom shape/path.
-            ),
-          ),
           SizedBox(
             height: 30.0,
           ),
           Text(
-            durationToString(widget.challengeList[0].time),
+            widget.cardModel.category == Category.stop_watch
+                ? durationToString(widget.newRecord.time)
+                : "${widget.newRecord.time} REPS",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
@@ -209,19 +228,29 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.challengeList.length == 1
-              ? "0 Secs"
-              : widget.newRecord.time < widget.challengeList[0].time
-                  ? "${widget.newRecord.time - widget.challengeList[0].time} Secs"
-                  : widget.newRecord.time > widget.challengeList[0].time
-                      ? "+${widget.newRecord.time - widget.challengeList[0].time} Secs"
-                      : "0 Secs",
+          widget.cardModel.category == Category.stop_watch
+              ? isFirstRecord
+                  ? "0 Secs"
+                  : widget.newRecord.time < bestRecord.time
+                      ? "${widget.newRecord.time - bestRecord.time} Secs"
+                      : widget.newRecord.time > bestRecord.time
+                          ? "+${widget.newRecord.time - bestRecord.time} Secs"
+                          : "0 Secs"
+              : isFirstRecord
+                  ? "0 Reps"
+                  : widget.newRecord.time < bestRecord.time
+                      ? "${widget.newRecord.time - bestRecord.time} Reps"
+                      : widget.newRecord.time > bestRecord.time
+                          ? "+${widget.newRecord.time - bestRecord.time} Reps"
+                          : "0 Reps",
           style: TextStyle(
-              color: widget.newRecord.time < widget.challengeList[0].time
-                  ? kActiveIconColor
-                  : widget.newRecord.time > widget.challengeList[0].time
-                      ? kPrimaryColor
-                      : Colors.white,
+              color: isFirstRecord
+                  ? Colors.white
+                  : widget.newRecord.time < bestRecord.time
+                      ? kActiveIconColor
+                      : widget.newRecord.time > bestRecord.time
+                          ? kPrimaryColor
+                          : Colors.white,
               fontSize: 20.0,
               fontWeight: FontWeight.bold),
         ),

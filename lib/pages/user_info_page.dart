@@ -216,7 +216,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           ),
         ),
         Container(
-          color: Colors.white,
+          color: kBackgroundColor,
           child: Column(
             children: [
               settingCard('Name', _userLocal.displayName, _nameController),
@@ -249,7 +249,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-          color: Colors.white,
+          color: kBackgroundColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -289,7 +289,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-          color: Colors.white,
+          color: kBackgroundColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -347,7 +347,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-          color: Colors.white,
+          color: kBackgroundColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -366,7 +366,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ],
           ),
         ),
-        Container(color: Colors.white, height: 1),
+        Container(color: kBackgroundColor, height: 1),
       ],
     );
   }
@@ -385,7 +385,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           ),
         ),
         Container(
-          color: Colors.white,
+          color: kBackgroundColor,
           child: Column(
             children: [
               gestureCard(
@@ -416,7 +416,7 @@ TextStyle headerStyle() {
 TextStyle normalStyle() {
   return GoogleFonts.lato(
     fontSize: 12,
-    color: kTextColor,
+    color: Colors.white,
     fontWeight: FontWeight.normal,
   );
 }
@@ -424,7 +424,7 @@ TextStyle normalStyle() {
 TextStyle normalBoldStyle() {
   return GoogleFonts.lato(
     fontSize: 12,
-    color: kTextColor,
+    color: Colors.grey[200],
     fontWeight: FontWeight.w900,
   );
 }

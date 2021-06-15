@@ -104,6 +104,7 @@ class _ChartMainPageState extends State<ChartMainPage> {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
+          color: kTextColor
         ),
       ),
     );
@@ -124,8 +125,8 @@ class _ChartMainPageState extends State<ChartMainPage> {
         icon: const Icon(Icons.keyboard_arrow_down),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Colors.grey[800], fontSize: 16.0),
-        underline: Container(height: 0, color: Colors.blueAccent,),
+        style: TextStyle(color: kTextColor, fontSize: 16.0),
+        underline: Container(height: 0,),
         onChanged: (String newValue) {
           setState(() {
             category = newValue;
@@ -161,7 +162,7 @@ class _ChartMainPageState extends State<ChartMainPage> {
                     Icon(
                       Icons.calendar_today_sharp,
                       size: 20,
-                      color: Colors.black,
+                      color: kTextColor,
                     )
                   ],
                 ),
@@ -252,24 +253,6 @@ class _ChartMainPageState extends State<ChartMainPage> {
             height: containerHeight,
             padding: EdgeInsets.only(top: 20.0, bottom: 10.0, right: 20.0),
             child: _buildChart(),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          top: 0,
-          width: 20,
-          height: containerHeight,
-          child: Container(
-            width: 20,
-          ),
-        ),
-        Positioned(
-          right: 0,
-          top: 0,
-          width: 20,
-          height: containerHeight,
-          child: Container(
-            width: 20,
           ),
         ),
       ],

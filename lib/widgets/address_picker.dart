@@ -1,28 +1,43 @@
 import 'package:dvhcvn/dvhcvn.dart' as dvhcvn;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/administrative_unit.dart';
 
 class AddressPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Enter your address")),
+      appBar: AppBar(
+        title: Text("Enter your address", style: TextStyle(color: kTextColor),),
+        backgroundColor: Colors.white,
+        leading: Builder(
+          builder: (context){
+            return IconButton(
+              icon: Icon(
+                Icons.chevron_left,
+                size: 30.0,
+                color: kTextColor,
+              ),
+              onPressed: ()=> Navigator.of(context).pop()
+            );
+          },
+        )
+      ),
       body: Container(
-        color: Colors.white,
         child: ListView(
           children: [
             Level1(),
             Level2(),
             Level3(),
             Padding(
+              padding: EdgeInsets.all(10.0),
               child: Row(
                 children: [
                   Expanded(child: ButtonReset()),
                   Expanded(child: ButtonDone()),
                 ],
               ),
-              padding: const EdgeInsets.all(8.0),
             ),
           ],
         ),
@@ -33,27 +48,41 @@ class AddressPicker extends StatelessWidget {
 
 class ButtonReset extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => TextButton(
-        child: Text('Reset'),
-        onPressed: () =>
-            AdministrativeUnit.of(context, listen: false).level1 = null,
-      );
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.only(right: 10.0),
+    child: TextButton(
+          child: Text('Reset', style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+          onPressed: () =>
+              AdministrativeUnit.of(context, listen: false).level1 = null,
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.white,
+            padding: EdgeInsets.only(top: 12.0, bottom: 12.0),
+          ),
+        ),
+  );
 }
 
 class ButtonDone extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => ElevatedButton(
-        child: Text('Done'),
-        onPressed: () => Navigator.of(context).pop(),
-      );
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.only(left: 10.0),
+    child: ElevatedButton(
+          child: Text('Done', style: TextStyle(color: Colors.white, fontSize: 16),),
+          onPressed: () => Navigator.of(context).pop(),
+          style: TextButton.styleFrom(
+            backgroundColor: kPrimaryColor,
+            padding: EdgeInsets.only(top: 12.0, bottom: 12.0),
+          ),
+        ),
+  );
 }
 
 class Level1 extends StatelessWidget {
   @override
   Widget build(BuildContext _) => Consumer<AdministrativeUnit>(
         builder: (context, data, _) => ListTile(
-          title: Text('Level 1'),
-          subtitle: Text(data.level1?.name ?? 'Tap to select level 1.'),
+          title: Text('Level 1', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+          subtitle: Text(data.level1?.name ?? 'Tap to select level 1.', style: TextStyle(color: Colors.white),),
           onTap: () => _select1(context, data),
         ),
       );
@@ -86,11 +115,11 @@ class _Level2State extends State<Level2> {
   @override
   Widget build(BuildContext _) => Consumer<AdministrativeUnit>(
         builder: (context, data, _) => ListTile(
-          title: Text('Level 2'),
+          title: Text('Level 2', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
           subtitle: Text(data.level2?.name ??
               (data.level1 != null
                   ? 'Tap to select level 2.'
-                  : 'Select level 1 first.')),
+                  : 'Select level 1 first.'), style: TextStyle(color: Colors.white),),
           onTap: data.level1 != null ? () => _select2(context, data) : null,
         ),
       );
@@ -130,11 +159,11 @@ class _Level3State extends State<Level3> {
   @override
   Widget build(BuildContext _) => Consumer<AdministrativeUnit>(
         builder: (context, data, _) => ListTile(
-          title: Text('Level 3'),
+          title: Text('Level 3', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
           subtitle: Text(data.level3?.name ??
               (data.level2 != null
                   ? 'Tap to select level 3.'
-                  : 'Select level 2 first.')),
+                  : 'Select level 2 first.'), style: TextStyle(color: Colors.white),),
           onTap: data.level2 != null ? () => _select3(context, data) : null,
         ),
       );

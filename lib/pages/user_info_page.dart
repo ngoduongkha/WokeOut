@@ -56,7 +56,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
           return GestureDetector(
             child: Scaffold(
-              backgroundColor: Colors.white,
               body: CustomScrollView(
                 slivers: [
                   settingAppBar(context),
@@ -102,7 +101,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                             'Log Out',
                             style: GoogleFonts.lato(
                               fontSize: 20,
-                              color: kTextColor,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -271,7 +270,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                         ? normalBoldStyle()
                         : GoogleFonts.lato(
                             fontSize: 12,
-                            color: Colors.black54,
+                            color: kTextColor,
                             fontWeight: FontWeight.w900),
                   ),
                 ),
@@ -367,7 +366,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ],
           ),
         ),
-        Container(color: Color(0xFFEBEDF0), height: 1),
+        Container(color: Colors.white, height: 1),
       ],
     );
   }
@@ -409,7 +408,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
 TextStyle headerStyle() {
   return GoogleFonts.lato(
     fontSize: 20,
-    color: kTextColor,
+    color: Colors.white,
     fontWeight: FontWeight.w900,
   );
 }

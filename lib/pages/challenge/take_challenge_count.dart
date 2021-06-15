@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';

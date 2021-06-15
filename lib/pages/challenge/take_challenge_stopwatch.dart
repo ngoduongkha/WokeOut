@@ -83,6 +83,13 @@ class _TakeChallengeStopWatchPageState
   }
 
   @override
+  void dispose() {
+    timerSubscription.cancel();
+    timerStream = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -109,10 +116,7 @@ class _TakeChallengeStopWatchPageState
                 size: 35.0,
               ),
               onTap: () {
-                timerSubscription.cancel();
-                timerStream = null;
                 Navigator.of(context).pop();
-                this.dispose();
               },
             ),
             elevation: 0,

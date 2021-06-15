@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
 import 'package:woke_out/util.dart';
+import 'package:confetti/confetti.dart';
 
 class ChallengeFinishPage extends StatefulWidget {
   final CardModel cardModel;
@@ -22,8 +25,13 @@ class ChallengeFinishPage extends StatefulWidget {
 }
 
 class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
+  ConfettiController _confettiController;
+
   @override
   void initState() {
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 10));
+
     int index = 0;
 
     widget.challengeList.forEach((element) {
@@ -34,7 +42,41 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
 
     widget.challengeList.insert(index, widget.newRecord);
 
+    if (widget.newRecord.time == widget.challengeList[0].time) {
+      _confettiController.play();
+    }
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
   }
 
   @override
@@ -126,6 +168,24 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontSize: 25.0,
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality
+                  .explosive, // don't specify a direction, blast randomly
+              shouldLoop:
+                  true, // start again as soon as the animation is finished
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple
+              ], // manually specify the colors to be used
+              createParticlePath: drawStar, // define a custom shape/path.
             ),
           ),
           SizedBox(

@@ -52,7 +52,8 @@ class _ChartMainPageState extends State<ChartMainPage> {
                   SizedBox(height: 10.0,),
                   _buildSelectionPanel(),
                   SizedBox(height: 10.0,),
-                  _buildChartWrapper()
+                  Expanded(child: _buildChartWrapper()),
+                  SizedBox(height: 10.0,),
                 ]
               ),
             );
@@ -199,7 +200,7 @@ class _ChartMainPageState extends State<ChartMainPage> {
       child: Column(
         children: [
           _buildChartTopBar(),
-          _buildChartContainer()
+          Expanded(child: _buildChartContainer()),
         ],
       ),
     );
@@ -241,21 +242,13 @@ class _ChartMainPageState extends State<ChartMainPage> {
   }
   Widget _buildChartContainer(){
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double containerHeight = screenHeight*0.42;
-    //  ~ 300.0
-    return Stack(
-      children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            width: screenWidth*2,
-            height: containerHeight,
-            padding: EdgeInsets.only(top: 20.0, bottom: 10.0, right: 20.0),
-            child: _buildChart(),
-          ),
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: screenWidth*2,
+        padding: EdgeInsets.only(top: 20.0, bottom: 10.0, right: 20.0),
+        child: _buildChart(),
+      ),
     );
   }
   Widget _buildChart(){

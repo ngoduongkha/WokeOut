@@ -177,7 +177,7 @@ class _RestPageState extends State<RestPage> {
 
   Widget _buildNextExercisePanel(){
     return Container(
-      height: 130.0,
+      height: 140.0,
       color: Colors.white,
       padding: EdgeInsets.all(20.0),
       child: Builder(
@@ -228,8 +228,8 @@ class _RestPageState extends State<RestPage> {
             TextSpan(
               text: "${nextExercise.name} ",
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
+                color: kTextColor,
+                fontSize: 17.0,
                 fontWeight: FontWeight.bold
               )
             ),

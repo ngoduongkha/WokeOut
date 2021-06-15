@@ -65,6 +65,9 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
                 defaultTextStyle: TextStyle(
                   color: Colors.white,
                 ),
+                weekendTextStyle: TextStyle(
+                  color: Colors.white
+                )
               ),
               headerStyle: HeaderStyle(
                 titleTextStyle: TextStyle(
@@ -86,6 +89,14 @@ class _CalendarMainPageState extends State<CalendarMainPage> {
                 ),
                 formatButtonTextStyle: TextStyle(
                   color: Colors.white,
+                )
+              ),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(
+                  color: Colors.white
+                ),
+                weekendStyle: TextStyle(
+                  color: Colors.white
                 )
               ),
               calendarBuilders: CalendarBuilders(

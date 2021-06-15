@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/model/challenge_card_model.dart';
 import 'package:woke_out/model/challenge_model.dart';
@@ -23,6 +22,21 @@ class ChallengeFinishPage extends StatefulWidget {
 }
 
 class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
+  @override
+  void initState() {
+    int index = 0;
+
+    widget.challengeList.forEach((element) {
+      if (element.time > widget.newRecord.time) {
+        index++;
+      }
+    });
+
+    widget.challengeList.insert(index, widget.newRecord);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,9 +118,9 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
             height: 15.0,
           ),
           Text(
-            widget.challengeList[0].time <= widget.challengeList[0].time
-                ? "challenge completed!".toUpperCase()
-                : "new record!".toUpperCase(),
+            widget.newRecord.time == widget.challengeList[0].time
+                ? "new record!".toUpperCase()
+                : "challenge completed!".toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,

@@ -93,42 +93,38 @@ class _TakeChallengeCountPageState extends State<TakeChallengeCountPage> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  _buildSecondBestText(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Second-best".toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        "${secondBestRecord.time} Reps".toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: 30.0,
                   ),
                 ],
               )
-            : SizedBox(height: 90.0),
+            : SizedBox(height: 130.0),
         _buildCountBtn(),
         SizedBox(height: 40.0),
         _buildFinishBtn(),
-      ],
-    );
-  }
-
-  Widget _buildSecondBestText() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          "Second-best".toUpperCase(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-          ),
-        ),
-        SizedBox(
-          height: 5.0,
-        ),
-        Text(
-          "7 Reps".toUpperCase(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ],
     );
   }

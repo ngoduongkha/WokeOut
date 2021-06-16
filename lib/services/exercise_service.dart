@@ -19,8 +19,8 @@ class ExerciseService with ChangeNotifier {
   Future<List<Exercise>> loadIntermediateExercises(String muscleName) async {
     return ref.where("level", isEqualTo: "intermediate").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) =>
-                isInMuscle(List.from((doc.data() as Map)['muscle']), muscleName))
+            .where((doc) => isInMuscle(
+                List.from((doc.data() as Map)['muscle']), muscleName))
             .map((doc) => Exercise.fromMap(doc.data()))
             .toList());
   }
@@ -28,8 +28,8 @@ class ExerciseService with ChangeNotifier {
   Future<List<Exercise>> loadAdvancedExercises(String muscleName) async {
     return ref.where("level", isEqualTo: "advanced").get().then(
         (QuerySnapshot snapshot) => snapshot.docs
-            .where((doc) =>
-                isInMuscle(List.from((doc.data() as Map)['muscle']), muscleName))
+            .where((doc) => isInMuscle(
+                List.from((doc.data() as Map)['muscle']), muscleName))
             .map((doc) => Exercise.fromMap(doc.data()))
             .toList());
   }

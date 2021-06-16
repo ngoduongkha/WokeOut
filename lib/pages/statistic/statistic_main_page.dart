@@ -19,7 +19,6 @@ class _StatisticMainPageState extends State<StatisticMainPage> with TickerProvid
   Color selectedColor = Colors.blueAccent;
   @override
   void initState() {
-    // TODO: implement initState
     _tabController = new TabController(vsync: this, length: 2);
     _tabController.addListener(selectTabHandler);
     super.initState();
@@ -30,7 +29,6 @@ class _StatisticMainPageState extends State<StatisticMainPage> with TickerProvid
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }

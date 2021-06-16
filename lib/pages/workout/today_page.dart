@@ -31,7 +31,7 @@ class _TodayPageState extends State<TodayPage> {
         ExerciseCategory(
             imageUrl: "assets/images/workout/back.jpg", name: "back"),
         ExerciseCategory(
-            imageUrl: "assets/images/workout/shoulder.jpeg", name: "shoulder"),
+            imageUrl: "assets/images/workout/shoulder.jpeg", name: "shoulders"),
         ExerciseCategory(
             imageUrl: "assets/images/workout/biceps.jpg", name: "biceps"),
         ExerciseCategory(

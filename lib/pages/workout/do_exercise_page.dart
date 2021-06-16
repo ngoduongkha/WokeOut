@@ -27,7 +27,6 @@ class _DoExercisePageState extends State<DoExercisePage> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     ExercisePlayer player = Provider.of<ExercisePlayer>(context, listen: false);
     initVideoController(player.currentExercise);
     counter = CountdownProgressIndicator(player: player);

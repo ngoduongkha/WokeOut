@@ -67,8 +67,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/data/tinh_tp.json
-    - assets/data/quan_huyen.json
     - assets/images/workout/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

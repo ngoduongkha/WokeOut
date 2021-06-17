@@ -114,10 +114,6 @@ class _SignupPageState extends State<SignupPage> {
                           },
                         ),
                         SocialIcon(
-                          iconSrc: "assets/icons/twitter.svg",
-                          press: () {},
-                        ),
-                        SocialIcon(
                           iconSrc: "assets/icons/google-plus.svg",
                           press: () async {
                             isLoading = true;

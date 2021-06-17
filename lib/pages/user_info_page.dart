@@ -244,7 +244,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
     _userLocal.address = getVietnameseString(entity) ?? _userLocal.address;
 
-
     return Column(
       children: [
         Container(
@@ -266,12 +265,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   child: Text(
                     _userLocal.address ?? "Your ${title.toLowerCase()}",
                     textAlign: TextAlign.end,
-                    style: _userLocal.address != null
-                        ? normalBoldStyle()
-                        : GoogleFonts.lato(
-                            fontSize: 12,
-                            color: kTextColor,
-                            fontWeight: FontWeight.w900),
+                    style: normalBoldStyle(),
                   ),
                 ),
               ),
@@ -302,6 +296,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   style: normalBoldStyle(),
                   decoration: InputDecoration(
                     hintText: "Your ${title.toLowerCase()}",
+                    hintStyle: normalBoldStyle(),
                     border: InputBorder.none,
                     errorBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,

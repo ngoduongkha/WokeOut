@@ -162,8 +162,8 @@ class _ChallengeFinishPageState extends State<ChallengeFinishPage> {
         },
         blendMode: BlendMode.dstIn,
         child: Image.asset(
-          widget.cardModel.image,
-          fit: BoxFit.fill,
+          widget.cardModel.finishImage,
+          fit: BoxFit.cover,
         ),
       ),
     );

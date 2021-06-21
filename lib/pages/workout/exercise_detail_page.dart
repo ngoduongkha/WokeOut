@@ -60,6 +60,7 @@ class _DetailPageState extends State<DetailPage> {
         if(snapshot.connectionState == ConnectionState.done){
           return SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
@@ -153,7 +154,9 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ),
         SizedBox(height: 8.0,),
-        Row(
+        Wrap(
+          alignment: WrapAlignment.start,
+          runSpacing: 8.0,
           children: tags.map((String tag)=> _buildTag(tag)).toList(),
         )
       ],

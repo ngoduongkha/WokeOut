@@ -174,7 +174,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
 
   Widget _buildDescription() {
     return Container(
-      padding: EdgeInsets.fromLTRB(30.0, 15.0, 5.0, 15.0),
+      padding: EdgeInsets.fromLTRB(30.0, 15.0, 15.0, 15.0),
       child: Text(
         widget.cardModel.description,
         style: TextStyle(color: Colors.white, fontSize: 14.0, height: 1.2),

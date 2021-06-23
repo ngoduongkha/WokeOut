@@ -250,23 +250,13 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
       flex: 7,
       child: Container(
         height: 60.0,
-        child: Image.network(
-          imageUrl,
+        clipBehavior: Clip.antiAlias,
+        child: FadeInImage.assetNetwork(
+          placeholder: kExerciseImagePlaceholder,
+          height: 30,
+          fadeInDuration: Duration(seconds: 1),
+          image: imageUrl,
           fit: BoxFit.cover,
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes
-                    : null,
-              ),
-            );
-          },
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.0),

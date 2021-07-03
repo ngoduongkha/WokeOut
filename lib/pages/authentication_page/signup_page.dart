@@ -61,7 +61,6 @@ class _SignupPageState extends State<SignupPage> {
                             emailController.text, passwordController.text);
                         if (user != null) {
                           AppUserService().addUser(user);
-
                           Navigator.pushNamedAndRemoveUntil(
                               context, 'home', ModalRoute.withName('landing'));
                         } else if (emailController.text.isEmpty ||

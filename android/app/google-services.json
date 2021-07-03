@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:218718472908:android:3d26292be85782a9b09069",
+        "mobilesdk_app_id": "1:218718472908:android:30579e6b5217c7fcb09069",
         "android_client_info": {
           "package_name": "com.example.woke_out"
         }
       },
       "oauth_client": [
         {
-          "client_id": "218718472908-3ib6mj0dum12b3em110t515qt0gq299c.apps.googleusercontent.com",
+          "client_id": "218718472908-pbk8qo40cp6s7a2vl7d4ok1k9t27n315.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.woke_out",
-            "certificate_hash": "7875f607fb37403c3de4b09cc8ad579543d2e3bd"
+            "certificate_hash": "c59eae4d6bafe44b915f6cf7f5f9fb6b2ef6b6c3"
           }
         },
         {

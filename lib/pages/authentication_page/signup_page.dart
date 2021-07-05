@@ -6,6 +6,7 @@ import 'package:woke_out/components/rounded_button.dart';
 import 'package:woke_out/components/rounded_input_field.dart';
 import 'package:woke_out/constants.dart';
 import 'package:woke_out/enum.dart';
+import 'package:woke_out/pages/bmi_page/input_page.dart';
 import 'package:woke_out/services/app_user_service.dart';
 import 'package:woke_out/services/auth_service.dart';
 import 'package:woke_out/widgets/custom_dialog_box.dart';
@@ -61,6 +62,24 @@ class _SignupPageState extends State<SignupPage> {
                             emailController.text, passwordController.text);
                         if (user != null) {
                           AppUserService().addUser(user);
+                          final Map<String, dynamic> result =
+                              await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InputPage(
+                                gender: user.gender,
+                                height: user.height,
+                                weight: user.weight,
+                              ),
+                            ),
+                          );
+
+                          user.gender = result['gender'];
+                          user.height = result['height'];
+                          user.weight = result['weight'];
+
+                          AppUserService().updateUser(user);
+
                           Navigator.pushNamedAndRemoveUntil(
                               context, 'home', ModalRoute.withName('landing'));
                         } else if (emailController.text.isEmpty ||

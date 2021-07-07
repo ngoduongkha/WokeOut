@@ -60,6 +60,8 @@ class _SignupPageState extends State<SignupPage> {
                         var user = await auth.createUserWithEmailAndPassword(
                             emailController.text, passwordController.text);
                         if (user != null) {
+                          user.height = 160;
+                          user.weight = 70;
                           AppUserService().addUser(user);
 
                           Navigator.pushNamedAndRemoveUntil(

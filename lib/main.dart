@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
               Theme.of(context).textTheme.apply(displayColor: kTextColor),
           primaryColor: kPrimaryColor,
         ),
-        home: new LandingPage(),
+        home: LandingPage(),
         onGenerateRoute: Routers.generateRoute,
       ),
     );
